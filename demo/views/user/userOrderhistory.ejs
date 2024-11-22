@@ -1,0 +1,50 @@
+<%- include('profile_layout/header') %>
+<div class="p-4">
+  <!-- Search bar -->
+  <div class="flex items-center mb-4">
+    <input type="text" placeholder="Search your order here" class="flex-grow border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-orange-400" />
+    <button class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 11-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd" />
+      </svg>
+      Search Order
+    </button>
+  </div>
+
+  <!-- Order list -->
+  <div class="space-y-4">
+    <!-- Order item -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex items-start justify-between">
+      <img src="https://via.placeholder.com/60" alt="Product Image" class="w-16 h-16 object-cover">
+      <div class="flex-1 ml-4">
+        <h3 class="text-base font-semibold">HealthXP Performance Whey 24g Protein, 5.4g BCAA, Muscle Building</h3>
+        <p class="text-sm text-gray-600">₹1,599 <span class="line-through text-gray-400">₹2,499</span> <span class="text-green-600">(36% off)</span></p>
+        <p class="text-sm text-red-600 flex items-center">
+          <svg class="h-4 w-4 text-red-500 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          Cancelled on 25/12/2022
+        </p>
+        <p class="text-sm text-gray-500">As per your request, your item has been canceled</p>
+      </div>
+    </div>
+
+    <!-- Another Order item -->
+    <div class="bg-white shadow-md rounded-lg p-4 flex items-start justify-between">
+      <img src="https://via.placeholder.com/60" alt="Product Image" class="w-16 h-16 object-cover">
+      <div class="flex-1 ml-4">
+        <h3 class="text-base font-semibold">HealthXP Performance Whey 24g Protein, 5.4g BCAA, Muscle Building</h3>
+        <p class="text-sm text-gray-600">₹1,599 <span class="line-through text-gray-400">₹2,499</span> <span class="text-green-600">(36% off)</span></p>
+        <p class="text-sm text-green-600 flex items-center">
+          <svg class="h-4 w-4 text-green-500 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          Delivered on 25/12/2022
+        </p>
+        <p class="text-sm text-gray-500">Your order was delivered on 25/12/2022</p>
+      </div>
+    </div>
+
+    <!-- Additional order items... -->
+    <!-- Repeat similar blocks with status changes and details -->
+    
+  </div>
+</div>
+
+<%- include('layout/footer') %>

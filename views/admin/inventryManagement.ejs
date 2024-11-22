@@ -1,0 +1,67 @@
+<%- include('layout/adminpage_header') %>
+
+<nav class="bg-blue-600 p-4">
+    <div class="container mx-auto">
+        <h1 class="text-white text-2xl font-bold">Inventory Management System</h1>
+    </div>
+</nav>
+<!-- Main Content -->
+<div class="container mx-auto mt-6">
+    <!-- Search and Add Section -->
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <input 
+                type="text" 
+                placeholder="Search inventory..." 
+                class="border border-gray-300 rounded-lg p-2 w-64 focus:outline-blue-400"
+            />
+        </div>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            + Add Item
+        </button>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="bg-white shadow rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-4">Inventory List</h2>
+        <table class="table-auto w-full border-collapse border border-gray-200">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-200 p-2 text-left">Item Name</th>
+                    <th class="border border-gray-200 p-2 text-left">Category</th>
+                    <th class="border border-gray-200 p-2 text-left">Stock</th>
+                    <th class="border border-gray-200 p-2 text-left">Price</th>
+                    <th class="border border-gray-200 p-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-200 p-2">Example Item 1</td>
+                    <td class="border border-gray-200 p-2">Category A</td>
+                    <td class="border border-gray-200 p-2">50</td>
+                    <td class="border border-gray-200 p-2">$20</td>
+                    <td class="border border-gray-200 p-2">
+                        <button class="text-blue-600 hover:underline">Edit</button>
+                        <button class="text-red-600 hover:underline ml-2">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-200 p-2">Example Item 2</td>
+                    <td class="border border-gray-200 p-2">Category B</td>
+                    <td class="border border-gray-200 p-2">30</td>
+                    <td class="border border-gray-200 p-2">$15</td>
+                    <td class="border border-gray-200 p-2">
+                        <button class="text-blue-600 hover:underline">Edit</button>
+                        <button class="text-red-600 hover:underline ml-2">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-blue-600 text-white text-center p-4 mt-6">
+    <p>© 2024 Inventory Management System</p>
+</footer>
+<%- include('layout/admin_footer') %>

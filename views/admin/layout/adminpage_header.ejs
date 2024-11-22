@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+    <!-- Header Section --> 
+    <header class="bg-white shadow p-4 flex justify-between items-center mb-2">
+        <div class="flex items-center space-x-6">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img src="/site_logo.webp" alt="Protein Hub Logo" class="h-10 rounded-2xl mr-3" />
+                <div class="text-2xl font-bold text-gray-800">Protein Hub</div>
+            </div>
+            
+        </div>
+        <%if(user){%>
+            <div class="flex group">
+            <a class="pr-1">
+                <img src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar"
+                class="inline-block relative object-cover object-center !rounded-full w-12 h-12" />
+              </a>
+            <div><h6 class="text-slate-800 font-semibold">
+                <%= user.username %>
+              </h6>
+            <p class="text-slate-600 text-sm">
+                <%= user.email%>
+              </p></div>
+
+
+
+              <div class="absolute bg bg-red-500 text-white p-8  justify-center rounded-lg hidden group-hover:block">
+                <a class="pr-1">
+                    <img src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar"
+                    class="inline-block relative object-cover object-center !rounded-full w-12 h-12" />
+                  </a>
+                <div><h6 class='' font-semibold">
+                   <span>Admin :</span> <%= user.username %>
+                  </h6>
+                <p class=" text-sm">
+                    <%= user.email%>
+                  </p>
+                  <button class="bg-orange-500 p-2 rounded-lg hover:bg-orange-700" onclick="window.location.href='/admin/logout'">LogOut</button>
+
+              </div>
+            </div>
+            <%}%>
+    </header> 
+
+    <!-- Main Content -->
+    <div class="flex">
+
+        <!-- Sidebar -->
+         
+        <aside id="separator-sidebar" class="side_bar z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 " >
+            <div class="h-full px-3 py-4 overflow-y-auto bg-white shadow dark:bg-white ">
+        
+                <% const menuItems = [
+                {
+                    title: "ALL PRODUCTS",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v10H7V7z"/>
+                          </svg>`,
+                    action: "view_all_products"
+                },
+                {
+                    title: "ORDER LIST",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/>
+                          </svg>`,
+                    action: "view_order_list"
+                },
+                
+                {
+                    title: "ADD PRODUCTS",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 11h-2v2h-2v-2H7v-2h2V9h2v2h2z"/>
+                          </svg>`,
+                    action: "addProduct"
+                },
+                {
+                    title: "BANNER",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M2 2h20v20H2V2zm2 2v16h16V4H4zm2 2h12v12H6V6z"/>
+                          </svg>`,
+                    action: "view_banner"
+                },
+                {
+                    title: "CATEGORIES",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zm-10 10h8v8H3v-8zm10 0h8v8h-8v-8z"/>
+                          </svg>`,
+                    action: "view_categories"
+                },
+                { 
+                    title: "COUPON",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M2 2h20v20H2V2zm2 2v16h16V4H4zm2 2h12v12H6V6z"/>
+                          </svg>`,
+                    action: "manage_coupons"
+                },
+                {
+                    title: "USERS",
+                    svg: `<svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                          </svg>`,
+                    action: "manage_users"
+                }
+            ];
+
+            let page="hai" %>
+                <ul class="space-y-2 font-medium">
+                    <% menuItems.forEach((option) => { %>
+                        <li>
+                            <a href="<%= option.action%>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ">
+                                <%- option.svg %>
+                                <span class="ms-3 text-gray-500 dark hover:text-white"><%= option.title %></span>
+                            </a>
+                        </li>
+                    <% }); %>
+                    
+                </ul>
+            </div>
+            
+         </aside>

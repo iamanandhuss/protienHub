@@ -1,0 +1,245 @@
+<%- include('layout/header') %>
+
+  <!-- Right: Login Form -->
+
+  <div class="bg-gray-200 lg:p-20 md:p-20  w-full lg:w-1/2 lg:h-full rounded-lg -ml-10 mt-0 flex justify-start">
+
+    <form class="space-y-4 flex-col w-full" method="post" action="/signup " action="/userSignupPost">
+      <h2 class="text-3xl font-bold text-center mb-8 custext">Create Account</h2>
+      <div class="flex space-x-4 justify-CE relative mt-8">
+        <div class="mb-4 justify-CE relative mt-0 ">
+          <!-- First Name -->
+          <label for="First Name"
+            class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">First Name</label>
+          <input type="text" id="firstName" name="First_name"
+            class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="First Name" />
+          <div><span class="text-sm res-text-xs" id="fistNameError"></span></div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-4 justify-CE relative mt-0">
+          <label for="Last Name"
+            class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Last Name</label>
+          <input type="text" id="lastName" name="Last_name"
+            class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="Last Name" />
+          <div><span class="text-sm res-text-xs" id="lastNameError"></span></div>
+        </div>
+      </div>
+      <!-- Email -->
+
+      <div class="mb-4 justify-CE relative mt-8">
+        <label for="Email"
+          class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Email</label>
+        <input type="text" id="email" name="email"
+          class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+          placeholder="Email" />
+        <div><span class="text-sm res-text-xs" id="emailError"></span></div>
+      </div>
+      <!-- Phone Number -->
+      <div class="mb-4 justify-CE relative mt-8">
+        <label for="Phone Number"
+          class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Phone Number</label>
+        <input type="text" id="phoneNumber" name="Phone"
+          class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+          placeholder="phonenumber" />
+        <div><span class="text-sm res-text-xs" id="phonenumberError"></span></div>
+      </div>
+      <!-- Create Password -->
+      <div class="flex space-x-4">
+
+        <div class="mb-4 justify-CE relative mt-8">
+          <label for="password"
+            class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Password</label>
+          <input type="password" id="password" name="password"
+            class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="Password" />
+            <button type="button" id="togglePassword" class="absolute right-2 top-8">
+              <i id="eyeIcon" class="fa fa-eye-slash"></i>
+          </button>
+          <div><span class="text-sm res-text-xs" id="passwordError"></span></div>
+        </div>
+
+        <div class="mb-4 justify-CE relative mt-8">
+          <label for="conformPassword"
+            class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Confirm
+            Password</label>
+          <input type="password" id="confirmPassword" name="conform_password"
+            class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="Confirm Password" />
+          <div><span class="text-sm res-text-xs" id="confirmPasswordError"></span></div>
+        </div>
+
+      </div>
+      <% if (typeof error !=='undefined' ) { %>
+        <div class="alert alert-danger text-red-500">
+          <%= error %>
+        </div>
+        <% } %>
+          <!-- button -->
+          <button type="submit" class="bg-orange-600 text-white font-bold py-2 w-full rounded-md hover:bg-orange-700">
+            Create Account
+          </button>
+
+          <p class="text-center text-gray-500 mt-4">
+            Already have an account? <a href="#" class="text-blue-500">Login</a>
+          </p>
+
+          <div class="flex items-center justify-center mt-4">
+            <hr class="w-1/4 border-gray-300" />
+            <span class="px-2 text-gray-500">or</span>
+            <hr class="w-1/4 border-gray-300" />
+          </div>
+          <!-- Google Signup  -->
+          <a href="/auth/google">
+            <button id="googleSignInButton"
+              class="bg-white border border-gray-300 text-gray-700 flex items-center justify-center py-2 w-full rounded-md hover:bg-gray-100">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+                class="h-6 w-6 mr-2" />
+              Signup with Google
+            </button>
+          </a>
+    </form>
+
+
+  </div>
+  </div>
+  </body>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+
+  <script src="/firebase.js"></script> <!-- Your custom Firebase configuration script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const firstNameInput = document.getElementById("firstName");
+      const lastNameInput = document.getElementById("lastName");
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const phoneNumberInput = document.getElementById("phoneNumber") // Corrected variable name
+      const confirmPasswordInput = document.getElementById("confirmPassword");
+      const firstNameError = document.getElementById("fistNameError");
+      const lastNameError = document.getElementById("lastNameError");
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const confirmPasswordError = document.getElementById("confirmPasswordError");
+      const phoneNumberError = document.getElementById("phonenumberError") // Corrected variable name
+
+      function showMessage(element, message, isValid) {
+        element.textContent = message;
+        element.style.color = isValid ? 'green' : 'red';
+      }
+
+      function validateFirstName() {
+        const firstName = firstNameInput.value.trim();
+        const nameRegex = /^[A-Za-z]+$/;
+        if (nameRegex.test(firstName)) {
+          showMessage(firstNameError, "Valid", true);
+        } else {
+          showMessage(firstNameError, "First Name must be a text", false);
+        }
+      }
+
+      function validateLastName() {
+        const lastName = lastNameInput.value.trim();
+        const nameRegex = /^[A-Za-z]+$/;
+        if (nameRegex.test(lastName)) {
+          showMessage(lastNameError, "Valid", true)
+        } else {
+          showMessage(lastNameError, "Last Name must be a text", false);
+        }
+      }
+
+      function validateEmail() {
+        const email = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(email)) {
+          showMessage(emailError, 'Valid email', true);
+        } else {
+          showMessage(emailError, 'Enter a valid email', false);
+        }
+      }
+
+      function validatePassword() {
+        const password = passwordInput.value.trim();
+        if (password.length >= 6) {
+          showMessage(passwordError, 'Valid password', true);
+        } else {
+          showMessage(passwordError, 'Password must be at least 6 characters', false);
+        }
+      }
+
+      function validateConfirmPassword() {
+        const confirmPassword = confirmPasswordInput.value.trim();
+        if (confirmPassword === passwordInput.value) {
+          showMessage(confirmPasswordError, "Valid confirm password", true);
+        } else {
+          showMessage(confirmPasswordError, "Password and Confirm Password must be equal", false)
+        }
+      }
+
+      function validatePhoneNumber() {
+        const phoneNumber = phoneNumberInput.value.trim(); // Corrected variable name
+        const phonePattern = /^[6-9]\d{9}$/;
+
+        if (phonePattern.test(phoneNumber)) {
+          showMessage(phoneNumberError, "Valid phone number", true); // Corrected variable name
+        } else {
+          showMessage(phoneNumberError, "Invalid phone number. It should be a 10-digit number starting with 6-9.", false); // Corrected variable name
+        }
+      }
+
+      firstNameInput.addEventListener("keyup", validateFirstName);
+      lastNameInput.addEventListener("keyup", validateLastName);
+      emailInput.addEventListener('keyup', validateEmail);
+      passwordInput.addEventListener('keyup', validatePassword);
+      confirmPasswordInput.addEventListener("keyup", validateConfirmPassword);
+      phoneNumberInput.addEventListener('keyup', validatePhoneNumber); // Corrected variable name
+
+      document.getElementById('loginForm').addEventListener('submit', (e) => {
+        validateEmail();
+        validatePassword();
+        validateFirstName();
+        validateLastName();
+        validatePassword();
+        validateConfirmPassword();
+        validatePhoneNumber();
+
+        if (firstNameError.style.color === 'red' || lastNameError.style.color === 'red' || emailError.style.color === "red" || passwordError.style.color === "red" || confirmPasswordError.style.color === "red" || phoneNumberError.style.color === "red") { // Corrected variable name
+          e.preventDefault();
+        }
+      });
+    });
+    const togglePassword = document.getElementById("togglePassword");
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    togglePassword.addEventListener('click', function () {
+    
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the eye icon
+        if (type === 'text') {
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        } else {
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const referralCode = new URLSearchParams(window.location.search).get('referral');
+      const googleLoginLink = document.getElementById('google-login');
+
+      if (referralCode) {
+        googleLoginLink.href += `?referral=${referralCode}`;
+      }
+      console.log(referralCode);
+      console.log(googleLoginLink.href);
+    });
+</script>
+
+
+  </html>

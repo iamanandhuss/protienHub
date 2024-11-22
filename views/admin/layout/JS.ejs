@@ -1,0 +1,250 @@
+<script>
+    function validateProductSlug() {
+        const productSlugInput = document.getElementById("product_slug");
+        const errorMessage = document.getElementById("error-message");
+
+        // Check if input contains only numbers
+        if (/^[a-zA-Z]*$/.test(productSlugInput.value)) {
+            // Valid input: hide error message
+            errorMessage.classList.add("hidden");
+        } else {
+            // Invalid input: show error message and clear input
+            errorMessage.classList.remove("hidden");
+        }
+    }
+    function validateName() {
+        const nameInput = document.getElementById("product_name");
+        const errorName = document.getElementById("error-Name");
+        if (/^[a-zA-Z]*$/.test(nameInput.value)) {
+            // Valid input: hide error message
+            errorName.classList.add("hidden");
+        } else {
+            // Invalid input: show error message and clear input
+            errorName.classList.remove("hidden");
+        }
+    }
+    function validateSKU() {
+        const skuInput = document.getElementById("sku");
+        const errorSku = document.getElementById("error-sku");
+        const skuValue = parseInt(skuInput.value, 10);
+
+        // Check if input is a number and within the allowed range
+        if (/^\d*$/.test(skuInput.value) && skuValue <= 100) {
+            // Valid input: hide error message
+            errorSku.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorSku.classList.remove("hidden");
+        }
+    }
+    function validateBrand() {
+        const brandInput = document.getElementById("brand");
+        const errorBrand = document.getElementById("error-brand");
+
+        // Check if input contains only alphabetic characters
+        if (/^[A-Za-z]*$/.test(brandInput.value)) {
+            // Valid input: hide error message
+            errorBrand.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorBrand.classList.remove("hidden");
+        }
+    }
+    function validatePrice() {
+        const priceInput = document.getElementById("price");
+        const errorPrice = document.getElementById("error-price");
+
+        // Check if input contains only numeric characters
+        if (/^\d*$/.test(priceInput.value)) {
+            // Valid input: hide error message
+            errorPrice.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorPrice.classList.remove("hidden");
+        }
+    }
+    function validateSalePrice() {
+        const salePriceInput = document.getElementById("sale_price");
+        const errorSalePrice = document.getElementById("error-sale-price");
+
+        // Check if input contains only numeric characters
+        if (/^\d*$/.test(salePriceInput.value)) {
+            // Valid input: hide error message
+            errorSalePrice.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorSalePrice.classList.remove("hidden");
+        }
+    }
+    function validateDiscount() {
+        const discountInput = document.getElementById("additional_discount");
+        const errorDiscount = document.getElementById("error-discount");
+
+        // Check if the input is a valid number and doesn't exceed 50
+        if (discountInput.value === "" || (discountInput.value <= 50 && discountInput.value >= 0)) {
+            // Valid input: hide the error message
+            errorDiscount.classList.add("hidden");
+        } else {
+            // Invalid input: show the error message
+            errorDiscount.classList.remove("hidden");
+        }
+    }
+    function validateDiscount() {
+        const discountInput = document.getElementById("discount");
+        const errorDiscount = document.getElementById("error-Adddiscount");
+
+        // Ensure the input is a valid number and does not exceed 100
+        const discountValue = discountInput.value;
+        if (discountValue === "" || (isNumeric(discountValue) && discountValue <= 100 && discountValue >= 0)) {
+            // Valid input: hide error message
+            errorDiscount.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorDiscount.classList.remove("hidden");
+        }
+    }
+
+    // Helper function to check if a string is a valid number
+    function isNumeric(value) {
+        return !isNaN(value) && value.trim() !== "";
+    }
+    function validateStockQuantity() {
+        const stockInput = document.getElementById("stock_quantity");
+        const errorStockQuantity = document.getElementById("error-stock-quantity");
+
+        // Ensure the input is a valid number between 1 and 100
+        const stockValue = stockInput.value;
+        if (stockValue >= 1 && stockValue <= 100) {
+            // Valid input: hide error message
+            errorStockQuantity.classList.add("hidden");
+        } else {
+            // Invalid input: show error message
+            errorStockQuantity.classList.remove("hidden");
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the current date
+        const currentDate = new Date();
+
+        // Calculate the date one year from now
+        currentDate.setFullYear(currentDate.getFullYear() + 1);
+
+        // Format the date to YYYY-MM-DD
+        const minDate = currentDate.toISOString().split('T')[0];
+
+        // Set the min attribute of the expiry input field
+        document.getElementById('expiry').setAttribute('min', minDate);
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get the current date
+        const currentDate = new Date();
+
+        // Format the current date to YYYY-MM-DD
+        const maxDate = currentDate.toISOString().split('T')[0];
+
+        // Set the max attribute of the manufacturing input field
+        document.getElementById('mfg').setAttribute('max', maxDate);
+    });
+    // Fetch country data from the API
+    fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            const countrySelect = document.querySelector('select[name="countryof_origin"]');
+
+            // Populate dropdown with countries
+            data.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name.common;
+                option.textContent = country.name.common;
+
+                // Pre-select the current country if applicable
+                if (country.name.common === "<%= product.countryof_origin %>") {
+                    option.selected = true;
+                }
+
+                countrySelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching country data: ", error);
+        });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const eanDropdown = document.getElementById('ean-dropdown');
+
+        // Loop to create values from 6.0 to 8.3 in steps of 0.1
+        for (let value = 6.0; value <= 8.3; value += 0.1) {
+            const option = document.createElement('option');
+            option.value = value.toFixed(1); // Sets the value to 1 decimal place
+            option.textContent = value.toFixed(1); // Display the value in the dropdown
+            eanDropdown.appendChild(option);
+        }
+
+        // Set the current product's EAN as selected, if available
+        const currentEAN = "<%= product.ean %>"; // Replace with the dynamic EAN value from your server-side code
+        if (currentEAN) {
+            eanDropdown.value = currentEAN;
+        }
+    });
+
+
+    // Listen for form submission
+    document.getElementById("editForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Create an object to store the form data
+        const formData = {};
+
+        // Get values from form inputs
+        formData.product_id = document.getElementById('product_id').value;
+        formData.product_name = document.getElementById("product_name").value;
+        formData.product_slug = document.getElementById("product_slug").value;
+        formData.sku = document.getElementById("sku").value;
+        formData.brand = document.getElementById("brand").value;
+        formData.price = document.getElementById("price").value;
+        formData.sale_price = document.getElementById("sale_price").value;
+        formData.additional_discount = document.getElementById("additional_discount").value;
+        formData.discount = document.getElementById("discount").value;
+        formData.stock_quantity = document.getElementById("stock_quantity").value;
+        formData.stock_status = document.querySelector("[name='stock_status']").value;
+        formData.expiry = document.getElementById("expiry").value;
+        formData.mfg = document.getElementById("mfg").value;
+        formData.flavor = document.querySelector("[name='flavor']").value;
+        formData.countryof_origin = document.querySelector("[name='countryof_origin']").value;
+        formData.dietary_choices = document.querySelector("[name='dietary_choices']").value;
+
+        submitFormData(formData);
+    });
+
+    // Optionally, you can define a function to handle sending the data
+    function submitFormData(data) {
+        fetch('/admin/data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then((result) => {
+            if (result.ok) {
+                Swal.fire({
+                    title: 'sucess',
+                    text: 'Product Updated successfully!',
+                    icon: 'sucess',
+                    confirmButtonText: 'OK'
+                }).then((result)=>{
+                    
+                });                
+            }
+        }).catch((error) => {
+            Swal.fire({
+                    title: 'Error',
+                    text: 'Product Updated fail!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                }).then((result)=>{
+                    
+                });  
+        })
+    }
+
+
+
+</script>

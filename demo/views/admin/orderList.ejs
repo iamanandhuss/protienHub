@@ -1,0 +1,50 @@
+<%- include('layout/adminpage_header') %>
+
+
+    <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Manage Orders</h1>
+      <p class="text-gray-600 mb-10">Create, Edit, and Organize Customer Orders</p>
+
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Order List</h2>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg">Filter</button>
+      </div>
+
+      <!-- Orders Table -->
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr class="bg-blue-600 text-white text-sm uppercase text-left">
+            <th class="py-3 px-4">Order ID</th>
+            <th class="py-3 px-4">Customer ID</th>
+            <th class="py-3 px-4">Order Date</th>
+            <th class="py-3 px-4">Total Amount ($)</th>
+            <th class="py-3 px-4">Order Status</th>
+            <th class="py-3 px-4">Payment Status</th>
+            <th class="py-3 px-4">Shipping Status</th>
+            <th class="py-3 px-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b  text-sm"> <!-- Optional: Add a bottom border to each row -->
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>
+              <td class="py-2 px-4">one</td>           
+              <td>
+              <button onclick="window.location.href='/order_manage'" class="bg-blue-500 text-white px-4 py-2 rounded ml-4">View</button>
+              </td>
+          </tr>
+          <!-- Add more products as needed -->
+      </tbody>
+
+        
+
+
+
+      </table>
+      <%- include('layout/admin_footer') %>
+    </div>
+    

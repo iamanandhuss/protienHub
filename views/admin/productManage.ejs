@@ -1,0 +1,229 @@
+<%- include('layout/adminpage_header') %>
+
+<div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg">
+  <!-- Header -->
+  <h2 class="text-3xl font-semibold text-center mb-8">Product Details</h2>
+  <p class="text-center text-lg mb-6">View all product information for your e-commerce store</p>
+
+  <!-- Product Details -->
+  <%if(product){%>    
+  <div class="grid grid-cols-3 gap-6">
+    <!-- Product Name -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">ProducName</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.product_name%></div>
+    </div>
+
+    <!-- Product Slug -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Product Slug</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.product_slug%></div>
+    </div>
+
+    <!-- SKU -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">SKU (Stock Keeping Unit)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.sku%></div>
+    </div>
+
+    <!-- Brand -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Brand</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.brand%></div>
+    </div>
+
+    <!-- Price -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Price (₹)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">₹<%= product.price%></div>
+    </div>
+
+    <!-- Sale Price -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Sale Price (₹)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">₹<%= product.sale_price%></div>
+    </div>
+
+    <!-- Additional Discount -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Additional Discount (%)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.additional_discount%></div>
+    </div>
+
+    <!-- Discount -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Discount (%)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.discount%></div>
+    </div>
+
+    <!-- Stock Quantity -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Stock Quantity</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.stock_quantity%></div>
+    </div>
+
+   
+
+    <!-- MFG -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">MFG</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= new Date(product.mfg).toLocaleDateString('en-US') %></div>
+    </div>
+
+    <!-- Best Before Date -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Best Before Date</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= new Date(product.expiry).toLocaleDateString('en-US') %></div>
+    </div>
+
+    <!-- Country of Origin -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Country of Origin</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.countryof_origin%></div>
+    </div>
+
+    <!-- Veg/Non-Veg -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Veg/Non-Veg</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.dietary_choices%></div>
+    </div>
+
+    <!-- Material Composition -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Material Composition</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.product_name%></div>
+    </div>
+
+    <!-- EAN -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">EAN</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.material_compositions%></div>
+    </div>
+
+    <!-- Number of Servings -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Number of Servings</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.number_of_serving%> servings</div>
+    </div>
+
+    <!-- Weight -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Weight (g)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.weight%>g</div>
+    </div>
+
+    <!-- Serving Size -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Serving Size</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.serving_size%>g</div>
+    </div>
+
+    <!-- Protein per Serving -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Protein per Serving (g)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.protein_per_serving%>g</div>
+    </div>
+
+    <!-- Carbs per Serving -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Carbs per Serving (g)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.nutrition_information.carb_per_serving%>g</div>
+    </div>
+
+    <!-- Fat per Serving -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Fat per Serving (g)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.nutrition_information.fat_per_serving%>g</div>
+    </div>
+
+    <!-- Sugar per Serving -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Sugar per Serving (g)</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.nutrition_information.sugar_per_serving%>g</div>
+    </div>
+
+    <!-- Nutrition Information -->
+    <div class="col-span-3">
+      <label class="block text-sm font-medium">Nutrition Information</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">
+        This product contains high levels of protein and essential nutrients.
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="col-span-3">
+      <label class="block text-sm font-medium">Categories</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">
+        <%= product.product_name%>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Tags</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">Discount, Best Seller</div>
+    </div>
+
+    <!-- Product Image -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Product Image</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white flex justify-between">
+        <% for(let i = 0; i <=2; i++) { %>
+          <div>
+            
+            <img src="<%= product.product_image[i] %>" 
+               alt="Product Image" 
+               class="w-11 h-16 object-fill">
+               <h1>Image<%= i+1%></h1>
+          </div>
+          
+      <% } %>
+      
+      
+      </div>
+  </div>
+  
+
+    <!-- Product Ratings -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Product Ratings</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.
+        product_rating%>/5</div>
+    </div>
+
+    <!-- Product Certifications -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Product Certifications</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.
+        product_certifications%></div>
+    </div>
+
+    <!-- Associated Category -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Associated Category</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.associated_category%></div>
+    </div>
+
+    <!-- Status -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Status</label>
+      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.status%></div>
+    </div>
+  </div>
+  <!-- Buttons -->
+  <div class="mt-8 flex justify-center space-x-4">
+    <button  class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600" 
+    onclick="window.location.href='/admin/editProduct/<%= product._id %>'">Edit</button>
+    <%if(product.status!=='active'){%>
+      <button class="text-white bg-green-500 p-1 w-24 rounded-sm" 
+        onclick="window.location.href='/admin/blockproduct/<%= product._id %>'">Unblock</button>
+    <%}else{%>  
+      <button class="text-white bg-red-500 p-1 w-24 rounded-sm" 
+        onclick="window.location.href='/admin/unblockproduct/<%= product._id %>'">Block</button>
+    <%}%>
+  </div>
+</div>
+</div>
+
+<%}%>
+      <%- include('layout/admin_footer') %>

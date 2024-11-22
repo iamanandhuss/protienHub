@@ -1,0 +1,97 @@
+<%- include('layout/header') %>
+
+<!-- Right: Login Form -->
+
+<div class="bg-gray-200 shadow-lg text-center lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 lg:h-full rounded-lg -ml-10">
+    <h1 class="text-2xl font-bold mb-4">Enter your OTP</h1>
+    <p class="text-gray-500 mb-6">We have sent you a one-time password via example@gmail.com</p>
+    
+    <!-- OTP Verification Form -->
+    <form id="verify-otp-form" method="post" action="/create_password">
+      <div class="flex justify-center mb-5">
+          <input name="otp" type="text" maxlength="1" class="font-sans w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-gray-300 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 mr-3" oninput="this.nextElementSibling ? this.nextElementSibling.focus() : this.blur()">
+          <input name="otp" type="text" maxlength="1" class="font-sans w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-gray-300 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 mr-3 ml-3" oninput="this.nextElementSibling ? this.nextElementSibling.focus() : this.blur()">
+          <input name="otp" type="text" maxlength="1" class="font-sans w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-gray-300 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 mr-3 ml-3" oninput="this.nextElementSibling ? this.nextElementSibling.focus() : this.blur()">
+          <input name="otp" type="text" maxlength="1" class="font-sans w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-gray-300 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 mr-3 ml-3" oninput="this.nextElementSibling ? this.nextElementSibling.focus() : this.blur()">
+          <input name="otp" type="text" maxlength="1" class="font-sans w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-gray-300 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 ml-3" oninput="this.blur()">
+      </div>
+      <input type="hidden" name="full_otp" id="full_otp">
+        <!-- Resend and Timer Section -->
+        <div class="flex justify-between items-center mb-4">
+            <span id="resendOtp" class="text-gray-500">Didn't get it? <a onclick=window.location.href='/Resend' class="text-orange-600 font-semibold">Resend code</a></span>
+            <div class="text-gray-500 font-sans">
+              <span id="otpTimer">00:00</span>
+          </div>
+        </div>
+
+        <!-- Verify Button -->
+        <button type="submit" class="bg-orange-600 btn text-white font-bold py-2 w-full rounded-md hover:bg-orange-700">Verify OTP</button>
+        <% if (typeof msg !== 'undefined') { %>
+          <div class="alert alert-danger text-red-500">
+            <%= msg %>
+          </div>
+        <% } %>
+      </form>
+</div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+<script>
+  
+   document.getElementById("verify-otp-form").addEventListener("submit", function(event) {
+        // Prevent form submission to process the OTP
+        event.preventDefault();
+
+        // Collect the OTP values
+        const inputs = this.querySelectorAll('input[name="otp"]');
+        document.getElementById('resendOtp').style.display = "hidden";       
+         let otpString = '';
+        
+        inputs.forEach(input => {
+            otpString += input.value; // Concatenate the values
+        });
+
+        // Set the value of the hidden input to the concatenated string
+        document.getElementById("full_otp").value = otpString;
+
+        // Now submit the form
+        this.submit();
+    });
+
+    let otpTimerInterval;
+
+    function startOtpTimer(duration) {
+    let timer = duration, minutes, seconds;
+    const otpExpiry = Date.now() + timer * 1000; // Store the expiry time in milliseconds
+
+    otpTimerInterval = setInterval(() => {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        // Format minutes and seconds
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // Update the OTP timer display
+        document.getElementById('otpTimer').textContent = minutes + ":" + seconds;
+
+        // Check if the timer has expired
+        if (timer <= 0) {
+            clearInterval(otpTimerInterval);
+            swal({
+                title: "Time is over!",
+                text: "Please request a new OTP.",
+                icon: "warning",
+                button: "OK",
+            });
+        } else {
+            timer--; // Decrement the timer only if it's still above zero
+        }
+
+    }, 1000);
+}
+
+startOtpTimer(15);
+</script>
+</html>

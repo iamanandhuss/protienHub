@@ -1,0 +1,227 @@
+<%- include('layout/adminpage_header') %>
+
+<div class="w-4/5 p-8">
+    
+  <div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg">
+    <!-- Header -->
+    <h2 class="text-3xl font-semibold text-center mb-8">Manage Products</h2>
+    <p class="text-center text-lg mb-6">Create, Edit, and Organize Products for Your E-commerce Store</p>
+    
+    <!-- Form -->
+    <form>
+      
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Product Name -->
+         
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Name</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Product Slug -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Slug</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- SKU -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">SKU (Stock Keeping Unit)</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Brand -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Brand</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Price -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Price (₹)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Sale Price -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Sale Price (₹)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Additional Discount -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Additional Discount (%)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Discount -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Discount (%)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Stock Quantity -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Stock Quantity</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Stock Status -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Stock Status</label>
+          <select class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+            <option>In stock</option>
+            <option>Out of stock</option>
+          </select>
+        </div>
+  
+        <!-- MFG -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">MFG</label>
+          <input type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Best Before Date -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Best Before Date</label>
+          <input type="date" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Country of Origin -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Country of Origin</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Veg/Non-Veg -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Veg/Non-Veg</label>
+          <select class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+            <option>Vegetarian</option>
+            <option>Non-Vegetarian</option>
+          </select>
+        </div>
+  
+        <!-- Material Composition -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Material Composition</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- EAN -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">EAN</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Number of Servings -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Number of Servings</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Weight -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Weight (g)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Serving Size -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Serving Size</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Protein per Serving -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Protein per Serving (g)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Carbs per Serving -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Carbs per Serving (g)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Fat per Serving -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Fat per Serving (g)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Sugar per Serving -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Sugar per Serving (g)</label>
+          <input type="number" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Nutrition Information -->
+        <div class="col-span-3">
+          <label class="block text-sm font-medium">Nutrition Information</label>
+          <textarea class="w-full mt-1 p-2 border border-gray-300 rounded-md"></textarea>
+        </div>
+  
+        <!-- Categories -->
+        <div class="col-span-3">
+          <label class="block text-sm font-medium">Categories</label>
+          <div class="flex space-x-2">
+            <span class="bg-gray-200 px-2 py-1 rounded">Whey protein</span>
+            <span class="bg-gray-200 px-2 py-1 rounded">Vegan protein</span>
+            <!-- Add more categories as needed -->
+          </div>
+        </div>
+  
+        <!-- Tags -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Tags</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Percentage">
+        </div>
+  
+        <!-- Product Image -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Image</label>
+          <input type="file" class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+        </div>
+  
+        <!-- Product Ratings -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Ratings</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Enter average ratings">
+        </div>
+  
+        <!-- Product Certifications -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Certifications</label>
+          <input type="text" class="w-full mt-1 p-2 border border-gray-300 rounded-md" placeholder="Enter certifications">
+        </div>
+  
+        <!-- Associated Category -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Associated Category</label>
+          <select class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+            <option>None</option>
+            <!-- Add more categories as needed -->
+          </select>
+        </div>
+  
+        <!-- Status -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Status</label>
+          <select class="w-full mt-1 p-2 border border-gray-300 rounded-md">
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+      </div>
+  
+      <!-- Buttons -->
+      <div class="mt-8 flex justify-center space-x-4">
+        <button class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600">Save</button>
+        <button class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Delete</button>
+      </div>
+    </form>
+  </div>
+  
+
+      <%- include('layout/admin_footer') %>

@@ -1,0 +1,153 @@
+<%- include('layout/adminpage_header') %>
+
+<%if(order){%>
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<div class="p-6 bg-white shadow-md rounded-lg w-full m-6 mt-0">
+  <h2 class="text-xl font-bold mb-4">Order Details</h2>
+  <div class="grid grid-cols-4 gap-4">
+    <!-- Row 1 -->
+    <div>
+      <label class="block text-gray-600 font-medium">Order ID</label>
+      <p class="border rounded px-2 py-1"><%=order._id%></p>
+    </div>
+    <div>
+      <label class="block text-gray-600 font-medium">Order Date</label>
+      <p class="border rounded px-2 py-1"><%=new Date(order.createdAt.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB")%></p>
+    </div>
+    <div>
+      <label class="block text-gray-600 font-medium">Order Status</label>
+      <p class="border rounded px-2 py-1"><%=order.orderStatus%></p>
+    </div>
+    <div>
+      <label class="block text-gray-600 font-medium">Payment Status</label>
+      <p class="border rounded px-2 py-1"><%=order.paymentStatus%></p>
+    </div>
+   
+    <div>
+      <label class="block text-gray-600 font-medium">Total Amount ()</label>
+      <p class="border rounded px-2 py-1"><%=order.totalAmount%></p>
+    </div>
+    <div>
+      <label class="block text-gray-600 font-medium">Customer Name</label>
+      <p class="border rounded px-2 py-1"><%=order.user.username%></p>
+    </div>
+    <!-- Row 3 -->
+    <div>
+      <label class="block text-gray-600 font-medium">Customer Email</label>
+      <p class="border rounded px-2 py-1"><%=order.user.email%></p>
+    </div>
+    <div>
+      <label class="block text-gray-600 font-medium">Customer Phone</label>
+      <p class="border rounded px-2 py-1"><%=order.user.Phone%></p>
+    </div>
+    
+  <%if(delivaryAddress.address[0]){%>
+    <div class="col-span-2">
+      <label class="block text-gray-600  font-bold p-4 pl-0">Shipping Address</label>
+      <div class="address">
+        <!-- First Address -->
+        <p class="flex justify-between pr-32"><strong>Contact Name:</strong><%=delivaryAddress.address[0].contactName%></p>
+        <p class="flex justify-between  pr-32"><strong>Building:</strong><%=delivaryAddress.address[0].building%></p>
+        <p class="flex justify-between  pr-32"><strong>City:</strong><%=delivaryAddress.address[0].city%></p>
+        <p class="flex justify-between  pr-32"><strong>District:</strong><%=delivaryAddress.address[0].district%></p>
+        <p class="flex justify-between  pr-32"><strong>State:</strong><%=delivaryAddress.address[0].state%></p>
+        <p class="flex justify-between  pr-32"><strong>Country:</strong><%=delivaryAddress.address[0].country%></p>
+        <p class="flex justify-between  pr-32"><strong>Pincode:</strong><%=delivaryAddress.address[0].pincode%></p>
+        <p class="flex justify-between  pr-32"><strong>Phone Number:</strong><%=delivaryAddress.address[0].phonenumber%></p>
+        <p class="flex justify-between  pr-32"><strong>Landmark:</strong><%=delivaryAddress.address[0].landmark%></p>
+      </div>
+    </div>
+  <%}%>
+  </div>
+<!-- -->
+<table class="min-w-full bg-white border border-gray-200 mt-10">
+  <thead>
+    <tr class="bg-orange-400 text-white text-sm uppercase text-left">
+      <th class="py-3 px-4">Image</th>
+      <th class="py-3 px-4">Product Name</th>
+      <th class="py-3 px-4">Order Date</th>
+      <th class="py-3 px-4">Flavor</th>
+      <th class="py-3 px-4">Price</th>
+      <th class="py-3 px-4">Discount</th> 
+      <th class="py-3 px-4">Quantity</th>
+      <th class="py-3 px-4">OrderStatus</th>
+    </tr>
+  </thead>
+  
+  <%order.products.forEach((data)=>{%>
+  <tbody id="tableBody">
+    <% const statusSteps = ['Pending','Processing', 'Shipped','Cancelled','Delivered']; %>
+        <tr class="border-b  text-sm"> <!-- Optional: Add a bottom border to each row -->
+        <td class="py-2 px-4"><img class="w-11 h-16 object-fill" src="<%=data.product.product_image[0]%>" alt=""></td>
+        <td class="py-2 px-4"><%=data.product.product_name%></td>
+        <td class="py-2 px-4"><%=new Date(order.createdAt.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB")%></td>
+        <td><%=data.product.Flavor%></td>
+        <td class="py-2 px-4"><%=data.product.price%></td>
+        <td class="py-2 px-4"><%=data.product.discount%></td>
+        <td class="py-2 px-4"><%=data.quantity%></td>
+        <td class="py-2 px-4 <%= (order.orderStatus == 'Delivered') ? 'text-green-500' : 'text-red-500' %>"><%- include('layout/dropdown') %></td>           
+    <!-- Add more products as needed -->
+     
+</tbody>
+
+<%})%>
+  </table>
+  
+
+</div>
+<h1 id="orderId" class="hidden"><%=order._id%></h1>
+<h1 id="currentOrder" class="hidden"><%=order.orderStatus%></h1>
+
+<%}%>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.getElementById("dropdownButton").addEventListener("click", function () {
+  const dropdown = document.getElementById("dropdownMenu");
+  dropdown.classList.toggle("hidden");
+});
+  
+
+
+const dropdownItems = dropdownMenu.querySelectorAll("a");
+dropdownItems.forEach((item) => {
+  item.addEventListener("click",  (event)=>{
+    const newStatus=event.target.textContent
+    const currentOrder=document.getElementById('currentOrder').innerText;
+    const orderId=document.getElementById('orderId').innerText;
+    const response=fetch(`/admin/newStatus?newStatus=${newStatus}&orderId=${orderId}&currentOrder=${currentOrder}`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        },
+    }).then((response)=>{
+
+if(response.status==200){
+  Swal.fire({
+                        title: 'Sucess!',
+                        text: 'OrderStatus Changed Sucessfully',
+                        icon: 'sucess',
+                        confirmButtonText: 'OK'
+                    }).then(()=>{
+                      window.location.reload();
+                    });
+} 
+if(response.status==304){
+  Swal.fire({
+                        title: 'info!',
+                        text: `cannot change order status from ${currentOrder}`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then(()=>{
+                      window.location.reload();
+                    });
+}   })
+    
+  });
+      })
+</script>
+<%- include('layout/admin_footer') %>

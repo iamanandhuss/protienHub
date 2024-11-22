@@ -1,0 +1,172 @@
+<%- include('layout/page_header') %>
+
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <!-- Dropdown Menus -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4 pb-0 space-x-8 flex-wrap normal">
+            <% let dropdata = ["Sports Nutrition", "General Wellness", "Vitamins & Supplements", "Fitness Accessories"]; %>
+            <% dropdata.forEach((i) => { %>
+                <div class="relative dropdiv category" onmouseover="javascript:mouseon()">
+                    <div class="flex items-center space-x-2 mb-2 md:mb-0 group">
+                        <p class="text-gray-700 group-hover:text-orange-700 font-bold text-base md:text-lg">
+                            <%= i %>
+                        </p>
+                        <i class="fa-solid fa-angle-down text-gray-600 group-hover:rotate-180 group-hover:text-orange-700"></i>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <!-- hidden menu -->
+    <div class="relative w-full h-4/6 mx-auto overflow-hidden">
+        <div class="absolute inset-0 z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-100 h-max" id="opt" onmouseover="javascript:mouseon()" onmouseleave="javascript:mouseoff()">
+            <div class="flex justify-between items-center py-4 pb-0 space-x-8 ">
+                <% let menu = ["Proteins", "Gainers", "Pre/Intra Workouts", "Workout Essentials"]; %>
+                <% menu.forEach((category) => { %>
+                    <div>
+                        <p class="text-gray-700 font-bold hover:underline decoration-orange-700">
+                            <%= category %>
+                        </p>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <!-- carousel -->
+        <div id="carousel" class="flex transition-transform duration-700 ease-in-out">
+            <% let bannerimg=["img1.avif","img2.jpg","img3.jpg"]%>
+                <%bannerimg.forEach((i)=> {%>
+                    <div class="min-w-full flex-shrink-0">
+                        <img src="/<%= i %>" alt="Slide 3" class="w-full h-3/4 object-cover">
+                    </div>
+                    <% }); %>
+        </div>
+
+
+        <button id="prev"
+            class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-transparent bg-opacity-50 p-3 pt-10">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="next"
+            class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-transparent bg-opacity-50 p-3 pt-10">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Coupons Of The Week -->
+    <div class="container mx-auto px-4 py-0">
+        <div class="flex justify-between items-center ml-3 mr-3">
+            <h2 class="text-2xl font-bold mb-8">Coupons Of The Week</h2>
+            <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4 mb-8">View all</button>
+        </div>
+
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <% products.forEach((product)=>{ %>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="flex justify-center">
+                        <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
+
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-red-500 font-bold"><%= product.discount %> OFF</span>
+                            <span class="text-gray-600">(32 Reviews)</span>
+        
+                            <div class="flex items-center">
+                                <% for(let i = 0; i < 5; i++) { %>
+                                    <% if(i < parseInt(product.product_rating)) { %>
+                                        <!-- Filled Star -->
+                                        <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    <% } else { %>
+                                        <!-- Unfilled Star -->
+                                        <svg class="w-4 h-4 text-gray-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-semibold mt-2"><%= product.product_name %></h3>
+                        <!-- Button with data attributes -->                           
+
+                        
+                        <button onclick="window.location.href='/addCart?productId=<%= product._id %>'" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
+                            Add to cart
+                        </button>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
+                </div>
+            <% }) %>
+        </div>
+        
+
+    <!-- Blog Section -->
+    <div class="container mx-auto px-4 flex flex-wrap justify-between mt-24">
+        <% let blog = [{
+            img: 'bllog1.png',
+            title: "Powering Your Fitness Journey",
+            desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea harum vero nam provident, ab, repellat deserunt, libero nemo magnam ratione ducimus eaque. Fuga veniam dolorem animi numquam mollitia dolores obcaecati."
+        }, {
+            img: 'bllog1.png',
+            title: "Powering Your Fitness Journey",
+            desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea harum vero nam provident, ab, repellat deserunt, libero nemo magnam ratione ducimus eaque. Fuga veniam dolorem animi numquam mollitia dolores obcaecati."
+        }, {
+            img: 'bllog1.png',
+            title: "Powering Your Fitness Journey",
+            desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea harum vero nam provident, ab, repellat deserunt, libero nemo magnam ratione ducimus eaque. Fuga veniam dolorem animi numquam mollitia dolores obcaecati."
+        }, {
+            img: 'bllog1.png',
+            title: "Powering Your Fitness Journey",
+            desc: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea harum vero nam provident, ab, repellat deserunt, libero nemo magnam ratione ducimus eaque. Fuga veniam dolorem animi numquam mollitia dolores obcaecati."
+        }]; %>
+        <% blog.forEach((blog) => { %>
+            <div class="p-5 w-full md:w-1/2 lg:w-1/4">
+                <img src="/<%= blog.img %>" alt="Protein and the Brain" class="w-full">
+                <h3 class="font-semibold text-lg mt-2"><%= blog.title %></h3>
+                <p class="container text-sm text-gray-600"><%= blog.desc %></p>
+            </div>
+        <% }) %>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <!-- Overview Section -->
+    <% proteinHubContent.forEach((overview) => { %>
+        <div class="container mx-auto px-4 bg-gray-200 py-6">
+            <h1 class="text-xl font-bold"><%= overview.sectionTitle %></h1>
+            <% if (overview.sectionDescription) { %>
+                <p class="mt-4 text-lg"><%= overview.sectionDescription %></p>
+            <% } %>
+            <% if (overview.sectionPoints) { %>
+                <ul class="mt-4 list-disc pl-5">
+                    <% overview.sectionPoints.forEach((point) => { %>
+                        <li class="text-lg"><%= point %></li>
+                    <% }) %>
+                </ul>
+            <% } %>
+            <% if (overview.categories) { %>
+                <% overview.categories.forEach((category) => { %>
+                    <h2 class="mt-6 text-lg font-semibold"><%= category.categoryTitle %></h2>
+                    <ul class="mt-4 list-disc pl-5">
+                        <% category.products.forEach((product) => { %>
+                            <li class="text-lg"><%= product %></li>
+                        <% }) %>
+                    </ul>
+                <% }) %>
+            <% } %> 
+        </div>
+    <% }) %>
+    <%- include('layout/footer') %>
+</body>

@@ -1,0 +1,233 @@
+<%- include('layout/page_header',{user}) %>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4 pb-0 space-x-8 flex-wrap normal">
+        <% let dropdata = ["Sports Nutrition", "General Wellness", "Vitamins & Supplements", "Fitness Accessories"]; %>
+        <% dropdata.forEach((i) => { %>
+            <div class="relative dropdiv category" onmouseover="javascript:mouseon()">
+                <div class="flex items-center space-x-2 mb-2 md:mb-0 group">
+                    <p class="text-gray-700 group-hover:text-orange-700 font-bold text-base md:text-lg">
+                        <%= i %>
+                    </p>
+                    <i class="fa-solid fa-angle-down text-gray-600 group-hover:rotate-180 group-hover:text-orange-700"></i>
+                </div>
+            </div>
+        <% }) %>
+
+        
+    </div>
+</div>
+
+<!-- hidden menu -->
+<div class="relative w-full h-4/6 mx-auto overflow-hidden">
+    <div class="absolute inset-0 z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-100 h-max" id="opt" onmouseover="javascript:mouseon()" onmouseleave="javascript:mouseoff()">
+        <div class="flex justify-between items-center py-4 pb-0 space-x-8 ">
+            <% let menu = ["Proteins", "Gainers", "Pre/Intra Workouts", "Workout Essentials"]; %>
+            <% menu.forEach((category) => { %>
+                <div>
+                    <p class="text-gray-700 font-bold hover:underline decoration-orange-700">
+                        <%= category %>
+                    </p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+<div class="flex pt-8">
+ 
+    <!-- Sidebar (Filters) -->
+    <aside class="w-2/4 p-4 bg-white shadow-lg rounded-md">
+      <form id="sortOptions">
+
+      <h2 class="text-xl font-bold mb-4">Filter</h2>
+<!-- Category -->
+      <div class="mb-6">
+        <h3 class="font-semibold text-lg">Category</h3>
+        <% Category.forEach((Cat) => { %>
+          <label class="flex items-center mt-2">
+            <input id="category" type="checkbox" name="category" value="<%= Cat.category_name%>">
+            <%= Cat.category_name %>
+          </label>
+        <% }) %>
+      </div>
+
+      <!-- Price Filter -->
+  <div class="mb-6">
+    <h3 class="font-semibold text-lg">Price</h3>
+    <label class="flex items-center mt-2">
+      <input id="price" type="radio" name="price" value="asc"> Low to High
+    </label>
+    <label class="flex items-center mt-2">
+      <input type="radio" name="price" value="desc"> High to Low
+    </label>
+  </div>
+
+  
+
+  <div class="mb-6">
+    <h3 class="font-semibold text-lg">Sort By</h3>
+    <label class="flex items-center mt-2">
+        <input type="radio" name="sort" value="asc" class="mr-2"> A to Z
+    </label>
+    <label class="flex items-center mt-2">
+        <input type="radio" name="sort" value="desc" class="mr-2"> Z to A
+    </label>
+  </div>
+
+  <!-- Flavor Filter -->
+  <div class="mb-6">
+    <h3 class="font-semibold text-lg">Flavour</h3>
+    <div class="flex flex-col">
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Chocolate" class="mr-2"> Chocolate
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Cookies and Cream" class="mr-2"> Cookies and Cream
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Double Chocolate" class="mr-2"> Double Chocolate
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Unflavoured Whey Protein" class="mr-2"> Unflavoured Whey Protein
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Vanilla" class="mr-2"> Vanilla
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Mango" class="mr-2"> Mango
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Salted Caramel" class="mr-2"> Salted Caramel
+        </label>
+        <label class="flex items-center mt-2">
+            <input id="flavour" type="checkbox" name="flavour" value="Strawberry" class="mr-2"> Strawberry
+        </label>
+    </div>
+</div>
+
+<button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">Submit</button>
+</form>
+    </aside>
+
+    <!-- Product Listing Section -->
+     <div>
+        <div class="flex justify-between"> 
+            <h2 class="text-xl font-bold mb-4 pl-4">All Products</h2>
+            <h2 class="text-xl font-bold mb-4 pr-4">(<%= products.length %> Items)</h2>
+        </div>
+       
+        
+<%=products%>
+    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+        <% products.forEach((product)=>{ %>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="flex justify-center">
+                    <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
+
+                </div>
+                
+                <div class="p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-red-500 font-sans font-bold"><%= product.discount %> OFF</span>
+                        <span class="text-gray-600 font-sans">(32Reviews)</span>
+    
+                        <div class="flex items-center">
+                            <% for(let i = 0; i < 5; i++) { %>
+                                <% if(i < parseInt(product.product_rating)) { %>
+                                    <!-- Filled Star -->
+                                    <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                <% } else { %>
+                                    <!-- Unfilled Star -->
+                                    <svg class="w-4 h-4 text-gray-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mt-2"><%= product.product_name %></h3>
+                    <%if(Number(product.stock_quantity)>2){%>
+                    <h3 class="text-lg font-semibold mt-2">Current Quantity:<span class="font-sans <%=(product.stock_quantity<6? 'text-red-500': 'text-green-500') %>"><%= product.stock_quantity %></span></h3>
+                    <!-- Button with data attributes -->                           
+
+                    
+                    <button onclick="window.location.href='/viewdetail?productId=<%= product._id %>'" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
+                        Add to cart
+                    </button>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
+            </div>
+                    <%}else{%>
+                        <h3 class="text-lg font-semibold mt-2 text text-red-500">Product OutOff Stock</h3>
+                    </div>
+                </div>
+                    <%}%>
+               
+        <% }) %>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("sortOptions").addEventListener("change", function () {
+        // Get selected filter values
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        const selectedFlavours = Array.from(document.querySelectorAll('input[name="flavour"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        const selectedPrice = document.querySelector('input[name="price"]:checked')?.value;
+        const selectedSort = document.querySelector('input[name="sort"]:checked')?.value;
+
+        // Build query parameters
+        const params = new URLSearchParams();
+        if (selectedCategories.length > 0) params.append("category", selectedCategories.join(","));
+        if (selectedFlavours.length > 0) params.append("flavour", selectedFlavours.join(","));
+        if (selectedPrice) params.append("price", selectedPrice);
+        if (selectedSort) params.append("sort", selectedSort);
+
+        // Fetch filtered data
+        fetch(`/sort-products?${params.toString()}`)
+            .then(response => response.json())
+            .then(data => {
+                const productContainer = document.getElementById("productContainer");
+                productContainer.innerHTML = ""; // Clear previous products
+
+                // Display filtered products
+                data.products.forEach(product => {
+                    productContainer.innerHTML += `
+                        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                            <div class="flex justify-center">
+                                <img src="${product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg'}" alt="Product Image" class="w-1/2 object-fill">
+                            </div>
+                            <div class="p-4">
+                                <div class="p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-red-500 font-bold">${product.discount}OFF</span>
+                        <span class="text-gray-600">(32 Reviews)</span>
+    
+                        
+                    </div>
+                    <h3 class="text-lg font-semibold mt-2">${product.product_name}</h3>
+                    <!-- Button with data attributes -->                           
+
+                    
+                    <button onclick="window.location.href='/viewdetail?productId=${product._id}'" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="${product.product_name}">
+                        Add to cart
+                    </button>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA ${product.additional_discount}% OFF</p>
+                            </div>
+                        </div>
+                    `;
+                }); 
+            })
+            .catch(error => console.error("Error fetching filtered products:", error));
+    });
+</script>
+
+
+  <%- include('layout/footer') %>
+</body>

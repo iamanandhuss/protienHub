@@ -1,0 +1,127 @@
+
+</div>
+<footer class="py-10">
+    <div class=" mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 bg-black text-gray-400 text-center py-8">
+        <!-- My Account Section -->
+        <div class="text-start pl-64">
+            <h4 class="text-lg font-semibold mb-4">My Account</h4>
+            <ul>
+                <li><a href="#" class="text-gray-400 hover:text-white ">My Account</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">My Orders</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">My Addresses</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Terms & Conditions</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Payment options</a></li>
+            </ul>
+            <div class="flex space-x-2 mt-4">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-amazon-pay"></i>
+                <i class="fa-brands fa-google-pay"></i>
+                <i class="fa-brands fa-cc-amazon-pay"></i>
+            </div>
+        </div>
+
+        <!-- Help & Support Section -->
+        <div class="text-start">
+            <h4 class="text-lg font-semibold mb-4">Help & Support</h4>
+            <ul>
+                <li><a href="#" class="text-gray-400 hover:text-white">Contact us</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Shipping & Return</a></li>
+            </ul>
+        </div>
+
+        <!-- Protein Hub Section -->
+        <div class="text-start">
+            <h4 class="text-lg font-semibold mb-4">Protein Hub</h4>
+            <ul>
+                <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Authenticity Check</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Delivery</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Store Locator</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Sell on HealthXP</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white">Sitemap</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact Us Section -->
+        <div class="text-start">
+            <h4 class="text-lg font-semibold mb-4">Contact us</h4>
+            <div class="mb-4">
+                <p class="flex items-center space-x-2">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Email: contact@example.com</span>
+                </p>
+                <p class="flex items-center space-x-2 mt-2">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>Phone: +123 456 789</span>
+                </p>
+            </div>
+            <div class="flex space-x-4 mt-4">
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-twitter"></i>
+                <i class="fa-brands fa-youtube"></i>
+                <i class="fa-brands fa-instagram"></i>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+<script>
+    function mouseon()
+    {
+        const opt=document.getElementById('opt').style.display="block"  
+
+    }
+    function mouseoff()
+    {
+        const opt=document.getElementById('opt').style.display="none"   
+
+    }
+    
+
+    document.getElementById('send-otp-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = e.target.email.value;
+
+        const response = await fetch('/api/otp/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+
+        const result = await response.text();
+        alert(result);
+    });
+        
+</script>
+
+</html><script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('#carousel div');
+    const totalItems = items.length;
+
+    function showSlide(index) {
+        document.querySelector('#carousel').style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    document.querySelector('#prev').addEventListener('click', () => {
+        currentIndex = (currentIndex === 0) ? totalItems - 1 : currentIndex - 1;
+        showSlide(currentIndex);
+    });
+
+    document.querySelector('#next').addEventListener('click', () => {
+        currentIndex = (currentIndex === totalItems - 1) ? 0 : currentIndex + 1;
+        showSlide(currentIndex);
+    });
+    document.querySelector('#carousel').addEventListener('click', () => {
+        currentIndex = (currentIndex === totalItems - 1) ? 0 : currentIndex + 1;
+        showSlide(currentIndex);
+    });
+</script>
+
+
+
+
+

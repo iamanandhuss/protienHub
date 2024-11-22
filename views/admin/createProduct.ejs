@@ -1,0 +1,528 @@
+<%- include('layout/adminpage_header') %>
+
+<div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Create Products</h1>
+  <form  method="post" id="productForm" enctype="multipart/form-data">
+    <div class="grid grid-cols-3 gap-6">
+
+       <!-- Product Name -->
+       <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Product Name</label>
+        <input oninput="validateName()" id="product_name" type="text" name="product_name"  class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+        <p id="error-Name" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
+      </div>
+
+      
+      <!-- Product Slug -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Product Slug</label>
+        <input id="product_slug" type="text" name="product_slug"  
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required 
+               oninput="validateProductSlug()">
+        <p id="error-message" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
+    </div>
+
+      <!-- SKU -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">SKU</label>
+        <input id="sku" type="number" name="sku" 
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required
+               oninput="validateSKU()">
+        <p id="error-sku" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 0 and 100.</p>
+    </div>
+
+      <!-- Brand -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Brand</label>
+        <input id="brand" type="text" name="brand"
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               required oninput="validateBrand()">
+        <p id="error-brand" class="text-red-500 text-sm mt-1 hidden">Please enter only letters.</p>
+    </div>
+
+      <!-- Price -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Price</label>
+        <input id="price" type="text" name="price" 
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               required oninput="validatePrice()">
+        <p id="error-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
+    </div>
+
+      <!-- Sale Price -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Sale Price</label>
+        <input id="sale_price" type="text" name="sale_price"  
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               oninput="validateSalePrice()">
+        <p id="error-sale-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
+    </div>
+
+      <!-- Additional Discount -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Additional Discount (%)</label>
+        <input id="additional_discount" type="number" name="additional_discount" 
+                class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               oninput="validateDiscount()">
+        <p id="error-discount" class="text-red-500 text-sm mt-1 hidden">Please enter a number not exceeding 50.</p>
+    </div>
+
+      <!-- Discount -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Discount</label>
+        <input id="discount" type="text" name="discount"  
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               oninput="validateDiscount()">
+        <p id="error-Adddiscount" class="text-red-500 text-sm mt-1 hidden">Please enter a valid number not exceeding 100.</p>
+    </div>
+
+      <!-- Stock Quantity -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Stock Quantity</label>
+        <input id="stock_quantity" type="number" name="stock_quantity"  
+               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+               min="1" max="100" required oninput="validateStockQuantity()">
+        <p id="error-stock-quantity" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 1 and 100.</p>
+    </div>
+
+      <!-- Stock Status -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Stock Status</label>
+        <select name="status" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="active" >Active</option>
+            <option value="inactive" >Inactive</option>
+        </select>
+    </div>
+
+      <!-- Expiry Date -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Expiry Date</label>
+        <input type="date" id="expiry" name="expiry"  class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+    </div>
+
+      <!-- Manufacturing Date -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Manufacturing Date</label>
+        <input type="date" id="mfg" name="mfg"  class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+    </div>
+
+      <!-- Flavor -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Flavor</label>
+        <select name="Flavor" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="chocolate">Chocolate</option>
+            <option value="cookies_and_cream" >Cookies and Cream</option>
+            <option value="double_chocolate">Double Chocolate</option>
+            <option value="unflavoured_whey_protein" >Unflavoured Whey Protein</option>
+            <option value="vanilla" >Vanilla</option>
+            <option value="mango" >Mango</option>
+            <option value="salted_caramel" >Salted Caramel</option>
+            <option value="strawberry" >Strawberry</option>
+        </select>
+    </div>
+
+      <!-- Country of Origin -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Country of Origin</label>
+        <select name="countryof_origin" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <!-- Dropdown options will be populated here using JavaScript -->
+        </select>
+    </div>
+      <!-- Dietary Choices -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Dietary Choices</label>
+        <select name="dietary_choices" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="Whey" >Whey</option>
+            <option value="Casein protein" >Casein protein</option>
+            <option value="Protein powders" >Protein powders</option>
+            <option value="Soy protein" >Soy protein</option>
+            <option value="Protein blends" >Protein blends</option>
+            <option value="Rice" >Rice</option>
+            <option value="Collagen Protein" >Collagen Protein</option>
+            <option value="Egg" >Egg</option>
+            <option value="Egg white" >Egg white</option>
+            <option value="Hemp protein" >Hemp protein</option>
+            <option value="Milk" >Milk</option>
+            <option value="Oatmeal boost">Oatmeal boost</option>
+            <option value="Casein" >Casein</option>
+            <option value="Greek Yogurt" >Greek Yogurt</option>
+            <option value="Hemp" >Hemp</option>
+            <option value="Pea" >Pea</option>
+            <option value="Protein hummus" >Protein hummus</option>
+        </select>
+    </div>
+
+      <!-- Material Compositions -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Material Compositions</label>
+        <input type="text" name="material_compositions" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full">
+      </div>
+
+      <!-- EAN -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">EAN</label>
+        <select name="ean" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required id="ean-dropdown">
+            <!-- Options will be populated by JavaScript -->
+        </select>
+    </div>
+
+      <!-- Number of Servings -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Number of Servings</label>
+        <select name="number_of_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="two"></option>
+            <option value="one">One Scoop</option>
+            <option value="two" >Two Scoops</option>
+        </select>
+    </div>
+
+      <!-- Weight -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Weight (g)</label>
+        <select name="weight" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <!-- Dynamically generating values from 0.8 to 1.8 with a step of 0.1 -->
+            <option value="0.8" >0.8 g/kg</option>
+            <option value="0.9">0.9 g/kg</option>
+            <option value="1.0">1.0 g/kg</option>
+            <option value="1.1">1.1 g/kg</option>
+            <option value="1.2">1.2 g/kg</option>
+            <option value="1.3">1.3 g/kg</option>
+            <option value="1.4">1.4 g/kg</option>
+            <option value="1.5">1.5 g/kg</option>
+            <option value="1.6">1.6 g/kg</option>
+            <option value="1.7">1.7 g/kg</option>
+            <option value="1.8">1.8 g/kg</option>
+        </select>
+    </div>
+
+      <!-- Serving Size -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Serving Size (g)</label>
+        <select name="serving_size" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="25" >1 scoop (25g)</option>
+            <option value="50" >2 scoops (50g)</option>
+        </select>
+    </div>
+
+      <!-- Protein per Serving -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Protein per Serving (g)</label>
+        <select name="protein_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="20">20 grams</option>
+            <option value="25">25 grams</option>
+            <option value="30">30 grams</option>
+        </select>
+    </div>
+
+      <!-- Nutrition Information -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Calories per Serving</label>
+        <select name="calories_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="80" >80 calories</option>
+            <option value="90" >90 calories</option>
+            <option value="100">100 calories</option>
+            <option value="110">110 calories</option>
+            <option value="120">120 calories</option>
+            <option value="130">130 calories</option>
+            <option value="140">140 calories</option>
+            <option value="150">150 calories</option>
+        </select>
+    </div>
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Sugars per Serving (g)</label>
+      <select name="sugar_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+          <option value="0" >0 grams</option>
+          <option value="1" >1 gram</option>
+          <option value="2" >2 grams</option>
+          <option value="3" >3 grams</option>
+          <option value="4" >4 grams</option>
+          <option value="5" >5 grams</option>
+      </select>
+    </div>
+      <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">Total Fat per Serving (g)</label>
+      <select name="fat_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+          <option value="1" >1 gram</option>
+          <option value="2" >2 grams</option>
+          <option value="3" >3 grams</option>
+          <option value="4" >4 grams</option>
+          <option value="5" >5 grams</option>
+      </select>
+  </div>
+  <div class="col-span-3 sm:col-span-1">
+    <label class="block text-sm font-medium">Total Carbohydrates per Serving (g)</label>
+    <select name="carb_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+        <option value="0" >0 grams</option>
+        <option value="1" >1 gram</option>
+        <option value="2" >2 grams</option>
+        <option value="3" >3 grams</option>
+        <option value="4" >4 grams</option>
+        <option value="5" >5 grams</option>
+    </select>
+</div>
+
+      
+      
+      <!-- Category -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Category</label>
+        <select name="categoryId" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+          <% if (categories) { %>
+            <% categories.forEach((category) => { %>
+              <option value="<%= category._id %>"><%= category.category_name %></option>
+            <% }) %>
+          <% } %>
+        </select>
+    </div>
+    
+      
+
+      <!-- Product Certifications -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Product Certifications</label>
+        <input type="text" name="product_certifications" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full">
+      </div>
+
+      <!-- Additional Information -->
+      <div class="col-span-3 sm:col-span-1">
+        <label class="block text-sm font-medium">Additional Information</label>
+        <input type="text" name="additional_information" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full">
+      </div>
+      
+      </div>
+      <div class="col-span-2">
+        <label class="block text-sm text-white mb-2">Upload Files</label>
+        <input
+          id="fileInput"
+          type="file"
+          name="image"
+          accept="image/*"
+          multiple
+          required
+          class="block w-full text-sm text-gray-400 file:bg-gray-700 file:border-none file:rounded file:text-white file:cursor-pointer file:px-4 file:py-2 hover:file:bg-gray-600"
+        />
+        <p class="mt-2 text-xs text-gray-400">
+          Allowed formats: PNG, JPG, SVG, WEBP, GIF (Max: 3 files).
+        </p>
+
+        <!-- Preview section -->
+        <div id="previewContainer" class="grid grid-cols-3 gap-4 mt-4">
+          <!-- Cropped Image Preview will appear here -->
+        </div>
+
+        <!-- Crop Modal -->
+        <div
+          id="cropModal"
+          class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+        >
+          <div class="bg-[#1f1f1f] p-8 rounded-lg">
+            <div id="imagePreviewContainer" class="max-w-md">
+              <img id="imageToCrop" class="w-full" src="" alt="To Crop" />
+            </div>
+            <div class="flex justify-between mt-4">
+              <button
+                type="button"
+                id="cropButton"
+                class="bg-blue-500 px-4 py-2 text-white rounded hover:bg-blue-600 transition"
+              >
+                Crop
+              </button>
+              <button
+                type="button"
+                id="cancelCropButton"
+                class="bg-red-500 px-4 py-2 text-white rounded hover:bg-red-600 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+      />
+      <button
+      id="addProductBtn"
+      type="submit"
+      class="mt-8 w-full rounded bg-blue-500 px-6 py-3 text-sm text-white hover:bg-blue-600 transition"
+    >
+      Add Product
+    </button>
+  </form>
+
+
+</div>
+<script>
+
+
+  //-----------------------------------Image croping adding----------------------------
+
+  const fileInput = document.getElementById("fileInput");
+  const previewContainer = document.getElementById("previewContainer");
+  const cropModal = document.getElementById("cropModal");
+  const imageToCrop = document.getElementById("imageToCrop");
+  const addProductBtn = document.getElementById("addProductBtn"); // Add Product button
+  const productForm = document.getElementById("productForm");
+  const spinner = document.getElementById("spinner");
+  const successModal = document.getElementById("successModal");
+
+  let cropper;
+  let fileCount = 0;
+  let croppedImages = []; // To store all cropped images
+
+  // File input handling
+  fileInput.addEventListener("change", handleFiles);
+
+  function handleFiles(event) {
+    const files = event.target.files;
+    const maxFiles = 3;
+
+    if (files.length > maxFiles) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Too Many Files',
+        text: 'You can upload a maximum of 3 files.',
+        confirmButtonText: 'OK'
+      });
+  return;
+    }
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imageToCrop.src = e.target.result;
+        cropModal.classList.remove("hidden");
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1,
+          viewMode: 1,
+          background: false,
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Handle the crop button click
+  document.getElementById("cropButton").addEventListener("click", function () {
+    const croppedCanvas = cropper.getCroppedCanvas();
+    const croppedImageURL = croppedCanvas.toDataURL();
+
+    const imgWrapper = document.createElement("div");
+    imgWrapper.classList.add("relative", "inline-block");
+
+    const imgElement = document.createElement("img");
+    imgElement.src = croppedImageURL;
+    imgElement.classList.add("rounded", "border", "border-gray-700", "p-2");
+
+
+    const removeBtn = document.createElement("button");
+    removeBtn.innerHTML = "&times;"; // Cross icon
+    removeBtn.classList.add(
+    "absolute",
+    "top-0",
+    "right-0",
+    "bg-red-500",
+    "text-white",
+    "rounded-full",
+    "p-1",
+    "cursor-pointer"
+  );
+  removeBtn.title = "Remove Image";
+
+  removeBtn.addEventListener('click', function(){
+
+    // Remove the image element from the DOM
+    previewContainer.removeChild(imgWrapper);
+
+    // Remove the image from the croppedImages array
+    const imageIndex = croppedImages.indexOf(croppedImageURL);
+    if (imageIndex > -1) {
+      croppedImages.splice(imageIndex, 1);
+    }
+
+    // Decrement file count
+    fileCount -= 1;
+
+    // Notify user that an image has been removed
+    alert(`Image removed. You can now upload ₹{3 - fileCount} more image(s).`);
+
+  })
+
+
+    imgWrapper.appendChild(imgElement);
+    imgWrapper.appendChild(removeBtn);
+
+
+// Append the wrapper to the preview container
+  previewContainer.appendChild(imgWrapper);
+
+  // Store the cropped image in an array for submission
+  croppedImages.push(croppedImageURL);
+
+  // Hide the modal and destroy the cropper instance
+  cropper.destroy();
+  cropModal.classList.add("hidden");
+
+  // Increment file count
+  fileCount += 1;
+
+  
+  });
+ 
+
+
+
+
+
+  productForm.addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    if (croppedImages.length !== 3) {
+      alert("Please upload and crop exactly 3 images.");
+      return;
+    }
+
+    // If validation passes, submit the form via fetch
+    const formData = new FormData(productForm);
+
+    // Append the cropped images as Base64 strings
+    croppedImages.forEach((img, index) => {
+      formData.append(`croppedImage₹{index + 1}`, img);
+    });
+
+    // Submit form data with fetch API
+    fetch("/admin/addProduct", {
+  method: "POST",
+  body: formData // FormData automatically sets the appropriate headers
+})
+.then(response => {
+  if (!response.ok) {
+    // Throw an error for non-OK responses
+    throw new Error(`Server error: ₹{response.statusText}`);
+  }
+  return response.json(); // Parse JSON response if status is OK
+})
+.then(data => {
+  if (data.success) {
+    // Redirect to the URL if provided in the response
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      console.log("Redirection URL not provided in the response.");
+    }
+  } else {
+    alert("Failed to add product. Please check and try again.");
+  }
+})
+.catch(error => {
+  console.error("Error adding product:", error);
+  alert("There was an error processing your request. Please try again.");
+});
+});
+</script>
+<%- include('layout/JS') %>
+<%- include('layout/admin_footer') %>

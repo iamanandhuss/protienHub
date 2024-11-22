@@ -1,0 +1,167 @@
+<%- include('layout/header') %>
+
+  <!-- Right: Login Form -->
+  <div class="bg-gray-200 lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 lg:h-full rounded-lg -ml-10">
+    <h2 class="text-3xl font-bold text-center mb-8">Login</h2>
+
+    <!-- Username Field -->
+    <form id="loginForm" method="post" onclick="sendData()">
+      <div class="mb-4 justify-CE relative mt-8">
+        <label for="username"
+          class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Username</label>
+        <input type="text" id="username" name="username"
+          class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+          placeholder="Username" />
+        <div><span class="text-sm res-text-xs" id="usernameError"></span></div>
+
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-6">
+        <div class="mb-0 relative mt-6">
+          <label for="password"
+            class="absolute -top-2.5 left-4 bg-gray-200 text-gray-700 mb-2 text-sm res-text-xs">Password</label>
+          <input type="password" id="password" name="password"
+            class="w-full px-4 py-2 border rounded-lg bg-gray-200 border-gray-700 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="Enter your password" />
+          <div><span class="text-sm res-text-xs" id="passwordError"></span></div>
+
+        </div>
+      </div>
+
+      <!-- Sign-in / Forgot Password -->
+      <div class="flex justify-between text-sm text-gray-600 mb-10 mt-0">
+        <a href="/signup" class="hover:text-orange-500 font-bold res-text-xs">Sign in now</a>
+        <a href="/forgotPassword" class="hover:text-orange-500 font-bold res-text-xs">Forgot password</a>
+      </div>
+
+      <!-- Login Button -->
+      <button
+        class="w-full mb-10 bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-orange-600 res-text-xs">
+        Login
+      </button>
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center justify-center my-4 mt-0">
+      <span class="w-full border-t border-gray-300"></span>
+      <span class="px-4 text-gray-400">or</span>
+      <span class="w-full border-t border-gray-300"></span>
+    </div>
+    <% if (typeof msg !=='undefined' ) { %>
+      <div class="alert alert-danger text-red-500">
+        <%= msg %>
+      </div>
+      <% } %>
+
+        <!-- Google Signup Button -->
+        <button
+          class="w-full bg-white border border-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg flex items-center justify-center hover:bg-gray-50">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 mr-2 res-text-xs"
+            alt="Google Logo" />
+          Signup with Google
+        </button>
+  </div>
+  </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      const passwordError = document.getElementById("passwordError")
+      const usernameError = document.getElementById("usernameError")
+
+
+      function showMessage(element, message, isValid) {
+        element.textContent = message;
+        element.style.color = isValid ? 'green' : 'red';
+      }
+
+
+      function validateusername() {
+        const usernameData = username.value.trim();
+        const nameRegex = /^[A-Za-z ]+$/;
+        if (nameRegex.test(usernameData)) {
+          showMessage(usernameError, "Valid", true);
+        } else {
+          showMessage(usernameError, "UserName must be a text", false);
+        }
+      }
+
+      function validatePassword() {
+        const passwordData = password.value.trim();
+        if (passwordData.length >= 6) {
+          showMessage(passwordError, 'Valid password', true);
+        } else {
+          showMessage(passwordError, 'Password must be at least 6 characters', false);
+        }
+      }
+
+      username.addEventListener("keyup", validateusername);
+      password.addEventListener("keyup", validatePassword);
+
+
+    })
+
+    function loginUser() {
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'exampleUser', // Replace with actual data
+          password: 'examplePass',  // Replace with actual data
+        }),
+      })
+        .then(response => {
+          // Check if the response is not OK
+          if (!response.ok) {
+            return response.json().then(data => {
+              // Display the error message from the server using SweetAlert
+              swal("Error!", data.message, "error");
+            });
+          }
+          return response.json(); // Parse successful response
+        })
+        .then(data => {
+          if (data.success) {
+            // Handle success case
+            swal("Success!", data.message, "success").then(() => {
+              // Optionally redirect after showing success alert
+              window.location.href = '/'; // Redirect to homepage
+            });
+          }
+        })
+        .catch(error => {
+          // Handle network or other errors
+          swal("Oops!", "Something went wrong!", "error");
+        });
+    }
+
+    // Call the loginUser function on form submission or button click
+
+
+
+    document.getElementById('loginForm').addEventListener('Submit', (event) => {
+      event.preventDefault();
+      var form = document.getElementById('loginForm');
+      var formData = new FormData(form);
+      let data=fetch('/login', {
+        method: 'POST',
+        body: formData
+      })
+     .then(response => {
+      console.log(response);
+     })
+     
+    })
+
+
+
+
+
+  </script>
+
+  </html>

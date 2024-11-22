@@ -1,0 +1,200 @@
+<%- include('profile_layout/header') %>
+    <!-- Address Form -->
+    <div class="container ml-6 mr-6 p-6   bg-white drop-shadow-2xl rounded-lg">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Add Address</h2>
+        <%address.address.forEach((address)=>{%>
+        <form id="addressForm" class="space-y-4" method="post">
+
+            <!-- Contact Name -->
+            <div>
+                <label for="contactName" class="block text-sm font-medium text-gray-700">Contact Name</label>
+                <input name="contactName" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                    value="<%=address.contactName%>">
+            </div>
+            
+            <!-- Building -->
+            <div>
+                <label for="building" class="block text-sm font-medium text-gray-700">Building</label>
+                <input name="building" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.building%>">
+            </div>
+
+            <!-- City -->
+            <div>
+                <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                <input name="city" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.city%>">
+            </div>
+
+            <!-- District -->
+            <div>
+                <label for="district" class="block text-sm font-medium text-gray-700">District</label>
+                <input name="District" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.district%>">
+            </div>
+
+            <!-- State -->
+            <div>
+                <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+                <input name="state" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.state%>">
+            </div>
+
+            <!-- Country -->
+            <div>
+                <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                <select class="w-full p-2 border border-gray-300 rounded" id="countryDropdown font-sans" name="country">
+                    <% Object.entries(countries).forEach(([code, country])=> { %>
+                        <option value="<%= country.name %>">
+                            <%= country.name %>
+                        </option>
+                        <% }) %>
+
+                </select>
+            </div>
+
+            <!-- Pincode -->
+            <div>
+                <label for="pincode" class="block text-sm font-medium text-gray-700">Pincode</label>
+                <input name="pincode" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.pincode%>">
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label for="phonenumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input id="phoneNumber" name="phonenumber" type="text"
+                    class="w-full p-2 border border-gray-300 rounded font-sans"value="<%=address.phonenumber%>">
+                <div><span class="text-sm res-text-xs" id="phonenumberError"></span></div>
+            </div>
+
+            <!-- Landmark -->
+            <div>
+                <label for="landmark" class="block text-sm font-medium text-gray-700">Landmark</label>
+                <input name="landmark" type="text" class="w-full p-2 border border-gray-300 rounded font-sans"
+                value="<%=address.landmark%>">
+            </div>
+            <%})%>
+            <input id="_id" class="hidden" type="text" value="<%=address._id%>">
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Get the phone number input and error message elements
+            const phoneNumberInput = document.getElementById("phoneNumber");
+            const phoneNumberError = document.getElementById("phonenumberError");
+            const addressForm = document.getElementById("addressForm");
+
+            // Function to show message based on validity
+            function showMessage(element, message, isValid) {
+                element.textContent = message;
+                element.style.color = isValid ? 'green' : 'red';
+            }
+
+            // Function to validate the phone number
+            function validatePhoneNumber() {
+                const phoneNumber = phoneNumberInput.value.trim();
+                const phonePattern = /^[6-9]\d{9}$/;
+
+                if (phonePattern.test(phoneNumber)) {
+                    showMessage(phoneNumberError, "Valid phone number", true);
+                    return true;  // Return true if valid
+                } else {
+                    showMessage(phoneNumberError, "Invalid phone number. It should be a 10-digit number starting with 6-9.", false);
+                    return false;  // Return false if invalid
+                }
+            }
+
+            // Add event listener to validate phone number on keyup
+            phoneNumberInput.addEventListener('keyup', validatePhoneNumber);
+
+            // Listen for the form submission event
+            addressForm.addEventListener("submit", async (event) => {
+                // Prevent default form submission behavior
+                event.preventDefault();
+
+                // Validate phone number before submitting the form
+                const isPhoneNumberValid = validatePhoneNumber();
+
+                // If the phone number is invalid, prevent form submission
+                if (!isPhoneNumberValid) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Invalid phone number. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return; // Exit the function if phone number is invalid
+                }
+
+                // Gather form data into an object
+                const formData = {
+                    contactName: addressForm.contactName.value,
+                    building: addressForm.building.value,
+                    city: addressForm.city.value,
+                    district: addressForm.District.value,
+                    state: addressForm.state.value,
+                    country: addressForm.country.value,
+                    pincode: addressForm.pincode.value,
+                    phonenumber: addressForm.phonenumber.value,
+                    landmark: addressForm.landmark.value,
+                };
+
+                const _id=document.getElementById('_id').value;
+                try {
+                    // Send the form data to the server with a POST request
+                    const response = await fetch("/editAddress/"+_id, {
+                        method: "POST",
+                        headers: { 
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(formData),
+                    });
+
+                    // Check if the request was successful
+                    if (response.ok) {
+                        const result = await response.json();
+                        Swal.fire({
+                            title: 'sucess',
+                            text: 'Address added successfully!',
+                            icon: 'sucess',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = "/my-address";
+                        console.log(result); // Handle or display the result as needed
+                    } else {
+                        // Handle errors
+                        const errorData = await response.json();
+                        Swal.fire({
+                            title: 'Error',
+                            text: `${errorData.message}`,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'There was an error submitting the form.',
+                        icon: 'Error',  
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+
+        });
+    </script>
+
+
+
+    <%- include('layout/footer') %>

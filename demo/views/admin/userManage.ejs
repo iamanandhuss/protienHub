@@ -1,0 +1,61 @@
+<%- include('layout/adminpage_header') %>
+<div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+  <h2 class="text-2xl font-bold text-center mb-6">User Details</h2>
+  <p class="text-center text-gray-500">View user details and make changes</p>
+
+  <div class="flex justify-end mb-4">
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Filter</button>
+  </div>
+
+  <table class="min-w-full border border-gray-300">
+    <thead class="bg-blue-500 text-white">
+      <tr>
+        <th class="py-2 px-4 border-b">UserID</th>
+        <th class="py-2 px-4 border-b">User Name</th>
+        <th class="py-2 px-4 border-b">Date of Registration</th>
+        <th class="py-2 px-4 border-b">Email</th>
+        <th class="py-2 px-4 border-b">Phone</th>
+        <th class="py-2 px-4 border-b">Status</th>
+        <th class="py-2 px-4 border-b">Action</th>
+      </tr>
+    </thead>
+    <tbody class="bg-gray-100">
+      <!-- Example row (repeat this for each user) -->
+       <%if(Users){%>
+        <%Users.forEach((user)=>{%>
+          <tr>
+            <th class="py-2 px-4 border-b"><%= user.serialNumber%></th>
+            <th class="py-2 px-4 border-b"><%= user.name%></th>:
+            <th class="py-2 px-4 border-b"><%= new
+                                Date(user.createdAt).toLocaleDateString('en-US') %></th>
+            <th class="py-2 px-4 border-b"><%= user.email%></th>
+            <th class="py-2 px-4 border-b"><%= user.phone%></th>
+            <%if(user.is_blocked){%>
+              <th class="py-2 px-4 border-b">Active</th>
+              <%}else{%>
+                <th class="py-2 px-4 border-b">Blocked</th>
+                <%}%>
+            
+            <th class="py-2 px-4 border-b">
+              <%if(!user.is_blocked){%>
+                <button class="text-white bg-green-500 p-1 w-24 rounded-sm " onclick="window.location.href='/blockUser/<%= user._id %>'">Unblock</button>
+                <%}else{%>
+                  <button class="text-white bg-red-500 p-1 w-24  rounded-sm" onclick="window.location.href='/unblockUser/<%= user._id %>'">Block</button>
+                  <%}%>
+
+              <button class="text-white bg-green-500 p-1 w-24 rounded-sm" >view</button>
+            </th>
+          <%})%>
+        <%}%>
+
+      
+      </tr>      <!-- Repeat the above row for other users -->
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+    <%- include('layout/admin_footer') %>
+  </div>

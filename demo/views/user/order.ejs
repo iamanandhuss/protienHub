@@ -1,0 +1,83 @@
+<%- include('layout/cartHeader.ejs') %>
+<div class="container mx-auto my-10 p-5">
+    <!-- Main Section -->
+    <div class="flex justify-between">
+      <!-- Left Section (Confirmation and Address) -->
+      <div class="w-2/3 bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-5">Thank You for Your Purchase!</h2>
+        
+        <div class="bg-gray-100 p-5 rounded-lg">
+          <h3 class="text-xl font-semibold mb-4">Confirm Your Address</h3>
+  
+          <!-- Address Section (Can be repeated for multiple addresses) -->
+          <div class="mb-4 bg-white p-4 border rounded-md">
+            <p class="text-lg font-semibold">Address:</p>
+            <p class="text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda voluptate,</p>
+            <p class="text-gray-600 mt-2">Phone: 00000025885</p>
+            <button class="mt-4 bg-orange-500 text-white px-4 py-2 rounded-lg"onclick="window.location.href='/payment'" >Confirm</button>
+          </div>
+  
+          <!-- Another Address Section -->
+          <div class="bg-white p-4 border rounded-md">
+            <p class="text-lg font-semibold">Address:</p>
+            <p class="text-gray-600">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda voluptate,</p>
+            <p class="text-gray-600 mt-2">Phone: 00000025885</p>
+            <button class="mt-4 bg-orange-500 text-white px-4 py-2 rounded-lg">Confirm</button>
+          </div>
+  
+        </div>
+      </div>
+  
+      <!-- Right Section (Order Summary) -->
+      <div class="w-1/3 bg-white p-6 rounded-lg shadow-md ml-6">
+        <h3 class="text-xl font-semibold mb-4 text-center">Your order</h3>
+  
+        <!-- Product 1 -->
+        <div class="flex justify-between mb-4">
+          <div class="flex">
+            <img src="image1.jpg" alt="Product 1" class="w-16 h-16 object-cover rounded-md">
+            <div class="ml-4">
+              <p class="text-lg">₹1,599 <span class="line-through text-gray-500">₹2,499</span></p>
+              <p class="text-green-500">You saved ₹900</p>
+              <p class="text-gray-700">QTY: 1</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Product 2 -->
+        <div class="flex justify-between mb-4">
+          <div class="flex">
+            <img src="image2.jpg" alt="Product 2" class="w-16 h-16 object-cover rounded-md">
+            <div class="ml-4">
+              <p class="text-lg">₹10,799 <span class="line-through text-gray-500">₹16,999</span></p>
+              <p class="text-green-500">You saved ₹6,200</p>
+              <p class="text-gray-700">QTY: 1</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Order Summary -->
+        <div class="mt-6">
+          <div class="flex justify-between text-lg">
+            <p>Sub total</p>
+            <p>₹12198</p>
+          </div>
+          <div class="flex justify-between text-lg">
+            <p>Delivery</p>
+            <p>₹0</p>
+          </div>
+          <div class="flex justify-between text-lg">
+            <p>Tax</p>
+            <p>₹0</p>
+          </div>
+          <hr class="my-4">
+          <div class="flex justify-between font-semibold text-xl">
+            <p>Grand Total</p>
+            <p>₹12198</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+   
+    <%- include('layout/footer') %>

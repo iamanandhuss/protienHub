@@ -1,0 +1,55 @@
+<footer class="text-center py-4 text-gray-500 mt-10">
+    <div class="max-w-7xl mx-auto  flex justify-between p-2">
+      <p>&copy; 2023 - Lorem ipsum dolor </p>
+      <div class="flex justify-center">
+        <a href="#" class="hover:text-gray-400 px-4">About</a>
+        <a href="#" class="hover:text-gray-400 px-4">Careers</a>
+        <a href="#" class="hover:text-gray-400 px-4">Policy</a>
+        <a href="#" class="hover:text-gray-400 px-4 ">Contact</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+</body>
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+      const username = document.getElementById("username");
+      const password = document.getElementById("password");
+      const passwordError=document.getElementById("passwordError")
+      const usernameError=document.getElementById("usernameError")
+      
+
+      function showMessage(element, message, isValid) {
+        element.textContent = message;
+        element.style.color = isValid ? 'green' : 'red';
+      }
+
+
+      function validateusername() {
+        const usernameData = username.value.trim();
+        const nameRegex = /^[A-Za-z ]+$/;
+        if (nameRegex.test(usernameData)) {
+          showMessage(usernameError, "Valid", true);
+        } else {
+          showMessage(usernameError, "UserName must be a text", false);
+        }
+      }
+
+      function validatePassword() {
+        const passwordData = password.value.trim();
+        if (passwordData.length >= 6) {
+          showMessage(passwordError, 'Valid password', true);
+        } else {
+          showMessage(passwordError, 'Password must be at least 6 characters', false);
+        }
+      }
+
+      username.addEventListener("keyup", validateusername);
+      password.addEventListener("keyup", validatePassword);
+
+
+    })
+
+</script>
+</html> 

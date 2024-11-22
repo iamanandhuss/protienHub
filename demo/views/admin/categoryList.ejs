@@ -1,0 +1,54 @@
+<%- include('layout/adminpage_header') %>
+<div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+  <h2 class="text-2xl font-bold text-center mb-6">Manage Protein Categories</h2>
+  <p class="text-center text-gray-500">Create, Edit, and Organize Categories for Protein Products</p>
+  <h1 class="font-bold mb-6 pl-2">Category List</h1 >
+  
+  <div class="flex justify-end mb-4">
+    <button class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600" onclick="window.location.href='/addCategory'">+ADD</button>
+  </div>
+  <table class="min-w-full border border-gray-300">
+    <thead class="bg-blue-500 text-white">
+      <tr>
+        <th class="py-2 px-4 border-b">CategoryID</th>
+        <th class="py-2 px-4 border-b">Category Name</th>
+        <th class="py-2 px-4 border-b">Number of products</th>
+        <th class="py-2 px-4 border-b">status</th>
+        <th class="py-2 px-4 border-b">Associate_Category</th>
+        <th class="py-2 px-4 border-b">Action</th>
+      </tr>
+    </thead>
+    
+       <%if(categories){%>
+        <%categories.forEach((categories)=>{%>
+            <tbody class="bg-gray-100"></tbody>
+        <th class="py-2 px-4 border-b"><%= categories.serialNumber%></th> 
+        <th class="py-2 px-4 border-b"><%= categories.category_name%></th> 
+               <th class="py-2 px-4 border-b"><%= categories.products.length%></th>
+
+        <th class="py-2 px-4 border-b"><%= categories.status%></th>
+        <th class="py-2 px-4 border-b"><%= categories.associate_category%></th>
+        <th><%if(categories.status!=='active'){%>
+            <button class="text-white bg-green-500 p-1 w-24 rounded-sm " onclick="window.location.href='/blockcategory/<%= categories._id %>'">Unblock</button>
+            <%}else{%>
+              <button class="text-white bg-red-500 p-1 w-24  rounded-sm" onclick="window.location.href='/unblockcategory/<%= categories._id %>'">Block</button>
+              <%}%>
+              <button class="text-white bg-green-500 p-1 w-24 rounded-sm" >view</button>
+            </th>
+        
+    </tr>
+        <%})%>
+        <%}%>
+      
+            <!-- Repeat the above row for other users -->
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+    <%- include('layout/admin_footer') %>
+  </div>
+
+  

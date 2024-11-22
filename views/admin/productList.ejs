@@ -1,0 +1,95 @@
+<%- include('layout/adminpage_header') %>
+
+<div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Manage Products</h1>
+  <p class="text-gray-600 mb-10 text-center md:text-left">Create, Edit, and Organize Products for Your E-commerce Store</p>
+
+  <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold mb-4 md:mb-0">Product List</h2>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" 
+    onclick="window.location.href='/admin/addProduct'">+ADD</button>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="overflow-x-auto"> <!-- Add horizontal scroll on small screens -->
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-blue-600 text-white text-sm uppercase text-left">
+          <th class="py-3 px-4">Image</th>
+          <th class="py-3 px-4">Product Name</th>
+          <th class="py-3 px-4">Price (₹)</th>
+          <th class="py-3 px-4">Discount (%)</th>
+          <th class="py-3 px-4">Stock Status</th>
+          <th class="py-3 px-4">Status</th>
+          <th class="py-3 px-4">Actions</th>
+        </tr>
+      </thead>
+      <% products.forEach((product) => { %>
+      <tbody>
+        <tr class="border-b text-sm">  
+          
+          <td class="py-2 px-4">
+            <img src="<%= product.product_image[0]%>" 
+            alt="Product Image" 
+            class="w-11 h-16 object-fill">
+                     
+          <td class="py-2 px-4">
+            <%= product.product_name %>
+          </td>
+          <td class="py-2 px-4">
+            <%= product.price %>
+          </td> 
+          <td class="py-2 px-4">
+            <%= product.discount %>
+          </td>
+          <td class="py-2 px-4">
+            <%= product.stock_status %>
+          </td>
+          <td class="py-2 px-4">
+            <%= product.status %>
+          </td>
+
+          <td class="py-2 px-4"> 
+            <%if(product.status!=='active'){%>
+              <button class="text-white bg-green-500 p-1 w-24 rounded-sm" 
+                onclick="window.location.href='/admin/blockproduct/<%= product._id %>'">Unblock</button>
+            <%}else{%>  
+              <button class="text-white bg-red-500 p-1 w-24 rounded-sm" 
+                onclick="window.location.href='/admin/unblockproduct/<%= product._id %>'">Block</button>
+            <%}%>
+            <button onclick="window.location.href='/admin/view_product_details/<%= product._id %>'"
+              class="bg-blue-500 text-white px-4 py-2 rounded ml-4">View</button>
+          </td>
+        </tr>
+      </tbody>
+      <% }) %>
+    </table>
+    <div class="flex justify-center mt-8">
+      <nav class="inline-flex space-x-2">
+        <% if (currentPage > 1) { %>
+          <!-- Previous Button -->
+          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+            
+          </a>
+        <% } %>
+    
+        <!-- Page Numbers -->
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="?page=<%= i %>&limit=<%= limit %>"
+            class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+            <%= i %>
+          </a>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+          <!-- Next Button -->
+       <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+          </a>
+        <% } %>
+      </nav>
+    </div>
+    
+    
+  </div>
+
+  <%- include('layout/admin_footer') %>
+</div>

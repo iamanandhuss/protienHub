@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *{font-family: "Syne";};
+        .otp
+        {
+          font-family:'Courier New', Courier, monospace
+        }
+        /* .dropdiv:hover + .drop{
+      display: flex;
+    } */
+       .drop
+       {
+        display: flex;
+       }
+            
+        @layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+    </style>
+    <script defer src="https://unpkg.com/alpinejs@3.2.3/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-200 shadow mb-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4 flex-col md:flex-row">
+
+                <!-- Logo and Brand Name -->
+                <div class="flex items-center mb-4 md:mb-0">
+                    <img src="/site_logo.webp" alt="Protein Hub Logo" class="h-10 rounded-2xl mr-3" />
+                    <div class="text-2xl font-bold text-gray-800">Protein Hub</div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex items-center w-full max-w-md mb-4 md:mb-0">
+                    <input type="text" class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"
+                        placeholder="Type a product name">
+                    <button 
+                        class="bg-orange-600 text-white px-4 py-2 rounded-r-xl hover:bg-orange-700">Search</button>
+                </div>
+
+                <!-- Icons and Login Button -->
+                <% if(user){%>
+                  <div class="flex items-center gap-4">
+                    <a href="/my-profile">
+                      <img src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar"
+                      class="inline-block relative object-cover object-center !rounded-full w-12 h-12" />
+                    </a>
+                    <div>
+                      <h6 class="text-slate-800 font-semibold">
+                        <%= user.name %>
+                      </h6>
+                      <p class="text-slate-600 text-sm">
+                        <%= user.email%>
+                      </p>
+                    </div>
+                  </div>
+                  <%}%>
+                 
+            </div>
+        </div>
+        
+    </nav>
+    <% if(user){%>
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class=" w-1/6 bg-white p-2">
+            <div class="flex flex-col items-center p-3">
+                <img src="https://via.placeholder.com/100" alt="Profile Image" class="rounded-full mb-4">
+                <h2 class="text-lg font-semibold"><%= user.name%></h2>
+                <p class="text-gray-600"><%= user.email%></p>
+                <p class="text-gray-600"><%= user.phone%></p>
+            </div>
+            <%}%>
+            <nav class="mt-10">
+                <ul class="space-y-4">
+                    <%  const menu = [
+                    {
+                      title: "My order",
+                      action: "my-order"
+                    },
+                    {
+                      title: "My profile",
+                      action: "my-profile"
+                    },
+                    {
+                      title: "My address",
+                      action: "my-address"
+                    },
+                    {
+                      title: "Wish List",
+                      action: "wish-list"
+                    },
+                    {
+                      title: "Order History",
+                      action: "order-history"
+                    },
+                    {
+                      title: "Coupons",
+                      action: "coupons"
+                    },
+                    {
+                      title: "Wallet",
+                      action: "wallet"
+                    },
+                    {
+                      title: "Log Out",
+                      action: "log-out"
+                    }
+                  ];
+                  %>
+                    <% menu.forEach((opt)=>{ %>
+                    <li>
+                        <a href="<%= opt.action%>" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 ">
+                            <span><%= opt.title%></span>
+                            <span class="ml-auto">&gt;</span>
+                        </a>
+                    </li>
+                    <% })%>
+                    
+                </ul>
+            </nav>
+        </aside>
+    
+  

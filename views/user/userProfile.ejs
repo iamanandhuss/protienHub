@@ -1,0 +1,152 @@
+<%- include('profile_layout/header') %>
+
+
+    <!-- Profile Form -->
+    <main class="flex-1 p-2">
+        <div class="bg-white p-6 rounded-md shadow-md">
+            <h2 class="text-xl font-semibold mb-4">My Profile</h2>
+            
+            
+            <form method="post" action="/editProfile" id="editForm" class="space-y-6">
+                <!-- Full Name -->
+                <div>
+                    <label class="block font-medium text-gray-700">Full Name</label>
+                    <div class="flex items-center space-x-4">
+                        <input name="username" id="nameField" type="text" value=<%=user.username%> class="w-full py-2
+                        px-4 bg-gray-300 rounded-md"
+                        readonly>
+                        <a id="nameChange" href="#" class="text-orange-500">Change</a>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block font-medium text-gray-700">Email</label>
+                    <div class="flex items-center space-x-4">
+                        <input id="emailField" type="email" value=<%=user.email%>
+                        class="w-full py-2 px-4 bg-gray-300 rounded-md" readonly>
+                        <span class="text-green-500">Verified</span>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label class="block font-medium text-gray-700">Phone</label>
+                    <div class="flex items-center space-x-4 font-sans">
+                        <input name="Phone" id="phoneField" type="text" value=<%=user.Phone%> class="w-full py-2 px-4
+                        bg-gray-300 rounded-md"
+                        readonly>
+                        <a id="numberChange" href="#" class="text-orange-500">Change</a>
+                    </div>
+                </div>
+
+                <!-- Food Preference -->
+
+
+
+                <% user.address.forEach((addres)=> { %>
+                    <div class="border border-gray-300 rounded-lg shadow-md p-4 bg-white">
+                        <label class="block font-medium text-gray-700 mb-2">Address Details</label>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text" value="<%= addres.contactName %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+
+                        </div>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text"
+                                value="<%= addres.building %>, <%= addres.city %>, <%= addres.district %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+                        </div>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text" value="<%= addres.state %>, <%= addres.country %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+                        </div>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text" value="<%= addres.pincode %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+                        </div>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text" value="<%= addres.phonenumber %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+                        </div>
+
+                        <div class="flex items-center space-x-4 mb-3">
+                            <input type="text" value="<%= addres.landmark %>"
+                                class="w-full py-2 px-4 bg-gray-200 rounded-md" readonly>
+                        </div>
+                    </div>
+
+
+
+
+
+
+                    <!-- Save Button -->
+                    <div class="flex justify-between">
+                        <button onclick="editAddress('<%=addres._id%>')"
+                            class="bg-orange-500 text-white py-2 px-6 rounded-md hover:bg-orange-600">
+                            Edit
+                        </button>
+
+                        <button id="Save"  class="bg-orange-500 text-white py-2 px-6 rounded-md hover:bg-orange-600">
+                            Save
+                        </button>
+                    </div>
+
+            </form>
+            <% }); %>
+                <%if(user.address.length==0){%>
+                    <h1 class="text-red-500">! No delivery address provided. Please add one to proceed with your order.
+                        <span><button id="addAddress" class="text-green-500">add address</button></span></h1>
+                    <%}%>
+        </div>
+    </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const nameField = document.getElementById('nameField')
+        const phoneField = document.getElementById('phoneField')
+
+
+
+        document.getElementById('numberChange').addEventListener('click', (event) => {
+            event.preventDefault()
+            phoneField.readOnly = false;
+            phoneField.classList.remove('bg-gray-300');
+            phoneField.classList.add('bg-green-100');
+            document.getElementById('numberChange').innerText = "Editable"
+        })
+        document.getElementById('nameChange').addEventListener('click', (event) => {
+            event.preventDefault()
+            nameField.readOnly = false;
+            nameField.classList.remove('bg-gray-300');
+            nameField.classList.add('bg-green-100');
+            document.getElementById('nameChange').innerText = "Editable"
+        })
+        document.getElementById('addAddress').addEventListener('click',(event)=>{
+            event.preventDefault()
+            window.location.href = '/addAddress'
+        })
+        function editAddress(id) {
+            event.preventDefault();
+            window.location.href = '/EditAddress/' + id;
+        }
+       
+        
+        if(msg)
+        { 
+            alert(msg)
+        }
+
+
+      
+
+
+
+    </script>
+    <%- include('layout/footer') %>

@@ -1,0 +1,370 @@
+<%- include('layout/adminpage_header') %>
+
+  <div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg">
+    <!-- Header -->
+    <h2 class="text-3xl font-semibold text-center mb-8">Edit Product Details</h2>
+    <p class="text-center text-lg mb-6">Modify the product information for your e-commerce store</p>
+
+    <form id="editForm" method="post" enctype="multipart/form-data">
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Product Name -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Name</label>
+          <input oninput="validateName()" id="product_name" type="text" name="product_name"
+            value="<%= product.product_name %>" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full"
+            required>
+          <p id="error-Name" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
+        </div>
+        <!-- id -->
+        <div class="col-span-3 sm:col-span-1 hidden">
+          <label class="block text-sm font-medium">Product Slug</label>
+          <input id="product_id" type="text" name="product_slug" value="<%= product._id%>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full">
+          <!-- Error message element -->
+        </div>
+
+        <!-- Product Slug -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Product Slug</label>
+          <input id="product_slug" type="text" name="product_slug" value="<%= product.product_slug %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required oninput="validateProductSlug()">
+          <!-- Error message element -->
+          <p id="error-message" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
+        </div>
+
+        <!-- SKU -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">SKU</label>
+          <input id="sku" type="text" name="sku" value="<%= product.sku %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required oninput="validateSKU()">
+          <p id="error-sku" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 0 and 100.</p>
+        </div>
+
+        <!-- Brand -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Brand</label>
+          <input id="brand" type="text" name="brand" value="<%= product.brand %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required oninput="validateBrand()">
+          <p id="error-brand" class="text-red-500 text-sm mt-1 hidden">Please enter only letters.</p>
+        </div>
+
+        <!-- Price -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Price</label>
+          <input id="price" type="text" name="price" value="<%= product.price %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required oninput="validatePrice()">
+          <p id="error-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
+        </div>
+
+        <!-- Sale Price -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Sale Price</label>
+          <input id="sale_price" type="text" name="sale_price" value="<%= product.sale_price %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateSalePrice()">
+          <p id="error-sale-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
+        </div>
+
+        <!-- Additional Discount -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Additional Discount (%)</label>
+          <input id="additional_discount" type="number" name="additional_discount"
+            value="<%= product.additional_discount %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateDiscount()">
+          <p id="error-discount" class="text-red-500 text-sm mt-1 hidden">Please enter a number not exceeding 50.</p>
+        </div>
+
+        <!-- Discount -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Discount</label>
+          <input id="discount" type="text" name="discount" value="<%= product.discount %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateDiscount()">
+          <p id="error-Adddiscount" class="text-red-500 text-sm mt-1 hidden">Please enter a valid number not exceeding
+            100.</p>
+        </div>
+        <!-- Stock Quantity -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Stock Quantity</label>
+          <input id="stock_quantity" type="number" name="stock_quantity" value="<%= product.stock_quantity %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" min="1" max="100" required
+            oninput="validateStockQuantity()">
+          <p id="error-stock-quantity" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 1 and 100.
+          </p>
+        </div>
+
+        <!-- Stock Status -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Stock Status</label>
+          <select name="stock_status" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="active" <%=product.stock_status==='active' ? 'selected' : '' %>>Active</option>
+            <option value="inactive" <%=product.stock_status==='inactive' ? 'selected' : '' %>>Inactive</option>
+          </select>
+        </div>
+
+        <!-- Expiry Date -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Expiry Date</label>
+          <input type="date" id="expiry" name="expiry" value="<%= product.expiry.toISOString().split('T')[0] %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+        </div>
+
+        <!-- Manufacturing Date -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Manufacturing Date</label>
+          <input type="date" id="mfg" name="mfg" value="<%= product.mfg.toISOString().split('T')[0] %>"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+        </div>
+
+        <!-- Flavor -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Flavor</label>
+          <select name="flavor" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="chocolate" <%=product.flavor==='chocolate' ? 'selected' : '' %>>Chocolate</option>
+            <option value="cookies_and_cream" <%=product.flavor==='cookies_and_cream' ? 'selected' : '' %>>Cookies and
+              Cream</option>
+            <option value="double_chocolate" <%=product.flavor==='double_chocolate' ? 'selected' : '' %>>Double
+              Chocolate</option>
+            <option value="unflavoured_whey_protein" <%=product.flavor==='unflavoured_whey_protein' ? 'selected' : '' %>
+              >Unflavoured Whey Protein</option>
+            <option value="vanilla" <%=product.flavor==='vanilla' ? 'selected' : '' %>>Vanilla</option>
+            <option value="mango" <%=product.flavor==='mango' ? 'selected' : '' %>>Mango</option>
+            <option value="salted_caramel" <%=product.flavor==='salted_caramel' ? 'selected' : '' %>>Salted Caramel
+            </option>
+            <option value="strawberry" <%=product.flavor==='strawberry' ? 'selected' : '' %>>Strawberry</option>
+          </select>
+        </div>
+
+
+        <!-- Country of Origin -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Country of Origin</label>
+          <select name="countryof_origin" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <!-- Dropdown options will be populated here using JavaScript -->
+          </select>
+        </div>
+
+        <!-- Dietary Choices -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Dietary Choices</label>
+          <select name="dietary_choices" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="Whey" <%=product.dietary_choices==='Whey' ? 'selected' : '' %>>Whey</option>
+            <option value="Casein protein" <%=product.dietary_choices==='Casein protein' ? 'selected' : '' %>>Casein
+              protein</option>
+            <option value="Protein powders" <%=product.dietary_choices==='Protein powders' ? 'selected' : '' %>>Protein
+              powders</option>
+            <option value="Soy protein" <%=product.dietary_choices==='Soy protein' ? 'selected' : '' %>>Soy protein
+            </option>
+            <option value="Protein blends" <%=product.dietary_choices==='Protein blends' ? 'selected' : '' %>>Protein
+              blends</option>
+            <option value="Rice" <%=product.dietary_choices==='Rice' ? 'selected' : '' %>>Rice</option>
+            <option value="Collagen Protein" <%=product.dietary_choices==='Collagen Protein' ? 'selected' : '' %>
+              >Collagen Protein</option>
+            <option value="Egg" <%=product.dietary_choices==='Egg' ? 'selected' : '' %>>Egg</option>
+            <option value="Egg white" <%=product.dietary_choices==='Egg white' ? 'selected' : '' %>>Egg white</option>
+            <option value="Hemp protein" <%=product.dietary_choices==='Hemp protein' ? 'selected' : '' %>>Hemp protein
+            </option>
+            <option value="Milk" <%=product.dietary_choices==='Milk' ? 'selected' : '' %>>Milk</option>
+            <option value="Oatmeal boost" <%=product.dietary_choices==='Oatmeal boost' ? 'selected' : '' %>>Oatmeal
+              boost</option>
+            <option value="Casein" <%=product.dietary_choices==='Casein' ? 'selected' : '' %>>Casein</option>
+            <option value="Greek Yogurt" <%=product.dietary_choices==='Greek Yogurt' ? 'selected' : '' %>>Greek Yogurt
+            </option>
+            <option value="Hemp" <%=product.dietary_choices==='Hemp' ? 'selected' : '' %>>Hemp</option>
+            <option value="Pea" <%=product.dietary_choices==='Pea' ? 'selected' : '' %>>Pea</option>
+            <option value="Protein hummus" <%=product.dietary_choices==='Protein hummus' ? 'selected' : '' %>>Protein
+              hummus</option>
+          </select>
+        </div>
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Category</label>
+          <select name="categoryId" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <% if (categories) { %>
+              <% categories.forEach((category) => { %>
+                <option value="<%= category._id %>"><%= category.category_name %></option>
+              <% }) %>
+            <% } %>
+          </select>
+      </div>
+
+
+
+
+        <!-- EAN -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">EAN</label>
+          <select name="ean" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required
+            id="ean-dropdown">
+            <!-- Options will be populated by JavaScript -->
+          </select>
+        </div>
+
+
+        <!-- Number of Servings -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Number of Servings</label>
+          <select name="number_of_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="two" <% if (product.number_of_serving==='' ) { %> selected <% } %>></option>
+            <option value="one" <% if (product.number_of_serving==='one' ) { %> selected <% } %>>One Scoop</option>
+            <option value="two" <% if (product.number_of_serving==='two' ) { %> selected <% } %>>Two Scoops</option>
+          </select>
+        </div>
+
+        <!-- Weight -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Weight (g)</label>
+          <select name="weight" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <!-- Dynamically generating values from 0.8 to 1.8 with a step of 0.1 -->
+            <option value="0.8" <% if (product.weight===0.8) { %> selected <% } %>>0.8 g/kg</option>
+            <option value="0.9" <% if (product.weight===0.9) { %> selected <% } %>>0.9 g/kg</option>
+            <option value="1.0" <% if (product.weight===1.0) { %> selected <% } %>>1.0 g/kg</option>
+            <option value="1.1" <% if (product.weight===1.1) { %> selected <% } %>>1.1 g/kg</option>
+            <option value="1.2" <% if (product.weight===1.2) { %> selected <% } %>>1.2 g/kg</option>
+            <option value="1.3" <% if (product.weight===1.3) { %> selected <% } %>>1.3 g/kg</option>
+            <option value="1.4" <% if (product.weight===1.4) { %> selected <% } %>>1.4 g/kg</option>
+            <option value="1.5" <% if (product.weight===1.5) { %> selected <% } %>>1.5 g/kg</option>
+            <option value="1.6" <% if (product.weight===1.6) { %> selected <% } %>>1.6 g/kg</option>
+            <option value="1.7" <% if (product.weight===1.7) { %> selected <% } %>>1.7 g/kg</option>
+            <option value="1.8" <% if (product.weight===1.8) { %> selected <% } %>>1.8 g/kg</option>
+          </select>
+        </div>
+
+
+        <!-- Serving Size -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Serving Size (g)</label>
+          <select name="serving_size" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="25" <% if (product.serving_size===25) { %> selected <% } %>>1 scoop (25g)</option>
+            <option value="50" <% if (product.serving_size===50) { %> selected <% } %>>2 scoops (50g)</option>
+          </select>
+        </div>
+
+
+        <!-- Protein per Serving -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Protein per Serving (g)</label>
+          <select name="protein_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full"
+            required>
+            <option value="20" <% if (product.protein_per_serving===20) { %> selected <% } %>>20 grams</option>
+            <option value="25" <% if (product.protein_per_serving===25) { %> selected <% } %>>25 grams</option>
+            <option value="30" <% if (product.protein_per_serving===30) { %> selected <% } %>>30 grams</option>
+          </select>
+        </div>
+
+
+        <!-- Nutrition Information -->
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Calories per Serving</label>
+          <select name="calories_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full"
+            required>
+            <option value="80" <% if (product.nutrition_information.calories_per_serving===80) { %> selected <% } %>>80
+                calories</option>
+            <option value="90" <% if (product.nutrition_information.calories_per_serving===90) { %> selected <% } %>>90
+                calories</option>
+            <option value="100" <% if (product.nutrition_information.calories_per_serving===100) { %> selected <% } %>
+                >100 calories</option>
+            <option value="110" <% if (product.nutrition_information.calories_per_serving===110) { %> selected <% } %>
+                >110 calories</option>
+            <option value="120" <% if (product.nutrition_information.calories_per_serving===120) { %> selected <% } %>
+                >120 calories</option>
+            <option value="130" <% if (product.nutrition_information.calories_per_serving===130) { %> selected <% } %>
+                >130 calories</option>
+            <option value="140" <% if (product.nutrition_information.calories_per_serving===140) { %> selected <% } %>
+                >140 calories</option>
+            <option value="150" <% if (product.nutrition_information.calories_per_serving===150) { %> selected <% } %>
+                >150 calories</option>
+          </select>
+        </div>
+
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Total Fat per Serving (g)</label>
+          <select name="total_fat_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full"
+            required>
+            <option value="1" <% if (product.nutrition_information.fat_per_serving===1) { %> selected <% } %>>1 gram
+            </option>
+            <option value="2" <% if (product.nutrition_information.fat_per_serving===2) { %> selected <% } %>>2 grams
+            </option>
+            <option value="3" <% if (product.nutrition_information.fat_per_serving===3) { %> selected <% } %>>3 grams
+            </option>
+            <option value="4" <% if (product.nutrition_information.fat_per_serving===4) { %> selected <% } %>>4 grams
+            </option>
+            <option value="5" <% if (product.nutrition_information.fat_per_serving===5) { %> selected <% } %>>5 grams
+            </option>
+          </select>
+        </div>
+
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Total Carbohydrates per Serving (g)</label>
+          <select name="total_carbohydrates_per_serving"
+            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="0" <% if (product.nutrition_information.carb_per_serving===0) { %> selected <% } %>>0 grams
+            </option>
+            <option value="1" <% if (product.nutrition_information.carb_per_serving===1) { %> selected <% } %>>1 gram
+            </option>
+            <option value="2" <% if (product.nutrition_information.carb_per_serving===2) { %> selected <% } %>>2 grams
+            </option>
+            <option value="3" <% if (product.nutrition_information.carb_per_serving===3) { %> selected <% } %>>3 grams
+            </option>
+            <option value="4" <% if (product.nutrition_information.carb_per_serving===4) { %> selected <% } %>>4 grams
+            </option>
+            <option value="5" <% if (product.nutrition_information.carb_per_serving===5) { %> selected <% } %>>5 grams
+            </option>
+          </select>
+        </div>
+
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Sugars per Serving (g)</label>
+          <select name="sugars_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
+            <option value="0" <% if (product.nutrition_information.sugar_per_serving===0) { %> selected <% } %>>0 grams
+            </option>
+            <option value="1" <% if (product.nutrition_information.sugar_per_serving===1) { %> selected <% } %>>1 gram
+            </option>
+            <option value="2" <% if (product.nutrition_information.sugar_per_serving===2) { %> selected <% } %>>2 grams
+            </option>
+            <option value="3" <% if (product.nutrition_information.sugar_per_serving===3) { %> selected <% } %>>3 grams
+            </option>
+            <option value="4" <% if (product.nutrition_information.sugar_per_serving===4) { %> selected <% } %>>4 grams
+            </option>
+            <option value="5" <% if (product.nutrition_information.sugar_per_serving===5) { %> selected <% } %>>5 grams
+            </option>
+          </select>
+        </div>
+
+        <div class="col-span-3 sm:col-span-1">
+          <label class="block text-sm font-medium">Protein per Serving (g)</label>
+          <select name="protein_per_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full"
+            required>
+            <option value="10" <% if (product.protein_per_serving===10) { %> selected <% } %>>10 grams</option>
+            <option value="11" <% if (product.protein_per_serving===11) { %> selected <% } %>>11 grams</option>
+            <option value="12" <% if (product.protein_per_serving===12) { %> selected <% } %>>12 grams</option>
+            <option value="13" <% if (product.protein_per_serving===13) { %> selected <% } %>>13 grams</option>
+            <option value="14" <% if (product.protein_per_serving===14) { %> selected <% } %>>14 grams</option>
+            <option value="15" <% if (product.protein_per_serving===15) { %> selected <% } %>>15 grams</option>
+            <option value="16" <% if (product.protein_per_serving===16) { %> selected <% } %>>16 grams</option>
+            <option value="17" <% if (product.protein_per_serving===17) { %> selected <% } %>>17 grams</option>
+            <option value="18" <% if (product.protein_per_serving===18) { %> selected <% } %>>18 grams</option>
+            <option value="19" <% if (product.protein_per_serving===19) { %> selected <% } %>>19 grams</option>
+            <option value="20" <% if (product.protein_per_serving===20) { %> selected <% } %>>20 grams</option>
+            <option value="21" <% if (product.protein_per_serving===21) { %> selected <% } %>>21 grams</option>
+            <option value="22" <% if (product.protein_per_serving===22) { %> selected <% } %>>22 grams</option>
+            <option value="23" <% if (product.protein_per_serving===23) { %> selected <% } %>>23 grams</option>
+            <option value="24" <% if (product.protein_per_serving===24) { %> selected <% } %>>24 grams</option>
+            <option value="25" <% if (product.protein_per_serving===25) { %> selected <% } %>>25 grams</option>
+            <option value="26" <% if (product.protein_per_serving===26) { %> selected <% } %>>26 grams</option>
+            <option value="27" <% if (product.protein_per_serving===27) { %> selected <% } %>>27 grams</option>
+            <option value="28" <% if (product.protein_per_serving===28) { %> selected <% } %>>28 grams</option>
+            <option value="29" <% if (product.protein_per_serving===29) { %> selected <% } %>>29 grams</option>
+            <option value="30" <% if (product.protein_per_serving===30) { %> selected <% } %>>30 grams</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="flex justify-center mt-8">
+        <button  type="submit"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Update Product</button>
+      </div>
+    </form>
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <%- include('layout/JS') %>
+    <%- include('layout/admin_footer') %>

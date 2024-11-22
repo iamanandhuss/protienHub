@@ -1,0 +1,97 @@
+<%- include('profile_layout/header') %>
+  </aside>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+    <% address.address.forEach((Address)=> { %>
+
+      <!-- Address Card -->
+      <div class="w-full max-w-md space-y-4">
+
+        <!-- Home Address Card -->
+        <div class="flex justify-between items-center border border-gray-200 rounded-lg p-4 bg-white">
+          <div class="flex-grow">
+            <div class="flex justify-between">
+              <span
+              class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 pb-0 rounded-md mb-2 inline-block">ADDRESS</span>
+              <div class="text-gray-500 text-2xl cursor-pointer group">⋮
+                <div class="bg-gray-50 absolute hidden rounded-lg group-hover:block">
+                  <!-- Edit Option -->
+                  <a onclick="editAddress('<%=Address._id%>')" class="block px-4 py-2 text-gray-700 hover:bg-white text-sm">Edit</a>
+                  <!-- Delete Option -->
+                  <a onclick="DeleteAddress('<%=Address._id%>')" class="block px-4 py-2 text-gray-700 hover:bg-white text-sm">Delete</a>
+                </div>
+              </div>
+            </div>
+            
+              
+            <h3 class="text-lg font-semibold font-sansy">
+              <%=Address.contactName%><span class="font-normal text-gray-700 font-sans"><%=Address.phonenumber%></span>
+            </h3>
+            <p class="text-gray-600 font-sans"><%=Address.building%>, <%=Address.city%>, <%=Address.district%>, <%=Address.state%> - <span
+                class="font-semibold font-sans "><%=Address.pincode%></span></p>
+                <p class="text-gray-600 font-sans"><%=Address.landmark%></span></p>
+          </div>
+          
+        </div>
+        <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
+
+
+      </div>
+
+
+      <%})%>
+  </div>
+
+
+
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script> 
+    document.getElementById("add_Address").addEventListener("click", (event) => {
+      event.preventDefault();
+      window.location.href = '/addAddress';
+    })
+    document.getElementById('Search').style.display = "none";
+    document.getElementById('add_Address').style.display = "flex"
+
+    function editAddress(id) {
+      window.location.href = '/EditAddress/' + id;
+    }
+    function DeleteAddress(id) {
+  fetch(`/DeleteAddress/${id}`, {
+    method: 'DELETE',
+  })
+    .then(response => {
+      if (response.ok) {
+        Swal.fire({
+                        title: 'Sucess!',
+                        text: 'Address deleted successfully!',
+                        icon: 'sucess',
+                        confirmButtonText: 'OK'
+                    });
+        // Reload the page or update the UI as needed
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else {
+        Swal.fire({
+                        title: 'fail!',
+                        text: 'Failed to delete address',
+                        icon: 'fail',
+                        confirmButtonText: 'OK'
+                    });
+      }
+    })
+    .catch(error => {
+      console.error('Error deleting address:', error);
+      Swal.fire({
+                        title: 'fail!',
+                        text: 'An error occurred while deleting the address',
+                        icon: 'fail',
+                        confirmButtonText: 'OK'
+                    });    });
+}
+  </script>
+
+  </html>
+
+  <%- include('layout/footer') %>

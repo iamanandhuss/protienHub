@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *{font-family: "Syne";};
+        .otp
+        {
+          font-family:'Courier New', Courier, monospace
+        }
+        /* .dropdiv:hover + .drop{
+      display: flex;
+    } */
+       .drop
+       {
+        display: flex;
+       }
+            
+        @layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+    </style>
+    <script defer src="https://unpkg.com/alpinejs@3.2.3/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-200 shadow mb-7">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4 flex-col md:flex-row">
+
+                <!-- Logo and Brand Name -->
+                <div class="flex items-center mb-4 md:mb-0">
+                    <img src="/site_logo.webp" alt="Protein Hub Logo" class="h-10 rounded-2xl mr-3" />
+                    <div class="text-2xl font-bold text-gray-800">Protein Hub</div>
+                </div>
+
+                <div class="flex items-center">
+                    <!-- Cart Step -->
+                    <% if (msg) { %>
+                      <h1><%= msg %></h1>
+                    <% } else { %>
+                      <div class="flex items-center">
+                        <div class="w-8 h-8 <%= (cart_akn) ? 'bg-green-500' : 'bg-red-700' %> text-white rounded-full flex items-center justify-center text-lg font-sans mr-2">1</div>
+                        <span class="<%= (cart_akn) ? 'text-green-500' : 'text-red-700' %> mt-1">Cart</span>
+                      </div>
+                    <div class="h-px w-12 <%= (address_akn) ? 'bg-green-500' : 'bg-red-700' %> mx-4"></div>
+                    <div class="flex items-center">
+                      <div class="w-8 h-8 <%= (address_akn) ? 'bg-green-500' : 'bg-red-700' %> text-white rounded-full flex items-center justify-center text-lg font-sans mr-2">2</div>
+                      <span class="<%= (address_akn) ? 'text-green-500' : 'text-red-700' %> mt-1">Address</span>
+                    </div>
+                    <div class="h-px w-12 <%= (payment_akn) ? 'bg-green-500' : 'bg-red-700' %> mx-4"></div>
+
+                    <div class="flex items-center">
+                      <div class="w-8 h-8 <%= (payment_akn) ? 'bg-green-500' : 'bg-red-700' %> text-white rounded-full flex items-center justify-center text-lg font-sans mr-2">3</div>
+                      <span class="<%= (payment_akn) ? 'text-green-500' : 'text-red-700' %> mt-1">Payment</span>
+                    </div>
+                    <% } %>
+                    
+
+                    
+                        
+                
+                
+                    <!-- Address Step -->
+                    
+                
+                    <!-- Payment Step -->
+                    
+                </div>
+                
+
+                <!-- Icons and Login Button -->
+                <div class="flex items-center space-x-6"> 
+                    <i class="fa-solid fa-heart text-3xl text-gray-600 hover:text-orange-600"></i>
+                    <% if(user){%>
+                      <div class="flex items-center gap-4">
+                        <a href="/my-profile">
+                          <img src="https://docs.material-tailwind.com/img/face-2.jpg" alt="avatar"
+                          class="inline-block relative object-cover object-center !rounded-full w-12 h-12" />
+                        </a>
+                        <div>
+                          <h6 class="text-slate-800 font-semibold">
+                            <%= user.name %>
+                          </h6>
+                          <p class="text-slate-600 text-sm">
+                            <%= user.email%>
+                          </p>
+                        </div>
+                      </div>
+                      <%} else{ %>
+                      <button onclick="window.location.href='/login'"  class="bg-orange-600 text-white px-4 py-2 rounded-xl hover:bg-orange-700">Login/Sign
+                        Up</button>
+                        <%}%>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+  
