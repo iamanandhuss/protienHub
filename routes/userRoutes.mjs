@@ -33,7 +33,7 @@ userRouter.post('/login',isLoggedOut,postLogin)
 userRouter.get('/auth/google',isLoggedOut, googleAuth);
 userRouter.get('/auth/google/callback',isLoggedOut, googleAuthCallback);
 
-//logout the session  
+//logout the session   
 userRouter.get('/log-out',isLoggedIn,logout)
 //resend otp
 userRouter.get('/Resend',isLoggedOut,resendOtp)

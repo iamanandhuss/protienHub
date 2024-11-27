@@ -7,15 +7,8 @@ import Rattings from "../../model/ratting.mjs";
 
 export const allProduct = async (req, res) => {
   try {
-  const ratting = await Rattings.find();
-
     const user = await User.findOne({ _id: req.session._id });
-    const products = await Product.find({ status: "active" }).populate({
-      path: "product_rating.Rattings",
-      select: "averageRatting",
-      model: Rattings,
-    });
-    // Fetch product
+    const products = await Product.find({ status: "active" }); // Fetch product
     const Category = await Categories.find(
       { status: "active" },
       { category_name: 1 }

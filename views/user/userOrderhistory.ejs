@@ -98,19 +98,19 @@
               ); %>
               <div class="flex flex-col items-center">
                 <div
-                  class="w-6 h-6 rounded-full flex justify-center items-center text-white font-bold <%= isCompleted ? 'bg-green-500' : 'bg-red-500' %>">
+                  class="w-6 h-6 rounded-full flex justify-center items-center text-white font-bold <%= isCompleted ? 'bg-green-500' : 'bg-red-500'%> <%=order.orderStatus=='Delivered'?'hidden':'block'%>">
                   <%= isCompleted ? '✓' : '✗' %>
                 </div>
-                <p class="<%= isCompleted ? 'text-green-500' : 'text-red-500' %> text-sm mt-2">
+                <p class="<%= isCompleted ? 'text-green-500' : 'text-red-500' %> <%=order.orderStatus=='Delivered'?'hidden':'block'%> text-sm mt-2">
                   <%= step %>
                 </p>
               </div>
               <% if (index < statusSteps.length - 1) { %>
-                <div class="flex-1 h-1 <%= isCompleted ? 'bg-green-500' : 'bg-gray-500' %>"></div>
+                <div class="flex-1 h-1 <%= isCompleted ? 'bg-green-500' : 'bg-gray-500' %> <%=order.orderStatus=='Delivered'?'hidden':'block'%>"></div>
               <% } %>
             <% }) %>
-            
-            <%if(order.orderStatus=="Processing"||order.orderStatus=="Shipped"||order.orderStatus=="Processing"){%>
+            <h1 class="font-bold text-green-600 <%=order.orderStatus=='Delivered'?'block':'hidden'%>">YOUR ORDER HAS BEEN SUCCESSFULLY DELIVERED</h1>
+            <%if(order.orderStatus!=="Delivered"){%>
             <div class="absolute right-20">
               
               <button onclick="cancel_Order('<%=order._id%>')" class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
@@ -209,7 +209,7 @@
       if(!result.status==409){
         alert("Rating Added");
       }
-        alert("Rating already exists");
+      
       
     })
   }
@@ -276,9 +276,7 @@ preConfirm: () => {
         icon: 'success',
         timer: 2000
         }).then((result) => {
-          if (result.dismiss === Swal.DismissReason.timer) {
-            window.location.href = '/my_order';
-            }
+          window.location.reload();
             });
     }
   }).catch((error)=>{

@@ -104,46 +104,6 @@
 
     })
 
-    function loginUser() {
-      fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'exampleUser', // Replace with actual data
-          password: 'examplePass',  // Replace with actual data
-        }),
-      })
-        .then(response => {
-          // Check if the response is not OK
-          if (!response.ok) {
-            return response.json().then(data => {
-              // Display the error message from the server using SweetAlert
-              swal("Error!", data.message, "error");
-            });
-          }
-          return response.json(); // Parse successful response
-        })
-        .then(data => {
-          if (data.success) {
-            // Handle success case
-            swal("Success!", data.message, "success").then(() => {
-              // Optionally redirect after showing success alert
-              window.location.href = '/'; // Redirect to homepage
-            });
-          }
-        })
-        .catch(error => {
-          // Handle network or other errors
-          swal("Oops!", "Something went wrong!", "error");
-        });
-    }
-
-    // Call the loginUser function on form submission or button click
-
-
-
     document.getElementById('loginForm').addEventListener('Submit', (event) => {
       event.preventDefault();
       var form = document.getElementById('loginForm');

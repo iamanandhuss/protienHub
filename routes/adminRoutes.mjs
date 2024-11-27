@@ -5,7 +5,7 @@ import {upload} from '../uploads/cloudinary.mjs'
 
 
 import {adminLogin,loginCred,adminlogOut} from '../controller/adminControllers/adminAuth.mjs'
-import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,createProduct,editProduct,updateProduct} from '../controller/adminControllers/productManagement.mjs'
+import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,createProduct,editProduct,updateProduct,addQuantity} from '../controller/adminControllers/productManagement.mjs'
 import {is_adminLogedin,is_adminLogedOut} from '../middleware/admin/adminAuth.mjs'
 import { dashboard } from '../controller/adminControllers/dashBoard.mjs';
 import {view_order_list,order_manage,changeStatus} from '../controller/adminControllers/orderManager.mjs'
@@ -43,6 +43,7 @@ adminRouter.get('/addProduct',is_adminLogedin,addProduct);//add product
 adminRouter.post('/addProduct',is_adminLogedin,upload.array('image',3),createProduct)
 adminRouter.get('/editProduct/:id',is_adminLogedin,editProduct)
 adminRouter.post('/editProduct/:id',is_adminLogedin,updateProduct)
+adminRouter.post('/addQty',addQuantity)
 
  
 

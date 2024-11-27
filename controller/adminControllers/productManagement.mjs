@@ -299,3 +299,17 @@ export const updateProduct = async (req, res) => {
 }
  
 };
+
+export const addQuantity=async(req,res)=>{
+const {id,quantity}=req.body;
+try {
+    const product = await Product.findById({ _id: req.query.id});
+    product.stock_quantity=Number(product.stock_quantity)+Number(quantity);
+    await product.save();
+    res.status(200).json({ success: true, message: 'Quantity updated successfully' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+}
+}  

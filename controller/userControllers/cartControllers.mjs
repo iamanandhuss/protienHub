@@ -18,6 +18,7 @@ export const viewCart = async (req,res)=>{
             const quantity= req.query.quantity;
             const Flavor=req.query.flavor;
             const product = await Product.findById(productId);
+            product.stock_quantity-quantity
             if (!cart) {
                 // If no cart, create a new cart object
                 cart = new Carts({
@@ -52,6 +53,8 @@ export const viewCart = async (req,res)=>{
                  
             } 
     
+            product.stock_quantity -= quantity;
+             await product.save();
             // Save the cart and render the view
             await cart.save().then(() => {
                 res.redirect('/Cart')
