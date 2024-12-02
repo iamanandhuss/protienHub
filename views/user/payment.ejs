@@ -1,160 +1,376 @@
 <%- include('layout/cartHeader.ejs') %>
 
-<div class="container mx-auto my-10 p-5">
+  <div class="container mx-auto my-10 p-5">
     <!-- Main Section -->
     <div class="flex justify-between">
-      
-      <!-- Left Section (Payment Method) --> 
+      <!-- Left Section (Payment Method) -->
       <div class="w-2/3 bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold mb-5">Thank You for Your Purchase!</h2>
         <form id="PaymentMethodForm">
           <div class="bg-gray-100 p-5 rounded-lg">
             <h3 class="text-xl font-semibold mb-2">Select payment method</h3>
             <p class="text-gray-500 mb-4">Preferred method with secure transaction</p>
-        
-            <!-- PhonePay -->
-            <div class="flex items-center mb-4 p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
-              <img src="/paymentppay.png" alt="PhonePay" class="w-10 h-10 mr-4">
-              <p class="text-lg">Pay with PhonePay</p>
-              <div class="ml-auto">
-                <label class="flex items-center">
-                  <input id="Pay_with_PhonePay" type="radio" name="PaymentMethod" value="upi"> Select
-                </label>
-              </div>
-            </div>
-        
-            <!-- GooglePay -->
-            <div class="flex items-center mb-4 p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
-              <img src="/paymentupi.png" alt="GooglePay" class="w-10 h-10 mr-4">
-              <p class="text-lg">Pay with GooglePay</p>
-              <div class="ml-auto">
-                <label class="flex items-center">
-                  <input id="Pay_with_GooglePay" type="radio" name="PaymentMethod" value="upi"> Select
-                </label>
-              </div>
-            </div>
-        
+
+
+
             <!-- Credit/Debit Card -->
             <div class="flex items-center mb-4 p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
               <img src="/paymentcard.png" alt="Credit/Debit Card" class="w-10 h-10 mr-4">
-              <p class="text-lg">Pay with Credit/Debit Card</p>
+              <img src="/paymentupi.png" alt="GooglePay" class="w-10 h-10 mr-4">
+              <img src="/paymentppay.png" alt="PhonePay" class="w-10 h-10 mr-4">
+              <p class="text-lg">Pay with Razorpay</p>
               <div class="ml-auto">
                 <label class="flex items-center">
-                  <input id="Pay_with_Card" type="radio" name="PaymentMethod" value="Credit/Debit_Cards"> Select
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Card" type="radio" name="PaymentMethod"
+                    value="Credit/Debit_Cards"> Select
                 </label>
               </div>
             </div>
-        
+
             <!-- Cash On Delivery -->
             <div class="flex items-center p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
               <img src="/paymentcod.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
               <p class="text-lg">Pay with Cash On Delivery</p>
               <div class="ml-auto">
                 <label class="flex items-center">
-                  <input id="Pay_with_Cash" type="radio" name="PaymentMethod" value="cod"> Select
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio" name="PaymentMethod" value="cod"> Select
                 </label>
               </div>
             </div>
+
+            <!-- Wallet -->
+            <div class="flex items-center p-4 mt-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
+              <img src="/wallet.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
+              <p class="text-lg">Pay with Wallet</p>
+              <div class="ml-auto">
+                <label class="flex items-center">
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio" name="PaymentMethod" value="cod"> Select
+                </label>
+              </div>
+            </div>
+
           </div>
         </form>
-        
-      </div>
-  
-      <!-- Right Section (Order Summary) -->
-      <div class="w-1/3 bg-white p-6 rounded-lg shadow-md ml-6">
-        <h3 class="text-xl font-semibold mb-4 text-center">Your order</h3>
-  
-        <%if(order){%>
 
-          <%items.forEach((product)=>{%>
-                <!-- Product 1 -->
-                <div class="flex justify-between mb-4">
-                  <div class="flex">
-                    <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product 1" class="w-16 h-16 object-cover rounded-md">
-                    <div class="ml-4">
-                      <p class="text-lg font-sans">₹<%=product.price%><span class="line-through text-red-500 font-sans">₹<%=product.sale_price%></span></p>
-                      <p class="text-green-500 font-sans">You saved ₹<%=product.price-product.sale_price%></p>
-                      <p class="text-gray-700 font-sans">QTY:</p>
+      </div>
+
+
+
+
+      <!-- Right div -->
+      <div class="w-1/3 bg-white p-6 rounded-lg shadow-md ml-6">
+        <!-- hidden div for coupons -->
+        <div id="allCoupons" class="bg-gray-400 rounded-lg absolute border hidden">
+          <!-- coupons -->
+          <h1 class="p-4 pb-0 font-bold text-white">Available Coupons</h1>
+          <hr class="my-4">
+          <%coupon.forEach((coupons)=>{%>
+            <div class="flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm m-6">
+              <div class="flex items-center space-x-3">
+                <img src="/Voucher.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
+                <div>
+                  <p class="text-gray-900 font-semibold">
+                    <span class="font-bold font-sans">Coupon Code:</span><span class="text-green-500">"<%=coupons.code%>
+                        "</span>
+                  </p>
+                  <p class="text-gray-600 text-sm font-sans">Save additional <%=coupons.discountValue%>% <span>
+                        <button onclick="addCoupon('<%=coupons._id%>','<%=order._id%>')"
+                          class="text-orange-500  hover:font-semibold">ADD</button>
+                      </span></p>
+                </div>
+              </div>
+
+
+            </div>
+            <%})%>
+        </div>
+        <!--  -->
+        <%if(order.couponCode){%>
+          <div class="flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm group">
+            <div class="flex items-center space-x-3">
+              <img src="/Voucher.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
+              <div>
+                <p class="text-gray-900 font-semibold">
+                  <span class="font-bold font-sans">"<%=order.couponCode%>"</span> applied
+                </p>
+                <p class="text-gray-600 text-sm font-sans">You saved additional <span class="font-sans textgreen500">
+                    <%=order.couponDiscound%>%
+                  </span></p>
+              </div>
+            </div>
+
+            <!-- Remove Button -->
+            <div>
+              <button onclick="removeCoupon('<%=order._id%>')"
+                class="text-red-500 font-semibold text-sm hover:underline">
+                REMOVE
+              </button>
+            </div>
+
+          </div>
+          <%}else{%>
+            <div class="flex justify-between border-2 p-2 rounded-lg">
+              <h1 class="text-red-500 font-bold">NO COUPON ADDED</h1>
+              <button id="addCoupon">
+                <h1 class="text-green-500 font-bold">+ADD</h1>
+              </button>
+
+
+            </div>
+            <%}%>
+
+
+              <hr class="my-4">
+
+
+              <h3 class="text-xl font-semibold mb-4 text-center">Your order</h3>
+
+              <%if(order){%>
+
+                <%items.forEach((product)=>{%>
+                  <!-- Product 1 -->
+                  <div class="flex justify-between mb-4">
+                    <div class="flex">
+                      <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>"
+                        alt="Product 1" class="w-16 h-16 object-cover rounded-md">
+                      <div class="ml-4">
+                        <p class="text-lg font-sans">₹<%=product.price%><span
+                              class="line-through text-red-500 font-sans">₹
+                              <%=product.sale_price%>
+                            </span></p>
+                        <p class="text-green-500 font-sans">You saved ₹<%=product.price-product.sale_price%></p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              <%})%>
-        
-                <!-- Order Summary -->
-                <div class="mt-6">
-                  <div class="flex justify-between text-lg">
-                    <p class="font-sans">Sub total</p>
-                    <p id="subTotal font-sans">₹<%=order.totalAmount%></p>
-                  </div>
-                  <div class="flex justify-between text-lg">
-                    <p class="font-sans">Delivery</p>
-                    <p id="deliveryCharge font-sans">₹0</p>
-                  </div>
-                 
-                  <hr class="my-4">
-                  <div class="flex justify-between font-semibold text-xl">
-                    <p class="font-sans">Grand Total</p>
-                    <p id="grandTotal font-sans">₹<%=order.totalAmount%></p>
-                  </div> 
-                </div>
-        
-                <%}%>  
-        <!-- Print Receipt Button -->
-        <div class="mt-6">
-          <button onclick="window.location.href='/orderSucess'" class="w-full flex items-center justify-center bg-green-500 text-white py-3 rounded-lg shadow-md hover:bg-green-600" onclick="window.location.href='/payment'">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h6v6m0 0v4H9v-4M3 7h18M5 7v2a2 2 0 002 2h10a2 2 0 002-2V7" />
-            </svg>
-            Print Receipt
-          </button>
-        </div>
+                  <%})%>
+
+                    <!-- Order Summary -->
+                    <div class="mt-6">
+                      <div class="flex justify-between text-lg">
+                        <p class="font-sans">Sub total</p>
+                        <p id="subTotal font-sans">₹<%=order.grandTottal%>
+                        </p>
+                      </div>
+                      <div class="flex justify-between text-lg">
+                        <p class="font-sans">Delivery</p>
+                        <p id="deliveryCharge font-sans">₹0</p>
+                      </div>
+
+                      <hr class="my-4">
+                      <div class="flex justify-between font-semibold text-xl">
+                        <p class="font-sans">Grand Total</p>
+                        <p id="grandTotal font-sans">₹<%=order.grandTottal%>
+                        </p>
+                      </div>
+                    </div>
+
+                    <%}%>
+                      <!-- Print Receipt Button -->
+                      <div class="mt-6">
+                        <button onclick="window.location.href='/orderSucess'"
+                          class="w-full flex items-center justify-center bg-green-500 text-white py-3 rounded-lg shadow-md hover:bg-green-600"
+                          onclick="window.location.href='/payment'">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 17v-6h6v6m0 0v4H9v-4M3 7h18M5 7v2a2 2 0 002 2h10a2 2 0 002-2V7" />
+                          </svg>
+                          Print Receipt
+                        </button>
+                      </div>
       </div>
+
+
+
+
     </div>
   </div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    document.getElementById("PaymentMethodForm").addEventListener("change", function (event) {
-  event.preventDefault(); // Prevent form submission
 
-  // Get the selected payment method
-  const selectedPaymentMethod = document.querySelector('input[name="PaymentMethod"]:checked').value;
 
-  if (selectedPaymentMethod) {
-   console.log(selectedPaymentMethod);
-   fetch("/paymentMethod",{
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      },
-      body: JSON.stringify({paymentMethod:selectedPaymentMethod})
-      })
-      .then((Response)=>{
-        if(Response.status==201){
-          Swal.fire({
-            title: `Payment Method Selected As ${(selectedPaymentMethod=="cod"?" cash on delivery (COD)":selectedPaymentMethod)}`,
-            text: 'Payment Method Selected Successfully',
-            icon: 'success',
-            timer: 2000
-            }).then((result)=>{
-              if(result.isConfirmed){
-                window.location.href="/orderSucess";
+    const allCoupons = document.getElementById('allCoupons')
+    document.getElementById('addCoupon').addEventListener('click', (event) => {
+      event.preventDefault();
+      allCoupons.classList.remove('hidden');
+    })
+
+    function addCoupon(couponId, orderId) {
+      console.log(couponId);
+      console.log(orderId)
+      try {
+        fetch(`/data/?couponId=${couponId}&orderId=${orderId}`, {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }).then((Response) => {
+          if (Response.status == 200) {
+            Swal.fire({
+              title: `Coupon Added Successfully`,
+              text: 'Coupon Added Successfully',
+              icon: 'success',
+            }).then(() => {
+              window.location.reload();
+            })
+          }
+          if (Response.status == 400) {
+            Swal.fire({
+              title: `Coupon Not Added `,
+              text: 'Failed to add coupon to the ordery',
+              icon: 'error',
+            }).then(() => {
+              window.location.reload();
+            })
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    function removeCoupon(orderId) {
+      try {
+        fetch(`/removeCoupon/?orderId=${orderId}`, {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }).then((Response) => {
+          if (Response.status == 200) {
+            Swal.fire({
+              title: `Coupon Removed Successfully`,
+              text: 'Coupon removed from the order',
+              icon: 'success',
+            }).then(() => {
+              window.location.reload();
+            })
+          }
+          if (Response.status == 400) {
+            Swal.fire({
+              title: `Failed to remove`,
+              text: 'Coupon not removed from the order',
+              icon: 'error',
+            }).then(() => {
+              window.location.reload();
+            })
+          }
+
+        })
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener("input", (event) => {
+        event.preventDefault();
+
+      });
+    });
+
+// to the razerpay
+
+    function data(amounts,orderId) {
+      const selectedPaymentMethod = document.querySelector('input[name="PaymentMethod"]:checked').value;
+      if (selectedPaymentMethod) {
+        console.log(selectedPaymentMethod);
+        if (selectedPaymentMethod != "cod") {
+          fetch('/paymentRender', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }).then((res) => {
+            if (!res.ok) {
+              throw new Error("Cannot render the payment page");
+            }
+            return res.json();
+          }).then(data => {
+            if (data.orderId) {
+              const options = {
+                key: "rzp_test_KDYrLJHnu3O9Ip",  // Replace with your Razorpay key
+                amount: amounts * 100,  // Razorpay accepts amounts in paise
+                currency: "INR",
+                name: "Protien Hub",
+                order_id: data.orderId,  // Razorpay Order ID
+                handler: function (response) {
+                  // Successful payment handler
+                  fetch('/rePay', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': "application/json"
+                    },
+                    body: JSON.stringify({ orderId: orderId })  // Pass orderId as an object
+                  }).then(()=>{
+                    Swal.fire({
+                  title: `Your Order Has Been Placed`,
+                  text: 'Your Order Has Been Placed',
+                  icon: 'success',
+                  timer: 2000
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/orderSucess";
+                  }
+                  window.location.href = "/orderSucess";
+                })                  })
+                   
+                },
+                prefill: {
+                  name: "Your Name",
+                  email: "your.email@example.com",
+                  contact: "7356941552",
+                },
+                notes: {
+                  address: "Razorpay Corporate Office"
+                },
+                theme: {
+                  color: "#3399cc"
                 }
-                window.location.href="/orderSucess";
+              };
+              const rzp1 = new Razorpay(options);
+              rzp1.open();
+            }
+          }).catch((error) => {
+            console.log(error);
+          })
+        } else {
+          fetch("/paymentMethod", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ paymentMethod: selectedPaymentMethod })
+          })
+            .then((Response) => {
+              if (Response.status == 201) {
+                Swal.fire({
+                  title: `Payment Method Selected As ${(selectedPaymentMethod == "cod" ? " cash on delivery (COD)" : selectedPaymentMethod)}`,
+                  text: 'Payment Method Selected Successfully',
+                  icon: 'success',
+                  timer: 2000
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    window.location.href = "/orderSucess";
+                  }
+                  window.location.href = "/orderSucess";
+                })
+              }
+              if (Response.status == 404) {
+                Swal.fire({
+                  title: `Payment Method Selected As ${(selectedPaymentMethod == "cod" ? " cash on delivery (COD)" : selectedPaymentMethod)}}`,
+                  text: 'Payment Method Selected Failed',
+                  icon: 'error',
+                  timer: 2000
+                })
+              }
             })
         }
-        if(Response.status==404){
-          Swal.fire({
-            title: `Payment Method Selected As ${(selectedPaymentMethod=="cod"?" cash on delivery (COD)":selectedPaymentMethod)}}`,
-            text: 'Payment Method Selected Failed',
-            icon: 'error',
-            timer: 2000
-            })
-        }
-      })
-  }
-});
 
+      }
+    }
 
   </script>
-  
-<%- include('layout/footer') %>
+
+  <%- include('layout/footer') %>

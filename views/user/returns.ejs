@@ -1,0 +1,100 @@
+<%- include('profile_layout/header') %>
+
+    <div>
+        <%Return.forEach((data)=>{%>
+            <div>
+                <h1 class="p-6 font-bold">My Returns</h1>
+
+                <div class="flex justify-between m-6">
+
+                    <div class="flex">
+                        <% data.products.forEach((item)=> { %>
+                            <div class="p-4">
+                                <h1 class="font-bold p-2 pl-0 text-red-500">Product Details</h1>
+                                <h3 class="text-gray-600">
+                                    <%= item.product.product_name %>
+                                </h3>
+                                <p class="text-gray-600">Price: $<%= item.product.price %>
+                                </p>
+                                <p class="text-gray-600">Quantity: <%= item.quantity %>
+                                </p>
+                                <div>
+                                    <img src="<%= item.product.product_image[0] %>" alt=""
+                                        style="width: 100px; height: 100px; margin-right: 10px;">
+                                </div>
+                                <hr>
+                                <div class="flex justify-between">
+                                    <div>
+                                        <h1 class="p-4 pl-0 font-sans text-green-500">Returned On:<%=data.createdAt.toISOString().split('T')[0]%></h1>
+                                        <%if(data.refundStatus!="pending"){%>
+                                            <h1 class=" pl-0 font-sans text-green-500">Refunded</h1>
+                                            <%}else{%>
+                                                <h1 class=" pl-0 font-sans text-green-500">pending</h1>
+                                                <%}%>
+                                    </div>
+                                   
+
+                                </div>
+                            </div>
+                            <% }) %>
+
+                                <!--  -->
+                                <div class="p-4">
+                                    <h1 class="font-bold p-2 pl-0 text-red-500">Order Details</h1>
+                                    <h2 class="text-gray-600">
+                                        <%= data.user.username %>
+                                    </h2>
+                                    <h2 class="text-gray-600">
+                                        <%= data.user.email %>
+                                    </h2>
+                                </div>
+
+                                <!--  -->
+                                <div class="p-4">
+                                    <h1 class="font-bold p-2 pl-0 text-red-500">Refund Summary</h1>
+                                    <h3 class="text-gray-600">Refund Mode: <%= data.refundMode %>
+                                    </h3>
+                                    <h3 class="text-gray-600">Refund Status: <%= data.refundStatus %>
+                                    </h3>
+                                </div>
+                                <!--  -->.
+                                <div class="p-4">
+                                    <h1 class="font-bold p-2 pl-0 text-red-500">Reason</h1>
+                                    <h3 class="text-gray-600">
+                                        <%= data.reason %>
+                                    </h3>
+                                </div>
+                                <div class=" flex-col items-center ml-6">
+                                    <div>
+                                        <span class="text-black font-sans font-bold">
+
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span class="text-green-500 font-sans font-bold">
+
+                                        </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                    </div>
+
+
+
+                                </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <hr class="my-4 border-gray-300">
+
+            <%})%>
+
+    </div>
+
+    <%- include('layout/footer') %>

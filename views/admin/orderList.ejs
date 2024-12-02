@@ -1,111 +1,120 @@
 <%- include('layout/adminpage_header') %>
 
 
-    <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">Manage Orders</h1>
-      <p class="text-gray-600 mb-10">Create, Edit, and Organize Customer Orders</p>
+  <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Manage Orders</h1>
+    <p class="text-gray-600 mb-10">Create, Edit, and Organize Customer Orders</p>
 
 
 
-      <input
-    type="text"
-    id="searchInput"
-    placeholder="Search..."
-    class="border p-2 rounded w-full mb-4"
-    onkeyup="searchTable()"
-  />
+    <input type="text" id="searchInput" placeholder="Search..." class="border p-2 rounded w-full mb-4"
+      onkeyup="searchTable()" />
 
 
 
 
 
-      <div id="filterdiv" class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Order List</h2>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg flex group">
-          <img src="/filter.png" alt="" class="h-6 pt-1">
-          Filter
-          <div class="absolute bg-emerald-500 rounded-lg p-6 right-8 hidden group-hover:block">
-            <%- include('layout/filter') %>
-          </div>
-          </button>
-      </div>
-
-      <!-- Orders Table -->
-      <table class="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr class="bg-orange-400 text-white text-sm uppercase text-left">
-            <th class="py-3 px-4">Order ID</th>
-            <th class="py-3 px-4">Customer Name</th>
-            <th class="py-3 px-4">Order Date</th>
-            <th class="py-3 px-4">Total Amount (₹)</th>
-            <th class="py-3 px-4">Order Status</th> 
-            <th class="py-3 px-4">Payment Status</th>
-            <th class="py-3 px-4">Shipping Status</th>
-            <th class="py-3 px-4">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <%if(order){%>
-            <% const statusSteps = ['Pending','Processing', 'Shipped','Cancelled','Delivered']; %>
-            <% order.forEach(order => { %>
-              <tr class="border-b  text-sm"> <!-- Optional: Add a bottom border to each row -->
-              <td class="py-2 px-4"><%=order._id%></td>
-              <td class="py-2 px-4"><%=order.user.username%></td>
-              <td class="py-2 px-4"><%=new Date(order.createdAt.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB")%></td>
-              <td class="py-2 px-4"><%=order.totalAmount%></td>
-              <td class="py-2 px-4 
-           <%= (order.orderStatus == 'Delivered') ? 'text-green-500' : 'text-red-500' %>">
-  <%= order.orderStatus %>
-</td> 
-
-              <td class="py-2 px-4"><%=order.paymentStatus%></td>
-              <td class="py-2 px-4 
-              <%=statusSteps.indexOf(order.orderStatus)>=3?'text-green-500':'text-red-500'%>
-              "><%=statusSteps.indexOf(order.orderStatus)>=3?`Shipped`:"Shipping Pending"%></td>           
-              <td>
-                <button onclick="window.location.href='/admin/order_manage/?OrderId=<%= order._id %>'" 
-                  class="bg-orange-600 text-white px-4 py-2 rounded ml-4">
-                  View
-          </button>
-          
-              </td>
-          </tr>
-          <%})%>
-            <%}%>
-          <!-- Add more products as needed -->
-      </tbody>   
-     
-         
+    <div id="filterdiv" class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Order List</h2>
+      <button class="bg-blue-500 text-white px-4 py-2 rounded-lg flex group">
+        <img src="/filter.png" alt="" class="h-6 pt-1">
+        Filter
+        <div class="absolute bg-emerald-500 rounded-lg p-6 right-8 hidden group-hover:block">
+          <%- include('layout/filter') %>
+        </div>
+      </button>
     </div>
-    
+
+    <!-- Orders Table -->
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-orange-400 text-white text-sm uppercase text-left">
+          <th class="py-3 px-4">Order ID</th>
+          <th class="py-3 px-4">Customer Name</th>
+          <th class="py-3 px-4">Order Date</th>
+          <th class="py-3 px-4">Total Amount (₹)</th>
+          <th class="py-3 px-4">Coupon Used</th>
+          <th class="py-3 px-4">Order Status</th>
+          <th class="py-3 px-4">Payment Status</th>
+          <th class="py-3 px-4">Shipping Status</th>
+          <th class="py-3 px-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <%if(order){%>
+          <% const statusSteps=['Pending','Processing', 'Shipped' ,'Cancelled','Delivered']; %>
+            <% order.forEach(order=> { %>
+              <tr class="border-b  text-sm"> <!-- Optional: Add a bottom border to each row -->
+                <td class="py-2 px-4">
+                  <%=order._id%>
+                </td>
+                <td class="py-2 px-4">
+                  <%=order.user.username%>
+                </td>
+                <td class="py-2 px-4">
+                  <%=new Date(order.createdAt.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB")%>
+                </td>
+                <td class="py-2 px-4">
+                  <%=order.grandTottal%>
+                </td>
+                <td class="py-2 px-4 ">
+                  <%=(order.couponCode)?order.couponCode:"No coupon"%>(<%=order.couponDiscound%>%)
+                </td>
+                <td class="py-2 px-4 
+           <%= (order.orderStatus == 'Delivered') ? 'text-green-500' : 'text-red-500' %>">
+                  <%= order.orderStatus %>
+                </td>
+
+                <td class="py-2 px-4">
+                  <%=order.paymentStatus%>
+                </td>
+                <td class="py-2 px-4 
+              <%=statusSteps.indexOf(order.orderStatus)>=3?'text-green-500':'text-red-500'%>
+              ">
+                  <%=statusSteps.indexOf(order.orderStatus)>=3?`Shipped`:"Shipping Pending"%>
+                </td>
+                <td>
+                  <button onclick="window.location.href='/admin/order_manage/?OrderId=<%= order._id %>'"
+                    class="bg-orange-600 text-white px-4 py-2 rounded ml-4">
+                    View
+                  </button>
+
+                </td>
+              </tr>
+              <%})%>
+                <%}%>
+                  <!-- Add more products as needed -->
+      </tbody>
+    </table>
+
+  </div>
+
   </div>
   <script>
     function searchTable() {
-  const input = document.getElementById("searchInput");
-  const filter = input.value.toLowerCase();
-  const tableBody = document.getElementById("tableBody");
-  const rows = tableBody.getElementsByTagName("tr");
+      const input = document.getElementById("searchInput");
+      const filter = input.value.toLowerCase();
+      const tableBody = document.getElementById("tableBody");
+      const rows = tableBody.getElementsByTagName("tr");
 
-  for (let i = 0; i < rows.length; i++) {
-    const cells = rows[i].getElementsByTagName("td");
-    let match = false;
+      for (let i = 0; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
 
-    // Check each cell for a match
-    for (let j = 0; j < cells.length; j++) {
-      if (cells[j]) {
-        const cellText = cells[j].textContent || cells[j].innerText;
-        if (cellText.toLowerCase().indexOf(filter) > -1) {
-          match = true;
-          break;
+        // Check each cell for a match
+        for (let j = 0; j < cells.length; j++) {
+          if (cells[j]) {
+            const cellText = cells[j].textContent || cells[j].innerText;
+            if (cellText.toLowerCase().indexOf(filter) > -1) {
+              match = true;
+              break;
+            }
+          }
         }
+
+        // Show or hide the row based on the match
+        rows[i].style.display = match ? "" : "none";
       }
     }
 
-    // Show or hide the row based on the match
-    rows[i].style.display = match ? "" : "none";
-  }
-}
-
   </script>
-      
-    

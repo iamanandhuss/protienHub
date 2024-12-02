@@ -1,0 +1,136 @@
+<%- include('layout/adminpage_header') %>
+<div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg mt-5">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">Create Coupon</h1>
+    <form  class="space-y-4" method="post" id="couponForm">
+      
+      <!-- Coupon Code -->
+      <div>
+        <label for="code" class="block text-sm font-medium text-gray-700">Coupon Code</label>
+        <input type="text" id="code" name="code" required
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea id="description" name="description" rows="3" required
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"></textarea>
+      </div>
+
+      <!-- Discount Type -->
+      <div>
+        <label for="discountType" class="block text-sm font-medium text-gray-700">Discount Type</label>
+        <select id="discountType" name="discountType" required
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+          <option value="percentage">Percentage</option>
+          <option value="fixed_amount">Fixed Amount</option>
+        </select>
+      </div>
+
+      <!-- Discount Value -->
+      <div>
+        <label for="discountValue" class="block text-sm font-medium text-gray-700">Discount Value</label>
+        <input type="number" id="discountValue" name="discountValue" min="0" required
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
+      </div>
+
+      <!-- Maximum Discount -->
+      <div>
+        <label for="maximumDiscount" class="block text-sm font-medium text-gray-700">Maximum Discount</label>
+        <input type="number" id="maximumDiscount" name="maximumDiscount" min="0"
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
+      </div>
+
+      <!-- Applicable Products -->
+      <div>
+        <label for="applicableProducts" class="block text-sm font-medium text-gray-700">Applicable Products</label>
+        <select id="applicableProducts" name="applicableProducts" multiple
+          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
+          <% products.forEach(product => { %>
+            <option value="<%= product._id %>"><%= product.product_name %></option>
+          <% }); %>
+        </select>
+        <p class="text-sm text-gray-500 mt-1">Hold Ctrl/Command to select multiple products.</p>
+      </div>
+
+      <!-- Validity -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Valid From -->
+        <div>
+          <label for="validFrom" class="block text-sm font-medium text-gray-700">Valid From</label>
+          <input type="date" id="validFrom" name="validFrom" required
+            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
+        </div>
+        <!-- Valid Until -->
+        <div>
+          <label for="validUntil" class="block text-sm font-medium text-gray-700">Valid Until</label>
+          <input type="date" id="validUntil" name="validUntil" required
+            class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-right">
+        <button type="submit"
+        id="addCoupon"
+          class="bg-orange-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          Create Coupon
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const form = document.querySelector("form");
+  
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+  
+      data.applicableProducts = Array.from(
+        form.querySelector("#applicableProducts").selectedOptions
+      ).map((option) => option.value);
+  const response=fetch('/admin/coupons',{
+    method:'POST',
+    headers:{
+        'Content-Type': 'application/json',
+        },
+        body:JSON.stringify(data),
+        }).then((response)=>{
+          if(response.status==201){
+            swal.fire({
+                title: 'Coupon Created',
+                text: 'Coupon created successfully',
+                icon: 'success',
+                }).then((result)=>{
+                    if(result.isConfirmed){
+                        window.location.href="/admin/manage_coupons";
+                        }
+            })
+          }
+          if(response.status==409){
+            swal.fire({
+                title: 'Error',
+                text: 'Coupon already exists',
+                icon: 'error',
+                })
+                }
+                if(response.status==500){
+                    swal.fire({
+                        title: 'Error',
+                        text: 'Internal Server Error',
+                        icon: 'error',
+                        })
+          }
+        })
+       {
+
+       }
+    });
+  </script>
+<%- include('layout/admin_footer') %>

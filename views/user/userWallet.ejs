@@ -1,3 +1,24 @@
 <%- include('profile_layout/header') %>
+    <div class="container mx-auto grid grid-cols-1  gap-6 px-4 w-full justify-center">
+        <div class="w-full h-1/6 bg-gray-300 flex justify-center rounded-xl">
+            <div>
+                <!-- balance amount -->
+                <h1 class="text-2xl p-6 font-semibold">Available Balance</h1>
+                <h1 class="text-2xl p-6 pt-0 font-sans">₹<%=wallet.balance%></h1>
+                <!-- transaction details -->
+                <div class="flex flex-col justify-center items-center w-full font-sans">
+                
+                    <h1 class="font-bold">Credited History</h1>
+                    <hr class="border-gray-500 w-full">
+                    <%wallet.transactions.forEach((data)=>{%>
+                        <h1 class="font-bold font-sans"><%=data.transactionType%> on <%=data.transactionDate.toISOString().split('T')[0]%> </h1>
+                        <hr class="border-gray-500 w-full">
 
-<%- include('layout/footer') %>
+                        <%})%>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <%- include('layout/footer') %>

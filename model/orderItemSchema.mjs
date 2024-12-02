@@ -1,80 +1,88 @@
 import mongoose, { Schema } from "mongoose";
 
-// Define orderSchema
 const orderSchema = new mongoose.Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "userCredentials", // Reference to the userCredentials collection
+      ref: "userCredentials", 
       required: true,
     },
     products: [
       {
         product: {
           type: Schema.Types.ObjectId,
-          ref: "products",  
-          required: true, 
+          ref: "products",
+          required: true,
         },
         quantity: {
-          type: Number, 
+          type: Number,
           required: true,
           min: 1,
         },
         product_image: {
-           type: [String],
-           required:false,
-          },
+          type: [String],
+          required: false,
+        },
         price: {
-          type: Number, 
-          required: true, 
+          type: Number,
+          required: true,
         },
         orderStatus: {
           type: String,
-          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], // Possible statuses for the order item
+          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"], // Possible statuses for the order item
           default: "Pending",
         },
       },
     ],
     totalAmount: {
       type: Number,
-      required: true,  
     },
+    couponCode: { type: String },
+    couponDiscound: {
+      type: Number, 
+      required: false,
+    },
+    couponId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Coupon'
+  },
     paymentMode: {
       type: String,
-      enum: ["upi", "cod","Credit/Debit_Cards"],
-      default: "cod",  
-    }, 
+      enum: ["upi", "cod", "Credit/Debit_Cards"],
+      default: "cod",
+    },
     paymentStatus: {
       type: String,
-      enum: ["Pending", "Paid", "Failed"], // Possible payment statuses
+      enum: ["Pending", "Paid", "Failed"], 
       default: "Pending",
     },
     orderStatus: {
       type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], 
+      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
       default: "Pending",
     },
     cancelReason: {
       type: String,
-      required: false, 
+      required: false,
     },
     cancelDescription: {
       type: String,
-      required: false, 
+      required: false,
     },
     shipping_address: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address', 
-        required: false, 
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+      required: false,
+    },
+    grandTottal: {
+      type: Number,
+    },
   },
   {
-    timestamps: true, 
+    timestamps: true,
   }
 );
 
 
-// Create orderModel
- const Order = mongoose.model("Order", orderSchema);
- export default Order;
- 
+const Order = mongoose.model("Order", orderSchema);
+export default Order;

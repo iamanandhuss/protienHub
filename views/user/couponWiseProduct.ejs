@@ -1,0 +1,80 @@
+<%- include('profile_layout/header') %>
+    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+        <%coupon.forEach((data)=>{%>
+            <%data.applicableProducts.forEach((product)=>{ %>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden h-fit">
+                <div class="flex justify-center">
+                    <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
+
+                </div>
+                
+                <div class="p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-red-500 font-sans font-bold"><%= product.discount %> OFF</span>
+                        <span class="text-gray-600 font-sans">(32Reviews)</span>
+    
+                        <div class="flex items-center">
+                            <% for(let i = 0; i < 5; i++) { %>
+                                <% if(i < parseInt(product.product_rating)) { %>
+                                    <!-- Filled Star -->
+                                    <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                <% } else { %>
+                                    <!-- Unfilled Star -->
+                                    <svg class="w-4 h-4 text-gray-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mt-2"><%= product.product_name %></h3>
+                    
+                    <%if(Number(product.stock_quantity)>2){%>
+                        
+                    <h3 class="text-lg font-semibold mt-2">Current Quantity:<span class="font-sans <%=(product.stock_quantity<6? 'text-red-500': 'text-green-500') %>"><%= product.stock_quantity %></span></h3>
+                    
+                    <!-- Button with data attributes -->                           
+
+                    
+                    
+                    <div class="flex justify-between h-fit align-middle">
+                        <button onclick="window.location.href='/viewdetail?productId=<%= product._id %>'" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
+                            Add to cart
+                        </button>
+                        <div class="bg-white  rounded-full shadow-lg  h-fit align-middle p-1 mt-3
+                        "onclick="addToFav('<%= product._id %>')">
+                            <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-8 h-8 fill-white hover:fill-red-500 stroke-black border-red-500">
+                                <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                </path>
+                              </svg>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
+            </div>
+                    <%}else{%>
+                        <h3 class="text-lg font-semibold mt-2 text text-red-500">Product OutOff Stock</h3>
+                        <div class="flex justify-between h-fit align-middle">
+                            <button  class=" mt-4 bg-white text-white py-2 px-4 rounded">
+                                Add to cart
+                            </button>
+                            <div class="bg-white  rounded-full shadow-lg  h-fit align-middle p-1 mt-3
+                            "onclick="addToFav('<%= product._id %>')">
+                                <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-8 h-8 fill-white hover:fill-red-500 stroke-black border-red-500">
+                                    <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                    </path>
+                                  </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <%}%>
+               
+        <% }) %>
+        <% }) %>
+    </div>
+    </div>
+    <%- include('layout/footer') %>
+        </body>

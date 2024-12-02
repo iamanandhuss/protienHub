@@ -3,12 +3,15 @@ import session from 'express-session';
 import { title } from "process";
 import { log } from "console";
 
-
+import Coupon from '../../model/couponSchema.mjs'
 import User from '../../model/userSchema.mjs';
 import Product from '../../model/productSchema.mjs'
 import Order from '../../model/orderItemSchema.mjs'
 import ProteinHubContent from '../../model/ProteinHub.mjs'
-import Carts from '../../model/cartSchema.js' 
+import Carts from '../../model/cartSchema.js'
+
+
+
 export const orderDetails=async(req,res)=>{
     try {
         const user = await User.findOne(req.session._id);
@@ -51,16 +54,20 @@ let orderId="";
           quantity: item.quantity,
           price: item.price,
           orderStatus: "Pending", // Initial order status
+
         }));
         const totalAmount = cart.totalAmount;
         const newOrder = new Order({
           user: req.session._id,
           products: products,
           totalAmount: totalAmount,
+          grandTottal:totalAmount,
           paymentMode: cart.paymentMode || "cod", // Default to COD if not specified
           shipping_address: cart.shipping_address, // Optional address field
           orderStatus: "Pending",
           paymentStatus: "Pending",
+          couponCode:"",
+          couponDiscound:"",
         });
 
         
@@ -85,7 +92,12 @@ export const addOrderAddress=async(req,res)=>{
     { _id: req.session._id, 'address._id': address },
     { 'address.$': 1 }
   );
-  console.log(OrderAddress);
+ 
+
+  order.couponCode=req.session.code;
+  order.couponDiscound=req.session.discountValue;
+  req.session.code=""
+  req.session.discountValue=""
   order.shipping_address=OrderAddress._id;
   const orderAddressadded=await order.save();
  if(orderAddressadded){
@@ -99,18 +111,24 @@ else
     
   }
 }
-//render mode of payments
-export const paymentDetails =async(req,res)=>{ 
-  const msg="sd" 
-  const order=await Order.findById(orderId)
-  const productIds = order.products.map(item => item.product); // Extract product IDs
-  const items = await Product.find({ _id: { $in: productIds } });
-  const address = await User.findOne({_id:req.session._id},{ address: 1});
- console.log(req.session);
-  const user = await User.findOne({_id:req.session._id});
-  res.render('user/payment.ejs',{items,order,msg,user,address,cart_akn:true,address_akn:true,payment_akn:true,msg:''})
-}  
 
+//render mode of payments
+export const paymentDetails =async(req,res)=>{
+ try {
+   const msg="sd" 
+   const order=await Order.findById(orderId)
+   req.session.amount=order.grandTottal;
+   const productIds = order.products.map(item => item.product); // Extract product IDs
+   const items = await Product.find({ _id: { $in: productIds } });
+   const address = await User.findOne({_id:req.session._id},{ address: 1});
+   const user = await User.findOne({_id:req.session._id});
+   const coupon=await Coupon.find();
+   res.render('user/payment.ejs',{coupon,items,order,msg,user,address,cart_akn:true,address_akn:true,payment_akn:true,msg:''})
+ } catch (error) {
+  console.log(error) 
+ }
+}  
+// add payment method
 export const paymentMethod=async(req,res)=>{
   const {paymentMethod}=req.body;
   console.log(paymentMethod);
@@ -119,6 +137,7 @@ export const paymentMethod=async(req,res)=>{
       let order=await Order.findById(orderId)
       console.log(order);
       order.paymentMode=paymentMethod;
+      console.log(req.session);
       const PaymentMet=await order.save();
       if (paymentMethod){
         res.status(201).json({ message: "Payment method updated successfully",});
@@ -143,12 +162,13 @@ export const paymentMethod=async(req,res)=>{
     
   } 
 }
-//order sucess message
 export const orderSucess= async(req,res)=>{
   const user = await User.findOne({_id:req.session._id});
   res.render('user/orderSucess.ejs',{user}) 
 }
 
+
+// to the order page showing order details
 export const my_order= async(req,res)=>{
   try {
     const user = await User.findOne({_id:req.session._id});
@@ -162,7 +182,6 @@ export const my_order= async(req,res)=>{
     res.render("user/userOrderhistory.ejs",{orders,user})
   } catch (error) { 
       console.error("Error fetching orders:", error);
-      // Handle the error (e.g., send a response to the client)
   }
     
     
@@ -171,7 +190,7 @@ export const my_order= async(req,res)=>{
   }
 }
  
-
+// cancel the order
 export const cancelOrder=async(req,res)=>{
    const cancelReson=req.query;
    console.log(orderId);
@@ -185,4 +204,18 @@ export const cancelOrder=async(req,res)=>{
     .catch((err)=>{
       res.status(500).json({message:"Error cancelling order"})
    }) 
-}  
+}   
+
+// reverse order when order is cancelled
+export const orderRevQty=async(req,res)=>{
+  try {
+    let order=await Order.findById({_id:req.query.orderId})
+    console.log(order.products.forEach(async(data)=>{
+      const product = await Product.findOne({ _id:data.product});
+      product.stock_quantity+=Number(data.quantity);
+      await product.save();
+    }));
+  } catch (error) {
+    console.log(error);
+  }
+}

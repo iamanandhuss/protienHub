@@ -49,6 +49,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "randomatic": "^3.1.1",
+    "razorpay": "^2.9.5",
     "rimraf": "^6.0.1",
     "twilio": "^5.3.3"
   }

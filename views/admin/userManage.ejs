@@ -40,7 +40,7 @@
                   <button class="text-white bg-red-500 p-1 w-24  rounded-sm" onclick="window.location.href='/admin/unblockUser/<%= user._id %>'">Block</button>
                   <%}%>
 
-              <button class="text-white bg-green-500 p-1 w-24 rounded-sm"  onclick="window.location.href='/admin/userDetails'" >view</button>
+              <button class="text-white bg-green-500 p-1 w-24 rounded-sm"  onclick="window.location.href='/admin/userDetails/<%= user._id %>'" >view</button>
             </th>
           <%})%>
         <%}%>
@@ -67,6 +67,7 @@
       <% } %>
   
       <% if (currentPage < totalPages) { %>
+        
         <!-- Next Button -->
      <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
         </a>

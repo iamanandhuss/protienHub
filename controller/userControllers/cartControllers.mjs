@@ -101,14 +101,13 @@ export const viewCart = async (req,res)=>{
     export const removeItem= async(req,res)=>{
         const {productId} = req.params;
         const userId = req.session._id;
-        console.log(productId);
         try {
             const updatedCart = await Carts.findOneAndUpdate(
                 { userId: req.session._id },
                 { $pull: { products: { productId: productId } } },
                 { new: true } 
             );   
-             
+            const product = await Product.findOne({ _id: productId});
             if (!updatedCart) {
                 return res.status(404).json({ message: 'Cart or product not found' });
             }
@@ -121,5 +120,13 @@ export const viewCart = async (req,res)=>{
         
     }
 
+export const reverseQty=async(req,res)=>{
+    try {
+        const product = await Product.findOne({ _id: req.query._id});
+        product.stock_quantity+=Number(req.query.qty);
+        await product.save();
+    } catch (error) {     
+    }
+}
     
     

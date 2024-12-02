@@ -154,14 +154,16 @@
                                     </svg>
                                 </button>
                             </div>
-                            <%}%>
+                            <button onclick="addToCart('<%= product._id %>')"
+                                class=" w-2/12 mt-4 bg-orange-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-orange-600">
+                                Add to Cart
+                            </button>
+                            <%}else{%>
+                        <H1 class="font-bold text-red-500 p-5">Product OutOff Stock</H1>
+                                <%}%>
 
 
-
-                                <button onclick="addToCart('<%= product._id %>')"
-                                    class=" w-2/12 mt-4 bg-orange-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-orange-600">
-                                    Add to Cart
-                                </button>
+                               
 
                     </div>
             </div>
