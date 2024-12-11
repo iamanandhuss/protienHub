@@ -9,11 +9,20 @@ import Order from "../../model/orderItemSchema.mjs"
 
 
 export const coupon=async(req,res)=>{
+    const page = parseInt(req.query.page) || 1; // Current page, default is 1
+    const limit = parseInt(req.query.limit) || 5; // Items per page, default is 10
+    const skip = (page - 1) * limit;
+    const totalProducts = await Coupon.countDocuments(); // Total number of products
+    const totalPages = Math.ceil(totalProducts / limit);  // Calculate total pages
+
     const user= await User.findOne({_id:req.session._id});
-    const coupon=await Coupon.find();
+    const coupon=await Coupon.find().skip(skip)
+    .limit(limit);;
     try {
-     res.render("user/coupons.ejs",{user,coupon})   
-    } catch (error) {
+     res.render("user/coupons.ejs",{user,coupon, totalPages,
+        currentPage: page, // Add currentPage here
+        limit})   
+    } catch (error) { 
         console.log(error)
     }
 }

@@ -6,14 +6,23 @@ import Categories from "../../model/CategorySchema.mjs";
 import Rattings from "../../model/ratting.mjs";
 
 export const allProduct = async (req, res) => {
+      const page = parseInt(req.query.page) || 1; // Current page, default is 1
+      const limit = parseInt(req.query.limit) || 8; // Items per page, default is 10
+      const skip = (page - 1) * limit;
+      const totalProduct = Product.find({ status: "active" }).countDocuments(); // Total number of products
+      const totalPages = Math.ceil(totalProduct / limit);  // Calculate total pages
+      const ratting=await Rattings.find();
   try {
     const user = await User.findOne({ _id: req.session._id });
-    const products = await Product.find({ status: "active" }); // Fetch product
+    const products = await Product.find({ status: "active" }).skip(skip)
+    .limit(limit); // Fetch product
     const Category = await Categories.find(
       { status: "active" },
       { category_name: 1 }
     );
-    res.render("user/allProducts.ejs", { user, products, Category });
+    res.render("user/allProducts.ejs", { user, products, Category,ratting,totalPages,
+      currentPage: page, // Add currentPage here
+      limit});
   } catch (error) {}
 };
 
@@ -107,7 +116,7 @@ export const addRatting = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-  }
+  } 
 };
 
 

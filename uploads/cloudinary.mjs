@@ -2,7 +2,9 @@ import cloudinary from 'cloudinary'
 import dotenv from 'dotenv'
 import multer from 'multer'
 import { CloudinaryStorage } from 'multer-storage-cloudinary'
+
 dotenv.config()
+
 cloudinary.v2.config({
     cloud_name:'dp5ytzpxg', 
     api_key: '773499734587333', 
@@ -19,10 +21,7 @@ const storage = new CloudinaryStorage({
     }
 })
 
+const upload = multer({storage})
 
-
-const upload = multer({
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-  });
 export { cloudinary, upload }
 

@@ -22,11 +22,13 @@ const orderSchema = new mongoose.Schema(
         product_image: {
           type: [String],
           required: false,
-        },
+        }, 
         price: {
           type: Number,
           required: true,
         },
+        discount: { type: Number, required: false },
+        gst:{type:Number,required: false},
         orderStatus: {
           type: String,
           enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"], // Possible statuses for the order item
@@ -77,11 +79,27 @@ const orderSchema = new mongoose.Schema(
     grandTottal: {
       type: Number,
     },
+    delivaryCharged:{
+      type:Boolean,
+      default:false
+    }
   },
   {
     timestamps: true,
   }
 );
+
+// Calculate totalAmount 
+orderSchema.pre('save', function(next) {
+  if(!this.delivaryCharged){
+    this.grandTottal =this.totalAmount+50;
+    next();
+    this.delivaryCharged=true;
+  }else{
+    next();
+  }
+  
+});
 
 
 const Order = mongoose.model("Order", orderSchema);

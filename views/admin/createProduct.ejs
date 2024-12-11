@@ -11,25 +11,23 @@
         <input oninput="validateName()" id="product_name" type="text" name="product_name"  class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
         <p id="error-Name" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
       </div>
-
-      
       <!-- Product Slug -->
       <div class="col-span-3 sm:col-span-1">
         <label class="block text-sm font-medium">Product Slug</label>
         <input id="product_slug" type="text" name="product_slug"  
                class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required 
                oninput="validateProductSlug()">
-        <p id="error-message" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
+        <p id="error-message" class="text-red-500 text-sm mt-1 hidden">space and allowed.</p>
     </div>
 
       <!-- SKU -->
-      <div class="col-span-3 sm:col-span-1">
+      <!-- <div class="col-span-3 sm:col-span-1">
         <label class="block text-sm font-medium">SKU</label>
         <input id="sku" type="number" name="sku" 
                class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required
                oninput="validateSKU()">
         <p id="error-sku" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 0 and 100.</p>
-    </div>
+    </div> -->
 
       <!-- Brand -->
       <div class="col-span-3 sm:col-span-1">
@@ -50,31 +48,43 @@
     </div>
 
       <!-- Sale Price -->
-      <div class="col-span-3 sm:col-span-1">
+      <!-- <div class="col-span-3 sm:col-span-1">
         <label class="block text-sm font-medium">Sale Price</label>
         <input id="sale_price" type="text" name="sale_price"  
                class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
                oninput="validateSalePrice()">
         <p id="error-sale-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
-    </div>
+    </div> -->
 
       <!-- Additional Discount -->
-      <div class="col-span-3 sm:col-span-1">
+      <!-- <div class="col-span-3 sm:col-span-1">
         <label class="block text-sm font-medium">Additional Discount (%)</label>
         <input id="additional_discount" type="number" name="additional_discount" 
                 class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
                oninput="validateDiscount()">
         <p id="error-discount" class="text-red-500 text-sm mt-1 hidden">Please enter a number not exceeding 50.</p>
-    </div>
+    </div> -->
 
-      <!-- Discount -->
+      <!-- HSN_Code -->
       <div class="col-span-3 sm:col-span-1">
-        <label class="block text-sm font-medium">Discount</label>
-        <input id="discount" type="text" name="discount"  
-               class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
-               oninput="validateDiscount()">
-        <p id="error-Adddiscount" class="text-red-500 text-sm mt-1 hidden">Please enter a valid number not exceeding 100.</p>
+        <label class="block text-sm font-medium">HSN Code</label>
+        <select id="HSN_Code" name="HSN_Code" 
+                class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="hsn_code()">
+            <option value="" disabled selected>Select an HSN Code</option>
+            <option value="18">2106 - health supplements or fitness products</option>
+            <option value="12">3004 - clinical nutrition</option>
+            <option value="18">1901 - meal replacements or weight management products</option>
+            <option value="5">1106 - natural sources without additives or flavors.</option>
+        </select>
+        <p id="error-HSN_Code" class="text-red-500 text-sm mt-1 hidden">Please select a valid HSN Code.</p>
     </div>
+    <!-- GST -->
+    <div class="col-span-3 sm:col-span-1">
+      <label class="block text-sm font-medium">GST</label>
+      <input id="gst" type="number" name="gst" readonly  
+             class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" 
+             min="1" max="100" required oninput="validateStockQuantity()">
+  </div>
 
       <!-- Stock Quantity -->
       <div class="col-span-3 sm:col-span-1">

@@ -8,16 +8,18 @@ import Order from '../../model/orderItemSchema.mjs'
 
 export const newReturn=async (req, res) => {
     try {
+        console.log(req.query.couponDiscound);
         const newReturn=new Returns({
             user:req.session._id,
             products:[{
                 product:req.query.product,
                 quantity:req.query.Quantity,
+                amount:(req.query.amount*req.query.Quantity)/100*(100-req.query.couponDiscound),
                 order:req.query.order
             }],
             refundMode:"wallet",
             refundStatus:"pending",
-            reason:req.query.reason,
+            reason:req.query.reason, 
             description:req.query.description,
         })
         let order=await Order.findById(req.query.order)

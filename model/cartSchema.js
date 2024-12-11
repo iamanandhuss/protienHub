@@ -22,17 +22,30 @@ const cartSchema = new mongoose.Schema({
         price: {
             type: Number,
             required: true
-        }
+        },
+        discount: { type: Number, required: false },
+        gst:{type:Number,required: false},
     }],
+    withOutDis:{
+        type: Number,
+        default: 0
+    },
     totalAmount: {
         type: Number,
         default: 0
     }
 });
 
-// Calculate totalAmount before saving the document
+// Calculate totalAmount 
 cartSchema.pre('save', function(next) {
     this.totalAmount = this.products.reduce((total, product) => {
+        return total + (((product.price * product.quantity)/100)*(100-product.discount)+((product.price/100)*product.gst));
+    }, 0);
+    next(); 
+});
+// withOutDis
+cartSchema.pre('save', function(next) {
+    this.withOutDis = this.products.reduce((total, product) => {
         return total + (product.price * product.quantity);
     }, 0);
     next(); 

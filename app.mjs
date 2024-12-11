@@ -11,6 +11,10 @@
   import nocache from "nocache";
   import flash from "connect-flash";
   import passport from "passport";
+  import passportSetup from './services/auth.mjs'
+
+
+  
   //---------------------- module require ---------------------------------
   const app = express();
 
@@ -86,3 +90,4 @@
   });
 
   //server listening
+ 

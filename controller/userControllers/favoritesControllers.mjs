@@ -30,6 +30,7 @@ export const addToFav = async (req, res) => {
 }
 
 export const wishList = async (req, res) => {
+    
     const user = await User.findOne({ _id: req.session._id }).populate({
         path: 'favorites',
         model: Product,
@@ -63,5 +64,5 @@ export const removeFromFav = async (req, res) => {
         res.status(500).json({ message: "Error removing product from favorites" });
         console.log(error);
 
-    }
+    } 
 }

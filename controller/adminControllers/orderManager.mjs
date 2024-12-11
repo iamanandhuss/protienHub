@@ -12,21 +12,33 @@ import Order from '../../model/orderItemSchema.mjs';
 
 export const view_order_list=async(req,res)=>{
     try {
-      
+      const page = parseInt(req.query.page) || 1; // Current page, default is 1
+      const limit = parseInt(req.query.limit) || 5; // Items per page, default is 10
+      const skip = (page - 1) * limit;
+      const totalOrder = await Order.countDocuments()
+      const totalPages = Math.ceil(totalOrder / limit);
+
       const user = await User.findOne({email:req.session.adminEmail})
       const products=await Product.find()
       const order=await Order.find().populate({
+
         path: 'user',
         select: 'username',
         model: User,  
         options: { strictPopulate: false },
-      })
-      res.render('admin/orderList.ejs',{ products,user,order})
+      }).skip(skip)
+      .limit(limit);
+
+      res.render('admin/orderList.ejs',{ products,user,order, totalPages,
+        currentPage: page,
+        limit})
     } catch (error) {
       console.log(error);
     }
     }
 export const order_manage =async(req,res)=>{
+ 
+
   const user = await User.findOne({email:req.session.adminEmail})
   const products=await Product.find()
   const orderId = req.query; // Extract orderId from query parameter
@@ -42,7 +54,7 @@ export const order_manage =async(req,res)=>{
     options: { strictPopulate: false },
   })
 
-
+ 
  
   
   const delivaryAddress = await User.findOne(
@@ -83,7 +95,7 @@ export const changeStatus=async(req,res)=>{
     return res.status(500).json({
       msg:"internal server error",
       success:false
-    })
+    }) 
     console.log(error);
   }
   }

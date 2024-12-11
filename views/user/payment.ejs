@@ -21,8 +21,8 @@
               <p class="text-lg">Pay with Razorpay</p>
               <div class="ml-auto">
                 <label class="flex items-center">
-                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Card" type="radio" name="PaymentMethod"
-                    value="Credit/Debit_Cards"> Select
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Card" type="radio"
+                    name="PaymentMethod" value="Credit/Debit_Cards"> Select
                 </label>
               </div>
             </div>
@@ -33,7 +33,8 @@
               <p class="text-lg">Pay with Cash On Delivery</p>
               <div class="ml-auto">
                 <label class="flex items-center">
-                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio" name="PaymentMethod" value="cod"> Select
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio"
+                    name="PaymentMethod" value="cod"> Select
                 </label>
               </div>
             </div>
@@ -44,7 +45,8 @@
               <p class="text-lg">Pay with Wallet</p>
               <div class="ml-auto">
                 <label class="flex items-center">
-                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio" name="PaymentMethod" value="cod"> Select
+                  <input oninput="data('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio"
+                    name="PaymentMethod" value="cod"> Select
                 </label>
               </div>
             </div>
@@ -133,13 +135,20 @@
                     <div class="flex">
                       <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>"
                         alt="Product 1" class="w-16 h-16 object-cover rounded-md">
-                      <div class="ml-4">
-                        <p class="text-lg font-sans">₹<%=product.price%><span
-                              class="line-through text-red-500 font-sans">₹
-                              <%=product.sale_price%>
-                            </span></p>
-                        <p class="text-green-500 font-sans">You saved ₹<%=product.price-product.sale_price%></p>
-                      </div>
+                        <div class="ml-4">
+                          <p class="text-lg font-sans"><span class="line-through text-red-500 font-sans">₹<%= product.price %>
+                                </span>₹<%= ((product.price/100)*(100-product.discount))+(product.price/100)*(product.gst) %>
+                          </p>
+                          <div>
+                            <span class="text-green-600 font-sans">(GST:<%=product.gst%>)%</span>
+                          </div>
+                          <div class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
+                            <span>
+                              <%= (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst))
+                                %>
+                            </span>
+                          </div>
+                        </div>
                     </div>
                   </div>
                   <%})%>
@@ -148,14 +157,14 @@
                     <div class="mt-6">
                       <div class="flex justify-between text-lg">
                         <p class="font-sans">Sub total</p>
-                        <p id="subTotal font-sans">₹<%=order.grandTottal%>
+                        <p id="subTotal font-sans">₹<%=order.totalAmount%>
                         </p>
                       </div>
                       <div class="flex justify-between text-lg">
-                        <p class="font-sans">Delivery</p>
-                        <p id="deliveryCharge font-sans">₹0</p>
+                        <p class="font-sans">Delivery Charge</p>
+                        <p id="deliveryCharge font-sans">₹50</p>
                       </div>
-
+      
                       <hr class="my-4">
                       <div class="flex justify-between font-semibold text-xl">
                         <p class="font-sans">Grand Total</p>
@@ -270,9 +279,9 @@
       });
     });
 
-// to the razerpay
+    // to the razerpay
 
-    function data(amounts,orderId) {
+    function data(amounts, orderId) {
       const selectedPaymentMethod = document.querySelector('input[name="PaymentMethod"]:checked').value;
       if (selectedPaymentMethod) {
         console.log(selectedPaymentMethod);
@@ -303,19 +312,20 @@
                       'Content-Type': "application/json"
                     },
                     body: JSON.stringify({ orderId: orderId })  // Pass orderId as an object
-                  }).then(()=>{
+                  }).then(() => {
                     Swal.fire({
-                  title: `Your Order Has Been Placed`,
-                  text: 'Your Order Has Been Placed',
-                  icon: 'success',
-                  timer: 2000
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    window.location.href = "/orderSucess";
-                  }
-                  window.location.href = "/orderSucess";
-                })                  })
-                   
+                      title: `Your Order Has Been Placed`,
+                      text: 'Your Order Has Been Placed',
+                      icon: 'success',
+                      timer: 2000
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        window.location.href = "/orderSucess";
+                      }
+                      window.location.href = "/orderSucess";
+                    })
+                  })
+
                 },
                 prefill: {
                   name: "Your Name",

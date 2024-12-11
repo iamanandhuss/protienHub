@@ -13,6 +13,7 @@ import {view_categories,unblockcategory,blockcategory,addCategory,createCategory
 import {listUser,blockUser,unblockUser,userDetails} from '../controller/adminControllers/userManager.mjs'
 import {manage_coupons,addCoupons,view_coupon_details} from '../controller/adminControllers/couponManager.mjs'
 import {refund} from '../controller/adminControllers/refundManager.mjs'
+import {create_Offers,addOffers} from '../controller/adminControllers/offerControllers.mjs'
 
 
 //home page for admin desides admin in loge in or not
@@ -78,10 +79,14 @@ adminRouter.post('/data',is_adminLogedin,updateProduct)
 adminRouter.get('/refund',refund)
 
 
-
+ 
 // coupons
 adminRouter.get('/manage_coupons',is_adminLogedin,view_coupon_details)
 adminRouter.post('/coupons',is_adminLogedin,addCoupons)
 adminRouter.get('/coupons/',is_adminLogedin,manage_coupons)
 
-export default adminRouter;  
+//offers
+adminRouter.get('/manage_offers',is_adminLogedin,create_Offers)
+adminRouter.put('/create-offer',is_adminLogedin,addOffers)
+
+export default adminRouter;   

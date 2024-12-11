@@ -139,7 +139,7 @@ export const postOtp = async (req, res) => {
             return res.status(404).json({ success: false, message: "OTP not found." })
         }
         //make the user verified
-        user.is_varified = true; 
+        user.is_varified = true;
         await user.save();
         //delete the session
         req.session.otp = null;
@@ -194,30 +194,28 @@ export const getLogin = (req, res) => {
 
 //post login
 export const postLogin = async (req, res) => {
+    const { username, password } = req.body;
     try {
-        const { username, password } = req.body;
         const user = await User.findOne({ username });
-        console.log(user);
-
         if (user) {
             if (!user.is_varified) {
-                // User is blocked by admin
-                return res.status(403).json({ success: false, message: "User access is blocked by admin." });
+                return res.status(403).json({ message: "not allowed to login" });
             } else {
                 const passwordCheck = await bcrypt.compare(password, user.password);
                 if (passwordCheck) {
                     req.session._id = user._id;
-                    res.redirect('/')
+                    return res.status(200).json({ message: "login sucess" });
                 } else {
-                    return res.status(401);
+                    return res.status(401).json({ message: "password incorrect" });
                 }
             }
         } else {
-            return res.status(404).json({ success: false, message: "User not found." });
+            console.log("user not excist");
+            return res.status(402).json({ message: "user doesn't excist" });
         }
+
     } catch (error) {
-        console.log(`Error while login post: ${error}`);
-        return res.status(500).json({ success: false, message: "An error occurred while processing your request." });
+        return res.status(404).json({ message: "Page Not Found" });
     }
 };
 
@@ -268,7 +266,7 @@ export const get_Otp = async (req, res) => {
 }
 export const password_update = async (req, res) => {
     try {
-        const {email}=req.session.otp;
+        const { email } = req.session.otp;
         const user = await User.findOne({ email })
         const { password, confirmPassword } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -276,7 +274,7 @@ export const password_update = async (req, res) => {
         await user.save();
         res.redirect('/')
     } catch (error) {
-console.log(error);
+        console.log(error);
     }
 }
 
@@ -293,7 +291,7 @@ export const verifie_email = async (req, res) => {
 
     }
 }
- 
+
 export const newPassword = async (req, res) => {
     try {
         res.render('user/createPassword.ejs')
@@ -306,39 +304,39 @@ export const newPassword = async (req, res) => {
 export const googleAuth = passport.authenticate('google', {
     scope: ['email', 'profile'],
     prompt: 'select_account',
-  });
-  
-  export const googleAuthCallback = (req, res, next) => {
-    passport.authenticate('google', (err, user, info) => {
-      if (err) {
-        console.log(`Error on Google auth callback: ${err}`);
-        req.flash('error_msg', 'Something went wrong during authentication.');
-        return res.redirect('/login');
-      }
-  
-      if (!user) {
-        req.flash('error_msg', 'No user found with this Google account.');
-        return res.redirect('/login');
-      }
-  
-      req.logIn(user, (err) => {
-        if (err) {
-          console.log(`Login error: ${err}`);
-          req.flash('error_msg', 'Failed to log you in.');
-          console.log(req.session.googleId);
+});
 
-          return res.redirect('/');
-        } 
-  
-        // Store user in session
-    
-        req.session._id = user._id;
-        console.log("********** session", req.session.user);
-  
-        console.log("Successfully logged in with Google!");
-  
-        req.flash('success_msg', 'Successfully logged in with Google!');
-        return res.redirect('/');
-      });
+export const googleAuthCallback = (req, res, next) => {
+    passport.authenticate('google', (err, user, info) => {
+        if (err) {
+            console.log(`Error on Google auth callback: ${err}`);
+            req.flash('error_msg', 'Something went wrong during authentication.');
+            return res.redirect('/login');
+        }
+
+        if (!user) {
+            req.flash('error_msg', 'No user found with this Google account.');
+            return res.redirect('/login');
+        }
+
+        req.logIn(user, (err) => {
+            if (err) {
+                console.log(`Login error: ${err}`);
+                req.flash('error_msg', 'Failed to log you in.');
+                console.log(req.session.googleId);
+
+                return res.redirect('/');
+            }
+
+            // Store user in session
+
+            req.session._id = user._id;
+            console.log("********** session", req.session.user);
+
+            console.log("Successfully logged in with Google!");
+
+            req.flash('success_msg', 'Successfully logged in with Google!');
+            return res.redirect('/');
+        });
     })(req, res, next);
-  };
+};

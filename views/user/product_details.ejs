@@ -57,6 +57,8 @@
             <!-- Product Header -->
             <div class="flex items-start justify-between">
                 <!-- Image -->
+                <%= product.discount%>
+
                 <% if(product){%>
                     <div class="image-container w-1/3" id="image-container">
                         <div class="flex justify-center">
@@ -66,8 +68,6 @@
                         </div>
                         <div id="mouse-overlay"></div>
                         <div id="overlay"></div>
-
-
                     </div>
                     <!-- Product Details -->
                     <div class="w-2/3 pl-6">
@@ -79,14 +79,19 @@
                         </p>
 
                         <!-- Price -->
-                        <div class="mt-4 mb-6">
-                            <span class="text-3xl font-semibold text-gray-800 font-sans">₹<%= product.sale_price%>
+                        <div class="mt-4 mb-0">
+                            <span class="text-3xl font-semibold text-gray-800 font-sans">₹<%= (Number(product.price)/100*(100-Number(product.discount)))%>
                             </span>
                             <span class="text-gray-500 line-through ml-2 font-sans">₹<%= product.price%></span>
                             <span class="ml-2 text-green-600 font-sans">
-                                <%= product.discount%>
+                            
+                                
                             </span>
+                            
                         </div>
+                        <span class="text-green-500 font-sans">Save <%=product.discount%>%</span>
+
+                        
 
                         <!-- Best Before -->
                         <p class="text-sm text-gray-600 mb-2 font-sans">Best Before:<%= new
@@ -325,6 +330,8 @@
     </div>
     <%- include('layout/footer') %>
         </body>
+
+
         <script src="path/to/magiczoom.js"></script>
         <script>
             function swapImage(imageUrl) {
@@ -350,13 +357,11 @@
                 },
             };
 
-            //initially blank
             let deviceType = "";
 
             //Checks for device type
             function isTouchDevice() {
                 try {
-                    //We try to create touch event (it would fail for desktops and throw error)
                     deviceType = "touch";
                     document.createEvent("TouchEvent");
                     return true;

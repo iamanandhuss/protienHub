@@ -4,7 +4,7 @@
         const errorMessage = document.getElementById("error-message");
 
         // Check if input contains only numbers
-        if (/^[a-zA-Z]*$/.test(productSlugInput.value)) {
+        if (/^[a-zA-Z^\d]*$/.test(productSlugInput.value)) {
             // Valid input: hide error message
             errorMessage.classList.add("hidden");
         } else {
@@ -15,7 +15,10 @@
     function validateName() {
         const nameInput = document.getElementById("product_name");
         const errorName = document.getElementById("error-Name");
-        if (/^[a-zA-Z]*$/.test(nameInput.value)) {
+        if (/^[a-zA-Z^\d ]*$/.test(nameInput.value)) {
+
+            document.getElementById("product_slug").value=(nameInput.value.split("")).map((a)=>(a==" ")?a='-':a).join("")
+            document.getElementById("brand").value=(nameInput.value.split(" ")[0])
             // Valid input: hide error message
             errorName.classList.add("hidden");
         } else {
@@ -63,48 +66,15 @@
             errorPrice.classList.remove("hidden");
         }
     }
-    function validateSalePrice() {
-        const salePriceInput = document.getElementById("sale_price");
-        const errorSalePrice = document.getElementById("error-sale-price");
 
-        // Check if input contains only numeric characters
-        if (/^\d*$/.test(salePriceInput.value)) {
-            // Valid input: hide error message
-            errorSalePrice.classList.add("hidden");
-        } else {
-            // Invalid input: show error message
-            errorSalePrice.classList.remove("hidden");
-        }
+    function hsn_code(){
+        const HSN_Code = document.getElementById("HSN_Code");
+        const data = HSN_Code.value;
+        document.getElementById("gst").value=HSN_Code.value
     }
-    function validateDiscount() {
-        const discountInput = document.getElementById("additional_discount");
-        const errorDiscount = document.getElementById("error-discount");
+    
 
-        // Check if the input is a valid number and doesn't exceed 50
-        if (discountInput.value === "" || (discountInput.value <= 50 && discountInput.value >= 0)) {
-            // Valid input: hide the error message
-            errorDiscount.classList.add("hidden");
-        } else {
-            // Invalid input: show the error message
-            errorDiscount.classList.remove("hidden");
-        }
-    }
-    function validateDiscount() {
-        const discountInput = document.getElementById("discount");
-        const errorDiscount = document.getElementById("error-Adddiscount");
 
-        // Ensure the input is a valid number and does not exceed 100
-        const discountValue = discountInput.value;
-        if (discountValue === "" || (isNumeric(discountValue) && discountValue <= 100 && discountValue >= 0)) {
-            // Valid input: hide error message
-            errorDiscount.classList.add("hidden");
-        } else {
-            // Invalid input: show error message
-            errorDiscount.classList.remove("hidden");
-        }
-    }
-
-    // Helper function to check if a string is a valid number
     function isNumeric(value) {
         return !isNaN(value) && value.trim() !== "";
     }
@@ -199,12 +169,8 @@
         formData.product_id = document.getElementById('product_id').value;
         formData.product_name = document.getElementById("product_name").value;
         formData.product_slug = document.getElementById("product_slug").value;
-        formData.sku = document.getElementById("sku").value;
         formData.brand = document.getElementById("brand").value;
         formData.price = document.getElementById("price").value;
-        formData.sale_price = document.getElementById("sale_price").value;
-        formData.additional_discount = document.getElementById("additional_discount").value;
-        formData.discount = document.getElementById("discount").value;
         formData.stock_quantity = document.getElementById("stock_quantity").value;
         formData.stock_status = document.querySelector("[name='stock_status']").value;
         formData.expiry = document.getElementById("expiry").value;
@@ -212,7 +178,6 @@
         formData.flavor = document.querySelector("[name='flavor']").value;
         formData.countryof_origin = document.querySelector("[name='countryof_origin']").value;
         formData.dietary_choices = document.querySelector("[name='dietary_choices']").value;
-
         submitFormData(formData);
     });
 

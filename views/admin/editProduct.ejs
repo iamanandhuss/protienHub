@@ -32,13 +32,7 @@
           <p id="error-message" class="text-red-500 text-sm mt-1 hidden">Number not allowed.</p>
         </div>
 
-        <!-- SKU -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">SKU</label>
-          <input id="sku" type="text" name="sku" value="<%= product.sku %>"
-            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required oninput="validateSKU()">
-          <p id="error-sku" class="text-red-500 text-sm mt-1 hidden">Please enter a number between 0 and 100.</p>
-        </div>
+       
 
         <!-- Brand -->
         <div class="col-span-3 sm:col-span-1">
@@ -56,31 +50,9 @@
           <p id="error-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
         </div>
 
-        <!-- Sale Price -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">Sale Price</label>
-          <input id="sale_price" type="text" name="sale_price" value="<%= product.sale_price %>"
-            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateSalePrice()">
-          <p id="error-sale-price" class="text-red-500 text-sm mt-1 hidden">Please enter only numbers.</p>
-        </div>
+       
 
-        <!-- Additional Discount -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">Additional Discount (%)</label>
-          <input id="additional_discount" type="number" name="additional_discount"
-            value="<%= product.additional_discount %>"
-            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateDiscount()">
-          <p id="error-discount" class="text-red-500 text-sm mt-1 hidden">Please enter a number not exceeding 50.</p>
-        </div>
-
-        <!-- Discount -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">Discount</label>
-          <input id="discount" type="text" name="discount" value="<%= product.discount %>"
-            class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" oninput="validateDiscount()">
-          <p id="error-Adddiscount" class="text-red-500 text-sm mt-1 hidden">Please enter a valid number not exceeding
-            100.</p>
-        </div>
+        
         <!-- Stock Quantity -->
         <div class="col-span-3 sm:col-span-1">
           <label class="block text-sm font-medium">Stock Quantity</label>
@@ -184,29 +156,6 @@
             <% } %>
           </select>
       </div>
-
-
-
-
-        <!-- EAN -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">EAN</label>
-          <select name="ean" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required
-            id="ean-dropdown">
-            <!-- Options will be populated by JavaScript -->
-          </select>
-        </div>
-
-
-        <!-- Number of Servings -->
-        <div class="col-span-3 sm:col-span-1">
-          <label class="block text-sm font-medium">Number of Servings</label>
-          <select name="number_of_serving" class="mt-1 p-2 border border-gray-300 rounded-md bg-white w-full" required>
-            <option value="two" <% if (product.number_of_serving==='' ) { %> selected <% } %>></option>
-            <option value="one" <% if (product.number_of_serving==='one' ) { %> selected <% } %>>One Scoop</option>
-            <option value="two" <% if (product.number_of_serving==='two' ) { %> selected <% } %>>Two Scoops</option>
-          </select>
-        </div>
 
         <!-- Weight -->
         <div class="col-span-3 sm:col-span-1">

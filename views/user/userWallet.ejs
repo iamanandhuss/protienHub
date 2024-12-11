@@ -10,11 +10,19 @@
                 
                     <h1 class="font-bold">Credited History</h1>
                     <hr class="border-gray-500 w-full">
-                    <%wallet.transactions.forEach((data)=>{%>
-                        <h1 class="font-bold font-sans"><%=data.transactionType%> on <%=data.transactionDate.toISOString().split('T')[0]%> </h1>
-                        <hr class="border-gray-500 w-full">
+                    <div class="p-2">
+                        <%wallet.transactions.forEach((data)=>{%>
+                            <div class="p-3">
+                                <div class="flex justify-between">
+                                    <h1 class="font-bold font-sans"><%=data.transactionType%> on <%=data.transactionDate.toISOString().split('T')[0]%> </h1>
+                                    <h1 class="font-bold font-sans"><%%></h1>
 
-                        <%})%>
+                                </div>
+                                <hr class="border-gray-500 w-full">
+                            </div>
+                            <%})%>
+                    </div>
+                    
                 </div>
             </div>
         </div>

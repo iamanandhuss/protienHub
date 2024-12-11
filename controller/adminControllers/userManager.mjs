@@ -30,7 +30,7 @@ export const listUser = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
+} 
 
 export const
     blockUser = async (req, res) => {

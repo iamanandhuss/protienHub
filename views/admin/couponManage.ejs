@@ -58,6 +58,31 @@
 
       </tbody>
     </table>
+    <div class="flex justify-center mt-8">
+      <nav class="inline-flex space-x-2">
+        <% if (currentPage > 1) { %>
+          <!-- Previous Button -->
+          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+            
+          </a>
+        <% } %>
+    
+        <!-- Page Numbers -->
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="?page=<%= i %>&limit=<%= limit %>"
+            class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+            <%= i %>
+          </a>
+        <% } %>
+    
+        <% if (currentPage < totalPages) { %>
+          
+          <!-- Next Button -->
+       <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+          </a>
+        <% } %> 
+      </nav>
+    </div>
 
 
   </div>
@@ -98,7 +123,7 @@
                       <label for="validUntil" class="block text-sm font-medium text-gray-700">Valid Until</label>
                       <input
                           type="text"
-                          id="validUntil"
+                           id="validUntil"
                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           value="${validUntil}"
                           readonly

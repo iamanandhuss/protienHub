@@ -27,6 +27,8 @@ export const viewCart = async (req,res)=>{
                         productId: product._id,
                         quantity: quantity,
                         price: product.price,
+                        discount: product.discount,
+                        gst:product.gst,
                         Flavor: Flavor
                     }]
                 });
@@ -47,6 +49,8 @@ export const viewCart = async (req,res)=>{
                     productId: product._id,
                     quantity: quantity,
                     price: product.price,
+                    discount: product.discount,
+                    gst:product.gst,
                     Flavor: Flavor
                 } ); 
             }

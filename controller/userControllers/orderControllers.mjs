@@ -26,13 +26,14 @@ export const orderDetails=async(req,res)=>{
 
     export  const orderDetail = async(req,res)=> {
         try {
+          
           const user = await User.findOne({_id:req.session._id});
           
           const order=await Order.findById(orderId)
           const productIds = order.products.map(item => item.product); // Extract product IDs
           const items = await Product.find({ _id: { $in: productIds } });
           
-
+ 
           
           let cart_akn;
           let address_akn 
@@ -53,6 +54,8 @@ let orderId="";
           product: item.productId, // Mapping productId from cart to product in the order
           quantity: item.quantity,
           price: item.price,
+          gst:item.gst,
+          discount: item.discount,
           orderStatus: "Pending", // Initial order status
 
         }));
@@ -173,13 +176,23 @@ export const my_order= async(req,res)=>{
   try {
     const user = await User.findOne({_id:req.session._id});
     try {
+      const page = parseInt(req.query.page) || 1; // Current page, default is 1
+      const limit = parseInt(req.query.limit) || 3; // Items per page, default is 10
+      const skip = (page - 1) * limit;
+      const totalOrders = await Order.countDocuments({ user: req.session._id }); // Total number of products
+      const totalPages = Math.ceil(totalOrders / limit);  // Calculate total pages
+
+
       const orders=await Order.find({ user: req.session._id }).sort({createdAt: -1}).populate({
         path: 'products.product',
         select: 'product_name price product_image categories discount Flavor',
         model: Product,  
         options: { strictPopulate: false },
-      })
-    res.render("user/userOrderhistory.ejs",{orders,user})
+      }).skip(skip)
+      .limit(limit);
+    res.render("user/userOrderhistory.ejs",{orders,user,totalPages,
+      currentPage: page, // Add currentPage here
+      limit})
   } catch (error) { 
       console.error("Error fetching orders:", error);
   }
