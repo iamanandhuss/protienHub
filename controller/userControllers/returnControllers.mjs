@@ -7,6 +7,9 @@ import Order from '../../model/orderItemSchema.mjs'
 
 
 export const newReturn=async (req, res) => {
+    const product = await Product.findById(req.query.product);
+    const gst=product.gst;
+    const discount=product.discount
     try {
         console.log(req.query.couponDiscound);
         const newReturn=new Returns({
@@ -14,7 +17,7 @@ export const newReturn=async (req, res) => {
             products:[{
                 product:req.query.product,
                 quantity:req.query.Quantity,
-                amount:(req.query.amount*req.query.Quantity)/100*(100-req.query.couponDiscound),
+                amount:(req.query.amount*req.query.Quantity)/100*(100-discount)+(req.query.amount*req.query.Quantity)/100*gst,
                 order:req.query.order
             }],
             refundMode:"wallet",

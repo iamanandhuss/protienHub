@@ -14,7 +14,7 @@
                                 <h3 class="text-gray-600">
                                     <%= item.product.product_name %>
                                 </h3>
-                                <p class="text-gray-600">Price: $<%= item.product.price %>
+                                <p class="text-gray-600">Price: ₹<%= item.product.price %>
                                 </p>
                                 <p class="text-gray-600">Quantity: <%= item.quantity %>
                                 </p>
@@ -27,9 +27,9 @@
                                     <div>
                                         <h1 class="p-4 pl-0 font-sans text-green-500">Returned On:<%=data.createdAt.toISOString().split('T')[0]%></h1>
                                         <%if(data.refundStatus!="pending"){%>
-                                            <h1 class=" pl-0 font-sans text-green-500">Refunded</h1>
+                                            <h1 class=" pl-0 font-sans text-green-500">Refunded ₹<%=data.products[0].amount%> on <%=data.updatedAt.toISOString().split('T')[0]%></h1>
                                             <%}else{%>
-                                                <h1 class=" pl-0 font-sans text-green-500">Requested for Refund</h1>
+                                                <h1 class=" pl-0 font-sans text-red-500">Requested for Refund of ₹<%=data.products[0].amount%></h1>
                                                 <%}%>
                                     </div>
                                    
@@ -96,5 +96,11 @@
             <%})%>
 
     </div>
+    <script>
+        document.getElementById('searchButton').addEventListener('click',(event)=>{
+            event.preventDefault();
+            window.location.href='/allProduct'
+        })
+    </script>
 
     <%- include('layout/footer') %>

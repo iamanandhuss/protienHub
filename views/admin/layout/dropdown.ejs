@@ -1,39 +1,24 @@
 <div class="relative inline-block text-left">
-    <button
-      id="dropdownButton"
-    >
-      
+  <button id="dropdownButton">
+
     <%=order.orderStatus%>
 
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        />
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
-    </button>
-  
-    <!-- Dropdown items --> 
-    <div
-      id="dropdownMenu"
-      class="hidden absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-      role="menu"
-      aria-orientation="horizontal"
-      aria-labelledby="dropdown"    
-    >
-      <div class="py-1" role="none">
-        <% const statusSteps = ['Pending','Processing', 'Shipped','Cancelled','Delivered']; %>
-<% statusSteps.slice(statusSteps.indexOf(order.orderStatus),statusSteps.length).forEach((status) => { %>
-        <a
-          href="#"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
-        >
-        <%=status%>
-        </a>
-        <%})%>
-      </div>
+  </button>
+
+  <!-- Dropdown items -->
+  <div id="dropdownMenu"
+    class="hidden absolute right-0 z-10 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+    role="menu" aria-orientation="horizontal" aria-labelledby="dropdown">
+    <div class="py-1" role="none">
+      <% const statusSteps=['Pending','Processing', 'Shipped' ,'Cancelled','Delivered']; %>
+        <% statusSteps.slice(statusSteps.indexOf(order.orderStatus),statusSteps.length).forEach((status)=> { %>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            role="menuitem">
+            <%=status%>
+          </a>
+          <%})%>
     </div>
   </div>
-  
+</div>

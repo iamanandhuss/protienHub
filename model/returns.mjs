@@ -48,7 +48,6 @@ const returnSchema = new mongoose.Schema(
     },
     reason: {
       type: String,
-      enum: ["Damaged_upon_arrival", "Wrong_product", "Defective_Needed", "Change_of_mind"],
       required: false,
     },
     description: {

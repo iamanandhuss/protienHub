@@ -73,6 +73,7 @@
       <th class="py-3 px-4">Price</th>
       <th class="py-3 px-4">Discount</th> 
       <th class="py-3 px-4">Quantity</th>
+      <th class="py-3 px-4">Payment Status</th>
       <th class="py-3 px-4">OrderStatus</th>
     </tr>
   </thead>
@@ -88,13 +89,43 @@
         <td class="py-2 px-4"><%=data.product.price%></td>
         <td class="py-2 px-4"><%=data.product.discount%></td>
         <td class="py-2 px-4"><%=data.quantity%></td>
+        <td class="py-2 px-4">
+          <%=order.paymentStatus%>
+        </td>
+        <%if(order.products.length>1){%>
+          <td class="py-2 px-4"><%=order.orderStatus%></td>
+        <%}else{%>
         <td class="py-2 px-4 <%= (order.orderStatus == 'Delivered') ? 'text-green-500' : 'text-red-500' %>"><%- include('layout/dropdown') %></td>           
-    <!-- Add more products as needed -->
+        <%}%>
+
+        <!-- Add more products as needed -->
      
 </tbody>
 
 <%})%>
+
+
   </table>
+  <%if(order.products.length>1){%>
+    <button id="dropdownButton" class="p-3 m-3 font-bold text-white rounded-md bg-orange-400">
+      Change Order Status
+    </button>
+    <!-- Dropdown items -->
+  <div id="dropdownMenu"
+  class="hidden absolute left-5-1 z-1 mt-2 w-44 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+  role="menu" aria-orientation="horizontal" aria-labelledby="dropdown">
+  <div class="py-1" role="none">
+    <% const statusSteps=['Pending','Processing', 'Shipped' ,'Cancelled','Delivered']; %>
+      <% statusSteps.slice(statusSteps.indexOf(order.orderStatus),statusSteps.length).forEach((status)=> { %>
+        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          role="menuitem">
+          <%=status%>
+        </a>
+        <%})%>
+  </div>
+</div>
+    <%}%>
+  
   
 
 </div>
@@ -125,8 +156,8 @@ dropdownItems.forEach((item) => {
         'Content-Type': 'application/json',
         },
     }).then((response)=>{
-
-if(response.status==200){
+      console.log(response);
+if(response.status==201){
   Swal.fire({
                         title: 'Sucess!',
                         text: 'OrderStatus Changed Sucessfully',

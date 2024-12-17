@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema(
         gst:{type:Number,required: false},
         orderStatus: {
           type: String,
-          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"], // Possible statuses for the order item
+          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned","Refunded"], // Possible statuses for the order item
           default: "Pending",
         },
       },
@@ -50,7 +50,7 @@ const orderSchema = new mongoose.Schema(
   },
     paymentMode: {
       type: String,
-      enum: ["upi", "cod", "Credit/Debit_Cards"],
+      enum: ["Razorpay", "cod", "wallet"],
       default: "cod",
     },
     paymentStatus: {

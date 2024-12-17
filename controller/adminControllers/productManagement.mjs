@@ -44,24 +44,22 @@ export const unblockproduct = async (req, res) => {
 //product list
 export const productDetails = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 6; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 6; 
     const skip = (page - 1) * limit;
-
     const user = await User.findOne({ email: req.session.adminEmail });
-      const totalProducts = await Product.countDocuments(); // Total number of products
-      const totalPages = Math.ceil(totalProducts / limit);  // Calculate total pages
+      const totalProducts = await Product.countDocuments(); 
+      const totalPages = Math.ceil(totalProducts / limit);  
 
     const products = await Product.find()
       .skip(skip)
       .limit(limit);
  
-    // Pass all necessary variables to the template
     res.render('admin/productList.ejs', {
       user,
       products,
       totalPages,
-      currentPage: page, // Add currentPage here
+      currentPage: page, 
       limit
     });
   } catch (error) {

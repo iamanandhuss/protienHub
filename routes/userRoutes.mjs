@@ -8,7 +8,7 @@ import {
     from '../controller/userControllers/userAuth.mjs'
 import { homepage } from '../controller/userControllers/userControllers.mjs'
 import { profile, editProfile } from '../controller/userControllers/profileControllers.mjs'
-import { orderDetails, orderDetail, addToOrder, addOrderAddress, paymentMethod, orderSucess, paymentDetails, my_order, cancelOrder, orderRevQty } from '../controller/userControllers/orderControllers.mjs'
+import { orderDetails, orderDetail, addToOrder, addOrderAddress, paymentMethod, orderSucess, paymentDetails, my_order, cancelOrder, orderRevQty,paymentRender,OrderListPay} from '../controller/userControllers/orderControllers.mjs'
 import { viewCart, Cart, removeItem, reverseQty } from '../controller/userControllers/cartControllers.mjs'
 import { addresspage, addAddressPage, insertAddress, editAddress, insertEdited, deleteAddress } from '../controller/userControllers/addressControllers.mjs'
 import { viewdetail, allProduct, sortproducts, addRatting } from '../controller/userControllers/productControllers.mjs'
@@ -16,13 +16,14 @@ import { isLoggedIn, isLoggedOut, isBlocked } from '../middleware/user/userAuth.
 import { addToFav, wishList, removeFromFav } from '../controller/userControllers/favoritesControllers.mjs'
 import {newReturn,My_Returns} from '../controller/userControllers/returnControllers.mjs'
 import {coupon,addCoupon,removeCoupon,couponWiseProduct} from '../controller/userControllers/couponControllers.mjs'
-import {paymentRender} from '../controller/userControllers/paymentControllers.mjs'
-import {wallet} from '../controller/userControllers/walletController.mjs'
+import {} from '../controller/userControllers/paymentControllers.mjs'
+import {wallet,walletDebit} from '../controller/userControllers/walletController.mjs'
+import { generateOrderPDF } from '../controller/userControllers/pdfController.mjs'
 
 import User from '../model/userSchema.mjs';
 
 
-
+ 
 //to the SignUp 
 userRouter.get('/SignUp', isLoggedOut, getSignUp)
 
@@ -50,7 +51,7 @@ userRouter.post('/create_password', isLoggedOut, get_Otp)
 userRouter.get('/newPassword', isLoggedOut, newPassword)
 userRouter.post('/password_update', isLoggedOut, password_update)
 
-
+ 
 
 
 
@@ -120,10 +121,13 @@ userRouter.get('/coupons', coupon)
 userRouter.get('/data',addCoupon)
 userRouter.get('/removeCoupon',removeCoupon)
 userRouter.get('/couponWiseProduct',couponWiseProduct)
+userRouter.get('/payNow',OrderListPay)
 // wallet
 userRouter.get('/wallet',wallet)
+userRouter.post('/walletDebit',walletDebit)
 
-
+// generate pdf
+userRouter.post('/generatePdf',generateOrderPDF)
 
 
 

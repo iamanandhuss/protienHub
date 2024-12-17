@@ -117,19 +117,16 @@
                         </tr>
                         <%})%>
 
-                            <!-- Repeat for more orders -->
                 </tbody>
             </table>
             <div class="flex justify-center mt-8">
                 <nav class="inline-flex space-x-2">
                   <% if (currentPage > 1) { %>
-                    <!-- Previous Button -->
                     <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
                       
                     </a>
                   <% } %>
               
-                  <!-- Page Numbers -->
                   <% for (let i = 1; i <= totalPages; i++) { %>
                     <a href="?page=<%= i %>&limit=<%= limit %>"
                       class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
@@ -139,12 +136,15 @@
               
                   <% if (currentPage < totalPages) { %>
                     
-                    <!-- Next Button -->
                  <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
                     </a>
                   <% } %>
                 </nav>
               </div>
+        </div>
+
+        <h1 class="font-bold">Best selling product</h1>
+        <div class="w-full">
         </div>
     </main>
     </div>
@@ -152,12 +152,11 @@
     <script>
         const ctx = document.getElementById('salesChart').getContext('2d');
     
-        // Data for the chart
         const MONTHLY = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], // Example months
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             datasets: [{
                 label: 'Sales (in ₹)',
-                data: [12000, 15000, 8000, 18000, 20000, 15000], // Example data
+                data: [12000, 15000, 8000, 18000, 20000, 15000], 
                 backgroundColor: 'rgba(241, 90, 34, 1)',
                 borderColor: 'rgba(241, 90, 34, 1)',
                 borderWidth: 1
@@ -165,10 +164,10 @@
         };
     
         const YEARLY = {
-            labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'], // Updated years
+            labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
             datasets: [{
                 label: 'Sales (in ₹)',
-                data: [12000, 15000, 8000, 18000, 20000, 15000, 17000, 19000, 21000], // Example data
+                data: [12000, 15000, 8000, 18000, 20000, 15000, 17000, 19000, 21000], 
                 backgroundColor: 'rgba(255, 165, 0, 0.5)',
                 borderColor: 'rgba(255, 165, 0, 1)',
                 borderWidth: 1
@@ -176,10 +175,10 @@
         };
     
         const WEEKLY = {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'], // Weekly labels
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'], 
             datasets: [{
                 label: 'Sales (in ₹)',
-                data: [2500, 3000, 1800, 4000, 3500, 4500], // Example data for each week
+                data: [2500, 3000, 1800, 4000, 3500, 4500], 
                 backgroundColor: 'rgba(255, 165, 0, 0.5)',
                 borderColor: 'rgba(255, 165, 0, 1)',
                 borderWidth: 1
@@ -187,11 +186,10 @@
         };
     
         let currentData = MONTHLY;
-        let currentType = 'bar'; // Default chart type
+        let currentType = 'bar'; 
     
-        // Chart configuration
         const config = {
-            type: currentType, // You can also use 'line', 'pie', etc.
+            type: currentType,
             data: currentData,
             options: {
                 responsive: true,
@@ -209,23 +207,18 @@
             }
         };
     
-        // Render the chart
         const salesChart = new Chart(ctx, config);
     
-        // Button click event to update chart data
         document.querySelectorAll('.btn-filter').forEach(button => {
             button.addEventListener('click', function () {
-                // Remove the active class from all buttons
                 document.querySelectorAll('.btn-filter').forEach(btn => {
                     btn.classList.remove('bg-orange-500', 'text-white');
                     btn.classList.add('bg-gray-200', 'text-gray-800');
                 });
     
-                // Add the active class to the clicked button
                 this.classList.remove('bg-gray-200', 'text-gray-800');
                 this.classList.add('bg-orange-500', 'text-white');
     
-                // Update chart data based on button clicked
                 const buttonText = this.textContent.trim();
                 if (buttonText === 'WEEKLY') {
                     currentData = WEEKLY;
@@ -235,17 +228,15 @@
                     currentData = YEARLY;
                 }
     
-                // Update the chart data and refresh
                 salesChart.data = currentData;
                 salesChart.update();
             });
         });
     
-        // Dropdown change event to update chart type
         document.getElementById('chartType').addEventListener('change', function () {
-            currentType = this.value; // Get the selected chart type
-            salesChart.config.type = currentType; // Update chart type
-            salesChart.update(); // Refresh the chart
+            currentType = this.value;
+            salesChart.config.type = currentType; 
+            salesChart.update(); 
         });
     </script>
     

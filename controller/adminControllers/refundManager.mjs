@@ -10,6 +10,14 @@ import Wallet from '../../model/wallet.mjs'
 export const refund = async (req, res) => {
     try {
         const Return = await Returns.findById(req.query.id);
+        let order=await Order.findById(Return.products[0].order)
+        const product = order.products.find(
+            (item) => item.product.toString() === Return.products[0].product.toString()
+          );
+          console.log("mnssj",product);
+          product.orderStatus="Refunded";
+          const data=await order.save();
+        const amount=Return.products[0].amount;
         if (!Return) {
             return res.status(404).json({ message: "Return not found" });
         }
@@ -17,11 +25,12 @@ export const refund = async (req, res) => {
         let wallet = await Wallet.findOne({ userId: Return.user });
 
         const transaction = {
-            walletAmount: 100,
-            orderId: "order123",
+            walletAmount: Number(amount),
+            orderId: Return.products[0].order,  
             transactionType: "Credited",
             transactionDate: new Date(),
         };
+        console.log("object",Return.products[0].order);
 
 
         if (!wallet) {

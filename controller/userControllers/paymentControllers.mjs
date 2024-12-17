@@ -3,6 +3,7 @@ import { razorpayInstance } from '../../services/razorpay.mjs'
 
 
 export const paymentRender=async(req,res)=>{
+    const {paymentMethod}=req.body;
     try {
         const orderAmount=req.session.amount;
         const instance = razorpayInstance;
@@ -21,6 +22,7 @@ export const paymentRender=async(req,res)=>{
                 .json({ error: `Failed to create oreder : ${error.message}` });
             }
             console.log(order.id);
+            console.log("hear");
             return res.status(200).json({ orderId: order.id });
           });
     } catch (error) {

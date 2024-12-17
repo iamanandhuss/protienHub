@@ -1,5 +1,5 @@
 import session from 'express-session';
-
+import { razorpayInstance } from '../../services/razorpay.mjs'
 import { title } from "process";
 import { log } from "console";
 
@@ -9,6 +9,9 @@ import Product from '../../model/productSchema.mjs'
 import Order from '../../model/orderItemSchema.mjs'
 import ProteinHubContent from '../../model/ProteinHub.mjs'
 import Carts from '../../model/cartSchema.js'
+import Categories from "../../model/CategorySchema.mjs";
+import Wallet from "../../model/wallet.mjs"
+
 
 
 
@@ -101,7 +104,7 @@ export const addOrderAddress=async(req,res)=>{
   order.couponDiscound=req.session.discountValue;
   req.session.code=""
   req.session.discountValue=""
-  order.shipping_address=OrderAddress._id;
+  order.shipping_address=address;
   const orderAddressadded=await order.save();
  if(orderAddressadded){
   res.status(201).json({ message: "Address added successfully",});
@@ -117,6 +120,7 @@ else
 
 //render mode of payments
 export const paymentDetails =async(req,res)=>{
+  let wallet = await Wallet.findOne({ userId: req.session._id });
  try {
    const msg="sd" 
    const order=await Order.findById(orderId)
@@ -125,16 +129,15 @@ export const paymentDetails =async(req,res)=>{
    const items = await Product.find({ _id: { $in: productIds } });
    const address = await User.findOne({_id:req.session._id},{ address: 1});
    const user = await User.findOne({_id:req.session._id});
-   const coupon=await Coupon.find();
-   res.render('user/payment.ejs',{coupon,items,order,msg,user,address,cart_akn:true,address_akn:true,payment_akn:true,msg:''})
- } catch (error) {
+   const coupon=await Coupon.find().sort({validUntil:-1});
+   res.render('user/payment.ejs',{coupon,items,order,msg,user,address,cart_akn:true,address_akn:true,payment_akn:true,msg:'',wallet})
+ } catch (error) { 
   console.log(error) 
  }
 }  
 // add payment method
 export const paymentMethod=async(req,res)=>{
   const {paymentMethod}=req.body;
-  console.log(paymentMethod);
   try {
     if(!req.session.orderId){
       let order=await Order.findById(orderId)
@@ -160,15 +163,42 @@ export const paymentMethod=async(req,res)=>{
         res.status(404).json({ message: "Payment method not found" });
       } 
      
-    }  
+    }   
   } catch (error) {
     
   } 
 }
-export const orderSucess= async(req,res)=>{
-  const user = await User.findOne({_id:req.session._id});
-  res.render('user/orderSucess.ejs',{user}) 
-}
+export const orderSucess = async (req, res) => {
+  try {
+      const orderId = req.query.orderId;
+      if (!orderId) {
+          throw new Error('Order ID is missing');
+      }
+
+      // Find the user from the session
+      const user = await User.findOne({ _id: req.session._id });
+
+      // Find the order by its ID and populate the product details
+      const order = await Order.findById(orderId).populate({
+          path: 'products.product',
+          select: 'product_name price product_image categories discount Flavor',
+          model: Product,
+          options: { strictPopulate: false },
+      });
+
+      // Find the shipping address associated with the order
+      const shippingAddress = user.address.find((address) =>
+          address._id.equals(order.shipping_address)
+      );
+
+      // Render the success page with user, order, and shipping address details
+      res.render('user/orderSucess.ejs', { user, order, shippingAddress });
+  } catch (error) {
+      console.error('Error fetching order details:', error.message);
+      res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 // to the order page showing order details
@@ -216,7 +246,7 @@ export const cancelOrder=async(req,res)=>{
     })
     .catch((err)=>{
       res.status(500).json({message:"Error cancelling order"})
-   }) 
+   })  
 }   
 
 // reverse order when order is cancelled
@@ -232,3 +262,78 @@ export const orderRevQty=async(req,res)=>{
     console.log(error);
   }
 }
+
+
+
+
+
+export const paymentRender=async(req,res)=>{
+  let order=await Order.findById(orderId)
+  try {
+    order.paymentMode="Razorpay"
+    order.paymentStatus="Paid"
+    await order.save();
+
+        const orderAmount=req.session.amount;
+        const instance = razorpayInstance;
+
+        const options={ 
+            amount:orderAmount * 100,
+            currency: 'INR',
+            receipt: `receipt_${Date.now()}`,
+        }
+
+        instance.orders.create(options, async(error, order) => {
+            if (error) {
+              console.error("Failed to create order:", error);
+              return res
+                .status(500)
+                .json({ error: `Failed to create oreder : ${error.message}` });
+            }
+            console.log(order.id);
+            console.log("hear");
+            return res.status(200).json({ orderId: order.id });
+          });
+    } catch (error) {
+        console.error("Error order in checkout : ", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
+
+export const OrderListPay=async(req,res)=>{
+
+  const {id}=req.query
+  let order=await Order.findById({_id:req.query.orderId})
+  try {
+    order.paymentMode="Razorpay"
+    order.paymentStatus="Paid"
+    await order.save();
+        const orderAmount=req.session.amount;
+        const instance = razorpayInstance;
+
+        const options={ 
+            amount:orderAmount * 100,
+            currency: 'INR',
+            receipt: `receipt_${Date.now()}`,
+        }
+
+        instance.orders.create(options, async(error, order) => {
+            if (error) {
+              console.error("Failed to create order:", error);
+              return res
+                .status(500)
+                .json({ error: `Failed to create oreder : ${error.message}` });
+            }
+            console.log(order.id);
+            console.log("hear");
+            return res.status(200).json({ orderId: order.id });
+          });
+    } catch (error) {
+        console.error("Error order in checkout : ", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+

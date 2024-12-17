@@ -14,6 +14,10 @@ const rattingSchema = new mongoose.Schema({
                 ref: 'User', 
                 required: true
             },
+            User: { 
+                type: String, 
+                required: false
+            },
             ratting: {
                 type: Number, 
                 min: 1,

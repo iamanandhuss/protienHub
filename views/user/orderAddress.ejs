@@ -76,7 +76,7 @@
                 <hr class="my-4">
                 <div class="flex justify-between font-semibold text-xl">
                   <p class="font-sans">Grand Total</p>
-                  <p id="grandTotal font-sans">₹<%=order.grandTottal%>
+                  <p id="grandTotal font-sans">₹<%=parseInt(order.grandTottal)%>
                   </p>
                 </div>
               </div>
@@ -118,5 +118,5 @@
 
     } 
   </script>
-
+  <%- include('layout/utility') %>
   <%- include('layout/footer') %>

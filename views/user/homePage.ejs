@@ -221,11 +221,5 @@
         </div>
     <% }) %>
     <%- include('layout/footer') %>
-    <script>
-        document.getElementById('searchButton').addEventListener('click',(event)=>{
-            event.preventDefault();
-            window.location.href='/allProduct'
-        })
-    </script>
-    
+    <%- include('layout/utility') %>    
 </body>
