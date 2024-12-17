@@ -26,7 +26,7 @@ export const addAddressPage=async(req,res)=>{
 }
 //post add address
 export const insertAddress = async (req, res) => {
-    try {
+    try { 
       // Get the user by their session ID (assuming you're using session for user identification)
       const user = await User.findOne({ _id: req.session._id });
       if (!user) {

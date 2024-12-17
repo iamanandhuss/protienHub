@@ -5,12 +5,15 @@ import {upload} from '../uploads/cloudinary.mjs'
 
 
 import {adminLogin,loginCred,adminlogOut} from '../controller/adminControllers/adminAuth.mjs'
-import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,createProduct,editProduct,updateProduct} from '../controller/adminControllers/productManagement.mjs'
+import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,createProduct,editProduct,updateProduct,addQuantity} from '../controller/adminControllers/productManagement.mjs'
 import {is_adminLogedin,is_adminLogedOut} from '../middleware/admin/adminAuth.mjs'
 import { dashboard } from '../controller/adminControllers/dashBoard.mjs';
 import {view_order_list,order_manage,changeStatus} from '../controller/adminControllers/orderManager.mjs'
 import {view_categories,unblockcategory,blockcategory,addCategory,createCategory,viewproduct} from'../controller/adminControllers/categoryManager.mjs'
 import {listUser,blockUser,unblockUser,userDetails} from '../controller/adminControllers/userManager.mjs'
+import {manage_coupons,addCoupons,view_coupon_details} from '../controller/adminControllers/couponManager.mjs'
+import {refund} from '../controller/adminControllers/refundManager.mjs'
+import {create_Offers,addOffers} from '../controller/adminControllers/offerControllers.mjs'
 
 
 //home page for admin desides admin in loge in or not
@@ -43,6 +46,7 @@ adminRouter.get('/addProduct',is_adminLogedin,addProduct);//add product
 adminRouter.post('/addProduct',is_adminLogedin,upload.array('image',3),createProduct)
 adminRouter.get('/editProduct/:id',is_adminLogedin,editProduct)
 adminRouter.post('/editProduct/:id',is_adminLogedin,updateProduct)
+adminRouter.post('/addQty',addQuantity)
 
  
 
@@ -62,15 +66,27 @@ adminRouter.get('/viewInformation/:id',is_adminLogedin,viewproduct)
 adminRouter.get('/manage_users',is_adminLogedin,listUser)//view user list
 adminRouter.get('/blockUser/:id',is_adminLogedin,blockUser)
 adminRouter.get('/unblockUser/:id',is_adminLogedin,unblockUser)
-adminRouter.get('/userDetails',is_adminLogedin,userDetails)
+adminRouter.get('/userDetails/:id',is_adminLogedin,userDetails)
+
 
 // order
 adminRouter.get('/order_manage',is_adminLogedin,order_manage)
 adminRouter.post('/newStatus',is_adminLogedin,changeStatus)
-
-
-
 adminRouter.post('/data',is_adminLogedin,updateProduct)
 
 
-export default adminRouter; 
+// refund
+adminRouter.get('/refund',refund)
+
+
+ 
+// coupons
+adminRouter.get('/manage_coupons',is_adminLogedin,view_coupon_details)
+adminRouter.post('/coupons',is_adminLogedin,addCoupons)
+adminRouter.get('/coupons/',is_adminLogedin,manage_coupons)
+
+//offers
+adminRouter.get('/manage_offers',is_adminLogedin,create_Offers)
+adminRouter.put('/create-offer',is_adminLogedin,addOffers)
+
+export default adminRouter;   

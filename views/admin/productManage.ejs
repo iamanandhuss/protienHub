@@ -20,12 +20,7 @@
       <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.product_slug%></div>
     </div>
 
-    <!-- SKU -->
-    <div class="col-span-3 sm:col-span-1">
-      <label class="block text-sm font-medium">SKU (Stock Keeping Unit)</label>
-      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.sku%></div>
-    </div>
-
+    
     <!-- Brand -->
     <div class="col-span-3 sm:col-span-1">
       <label class="block text-sm font-medium">Brand</label>
@@ -36,24 +31,6 @@
     <div class="col-span-3 sm:col-span-1">
       <label class="block text-sm font-medium">Price (₹)</label>
       <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">₹<%= product.price%></div>
-    </div>
-
-    <!-- Sale Price -->
-    <div class="col-span-3 sm:col-span-1">
-      <label class="block text-sm font-medium">Sale Price (₹)</label>
-      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white">₹<%= product.sale_price%></div>
-    </div>
-
-    <!-- Additional Discount -->
-    <div class="col-span-3 sm:col-span-1">
-      <label class="block text-sm font-medium">Additional Discount (%)</label>
-      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.additional_discount%></div>
-    </div>
-
-    <!-- Discount -->
-    <div class="col-span-3 sm:col-span-1">
-      <label class="block text-sm font-medium">Discount (%)</label>
-      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.discount%></div>
     </div>
 
     <!-- Stock Quantity -->
@@ -197,13 +174,6 @@
       <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.
         product_certifications%></div>
     </div>
-
-    <!-- Associated Category -->
-    <div class="col-span-3 sm:col-span-1">
-      <label class="block text-sm font-medium">Associated Category</label>
-      <div class="mt-1 p-2 border border-gray-300 rounded-md bg-white"><%= product.associated_category%></div>
-    </div>
-
     <!-- Status -->
     <div class="col-span-3 sm:col-span-1">
       <label class="block text-sm font-medium">Status</label>

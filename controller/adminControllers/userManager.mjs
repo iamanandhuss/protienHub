@@ -4,6 +4,13 @@ import session from 'express-session';
 
 import User from '../../model/userSchema.mjs';
 import Product from '../../model/productSchema.mjs';
+import Order from '../../model/orderItemSchema.mjs'
+import Coupon from '../../model/couponSchema.mjs';
+import Carts from '../../model/cartSchema.js' 
+import Returns from "../../model/returns.mjs"
+
+
+
 
 export const listUser = async (req, res) => {
     const user = await User.findOne({ email: req.session.adminEmail })
@@ -23,7 +30,7 @@ export const listUser = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
+} 
 
 export const
     blockUser = async (req, res) => {
@@ -49,15 +56,36 @@ export const unblockUser = async (req, res) => {
         res.redirect('/admin/manage_users')
     } catch (error) {
         console.log(error);
-    }
+    } 
 }
 
-export const userDetails = async (req, res) => {
-    const user = await User.findOne({ email: req.session.adminEmail })
+export const userDetails = async (req,res)=>{
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    let  cart=await Carts.findOne({userId:req.params.id});
+    const order = await Order.find({ user:req.params.id}).populate({
+        path:'products.product',
+        model:'Product',
+        select:'product_image', 
+        options: { strictPopulate: false },
+    }).populate({
+        path:'couponId',
+        model:'Coupon',
+        options: { strictPopulate: false },
+    })
+    const Return=await Returns.find({user:req.params.id}).populate({
+        path: 'products.product',
+        select: 'product_name price product_image',
+        model: Product,  
+        options: { strictPopulate: false },
+    })
+res.render("admin/userDetails.ejs",{user,order,cart,Return})
+
+    
     try {
-        res.render('admin/userDetails.ejs', { user })
+        
     } catch (error) {
-        console.log(error);
+        
     }
-}
+    }
 

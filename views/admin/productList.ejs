@@ -42,9 +42,19 @@
           <td class="py-2 px-4">
             <%= product.discount %>
           </td>
-          <td class="py-2 px-4">
-            <%= product.stock_status %>
+          <%if(product.stock_quantity<2){%>
+          <td class="py-2 px-4 text-red-500 group">
+            <div class="absolute p-2 rounded bg-orange-300 hidden group-hover:block">
+              <button onclick="addProduct(`<%=product._id%>`)">ADD Quantity</button>
+              </div>
+            LOW STOCK
           </td>
+          <%}else{%>
+            <td class="py-2 px-4 text-green-500">
+              IN STOCK
+
+            </td>
+            <%}%>
           <td class="py-2 px-4">
             <%= product.status %>
           </td>
@@ -69,9 +79,8 @@
         <% if (currentPage > 1) { %>
           <!-- Previous Button -->
           <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
-            
           </a>
-        <% } %>
+        <% } %> 
     
         <!-- Page Numbers -->
         <% for (let i = 1; i <= totalPages; i++) { %>
@@ -90,6 +99,35 @@
     
     
   </div>
-
+  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function addProduct(_id){
+    Swal.fire({
+                    title: 'Add product',
+                    html:
+                    '<form id="quantityForm">' +
+                    '<label for="quantity">Quantity:</label>' +
+                    '<select id="quantity" name="quantity">' +
+                    Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('') +
+                    '</select>' +
+                    '</form>',
+                    showCancelButton: true,
+                    confirmButtonText: 'OK',
+                    preConfirm: () => {
+                    const quantity = document.getElementById('quantity').value;
+                    if (!quantity) {
+                        Swal.showValidationMessage('Please select a quantity');
+                    }
+                    const result=fetch(`/admin/addQty/?id=${_id}&quantity=${quantity}`,{
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        },
+                    })
+                  }
+                })
+  }
+</script>
   <%- include('layout/admin_footer') %>
 </div>

@@ -5,7 +5,7 @@
     <h2 class="text-3xl font-bold text-center mb-8">Login</h2>
 
     <!-- Username Field -->
-    <form id="loginForm" method="post" onclick="sendData()">
+    <form id="form">
       <div class="mb-4 justify-CE relative mt-8">
         <label for="username"
           class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Username</label>
@@ -13,7 +13,7 @@
           class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
           placeholder="Username" />
         <div><span class="text-sm res-text-xs" id="usernameError"></span></div>
-
+ 
       </div>
 
       <!-- Password Field -->
@@ -55,24 +55,81 @@
       <% } %>
 
         <!-- Google Signup Button -->
-        <button
-          class="w-full bg-white border border-gray-300 text-gray-600 font-semibold py-2 px-4 rounded-lg flex items-center justify-center hover:bg-gray-50">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5 mr-2 res-text-xs"
-            alt="Google Logo" />
-          Signup with Google
-        </button>
+        <a href="/auth/google">
+          <button id="googleSignInButton"
+            class="bg-white border border-gray-300 text-gray-700 flex items-center justify-center py-2 w-full rounded-md hover:bg-gray-100">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+              class="h-6 w-6 mr-2" />
+            Signup with Google
+          </button>
+        </a>
   </div>
   </div>
   </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+<script>
+  document.getElementById('form').addEventListener('submit',(event)=>{
+    event.preventDefault()
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const credential = {
+    'username': username,
+    'password': password,
+  };
+  // post  the credential
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', // Specify JSON data
+    },
+    body: JSON.stringify(credential), // Convert object to JSON
+  }).then((response)=>{
+    if(response.status==200){
+      Swal.fire({
+        title: 'Login Success',
+        text: 'You have been logged in',
+        icon: 'success',
+        }).then(()=>{
+          window.location.href = '/';
+        })
+      }else if(response.status==401){
+        Swal.fire({
+          title: 'Invalid Credentials',
+          text: 'Please check your username and password',
+          icon: 'error',
+          })
+      }else if(response.status==402){
+        Swal.fire({
+          title: 'Account Not Found',
+          text: 'Please check your username and password',
+          icon: 'error',
+          })
+      }else if(response.status==403){
+        Swal.fire({
+          title: 'Forbidden',
+          text: 'You do not have permission to access this page',
+          icon: 'error',
+          })
+      }else if(response.status==404){
+        Swal.fire({
+          title: 'Page Not Found',
+          text: 'The page you are looking for does not exist',
+          icon: 'error',
+        })
+      }
+  }).catch((error)=>{
+    console.log(error);
+  })
+  })
+
+
+
+  document.addEventListener('DOMContentLoaded', () => {
       const username = document.getElementById("username");
       const password = document.getElementById("password");
       const passwordError = document.getElementById("passwordError")
       const usernameError = document.getElementById("usernameError")
-
-
       function showMessage(element, message, isValid) {
         element.textContent = message;
         element.style.color = isValid ? 'green' : 'red';
@@ -104,64 +161,5 @@
 
     })
 
-    function loginUser() {
-      fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: 'exampleUser', // Replace with actual data
-          password: 'examplePass',  // Replace with actual data
-        }),
-      })
-        .then(response => {
-          // Check if the response is not OK
-          if (!response.ok) {
-            return response.json().then(data => {
-              // Display the error message from the server using SweetAlert
-              swal("Error!", data.message, "error");
-            });
-          }
-          return response.json(); // Parse successful response
-        })
-        .then(data => {
-          if (data.success) {
-            // Handle success case
-            swal("Success!", data.message, "success").then(() => {
-              // Optionally redirect after showing success alert
-              window.location.href = '/'; // Redirect to homepage
-            });
-          }
-        })
-        .catch(error => {
-          // Handle network or other errors
-          swal("Oops!", "Something went wrong!", "error");
-        });
-    }
-
-    // Call the loginUser function on form submission or button click
-
-
-
-    document.getElementById('loginForm').addEventListener('Submit', (event) => {
-      event.preventDefault();
-      var form = document.getElementById('loginForm');
-      var formData = new FormData(form);
-      let data=fetch('/login', {
-        method: 'POST',
-        body: formData
-      })
-     .then(response => {
-      console.log(response);
-     })
-     
-    })
-
-
-
-
-
-  </script>
-
+</script>
   </html>

@@ -25,17 +25,16 @@ export const isLoggedOut = (req, res, next) => {
    }
  } catch (error) {
   console.log(error);
-  return res.status(500).send("error");
+  return res.status(500).send("error"); 
 }
 }
 
 export const isBlocked = async (req, res, next) => {
  try {
    const user = await User.findOne({_id:req.session._id});
-   if(user.is_blocked)
+   if(!user.is_blocked) 
    {
      return next();
-    
    }
    req.session._id=null;
    res.redirect('/login')

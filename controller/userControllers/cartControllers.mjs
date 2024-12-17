@@ -18,6 +18,7 @@ export const viewCart = async (req,res)=>{
             const quantity= req.query.quantity;
             const Flavor=req.query.flavor;
             const product = await Product.findById(productId);
+            product.stock_quantity-quantity
             if (!cart) {
                 // If no cart, create a new cart object
                 cart = new Carts({
@@ -26,6 +27,8 @@ export const viewCart = async (req,res)=>{
                         productId: product._id,
                         quantity: quantity,
                         price: product.price,
+                        discount: product.discount,
+                        gst:product.gst,
                         Flavor: Flavor
                     }]
                 });
@@ -46,12 +49,16 @@ export const viewCart = async (req,res)=>{
                     productId: product._id,
                     quantity: quantity,
                     price: product.price,
+                    discount: product.discount,
+                    gst:product.gst,
                     Flavor: Flavor
                 } ); 
             }
                  
             } 
     
+            product.stock_quantity -= quantity;
+             await product.save();
             // Save the cart and render the view
             await cart.save().then(() => {
                 res.redirect('/Cart')
@@ -98,14 +105,13 @@ export const viewCart = async (req,res)=>{
     export const removeItem= async(req,res)=>{
         const {productId} = req.params;
         const userId = req.session._id;
-        console.log(productId);
         try {
             const updatedCart = await Carts.findOneAndUpdate(
                 { userId: req.session._id },
                 { $pull: { products: { productId: productId } } },
                 { new: true } 
             );   
-             
+            const product = await Product.findOne({ _id: productId});
             if (!updatedCart) {
                 return res.status(404).json({ message: 'Cart or product not found' });
             }
@@ -118,5 +124,13 @@ export const viewCart = async (req,res)=>{
         
     }
 
+export const reverseQty=async(req,res)=>{
+    try {
+        const product = await Product.findOne({ _id: req.query._id});
+        product.stock_quantity+=Number(req.query.qty);
+        await product.save();
+    } catch (error) {     
+    }
+}
     
     

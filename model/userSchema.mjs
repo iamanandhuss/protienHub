@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: false,
+    required: false, 
     unique: true,
   },
   password: {
@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
     type:[addressSchema],
     default:[]
 }, 
+favorites:{
+  type:[Schema.Types.ObjectId],
+  default:[]
+},
   email: {
     type: String,
     required: true,

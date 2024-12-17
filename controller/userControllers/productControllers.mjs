@@ -6,32 +6,38 @@ import Categories from "../../model/CategorySchema.mjs";
 import Rattings from "../../model/ratting.mjs";
 
 export const allProduct = async (req, res) => {
-  try {
-  const ratting = await Rattings.find();
 
+  const page = parseInt(req.query.page) || 1; 
+  const limit = parseInt(req.query.limit) || 6; 
+  const skip = (page - 1) * limit;
+      
+      const ratting=await Rattings.find();
+  try {
     const user = await User.findOne({ _id: req.session._id });
-    const products = await Product.find({ status: "active" }).populate({
-      path: "product_rating.Rattings",
-      select: "averageRatting",
-      model: Rattings,
-    });
-    // Fetch product
+    const totalProducts = await Product.countDocuments(); 
+    const totalPages = Math.ceil(totalProducts / limit);  
+
+    const products = await Product.find({ status: "active" }).skip(skip)
+    .limit(limit); // Fetch product
     const Category = await Categories.find(
       { status: "active" },
       { category_name: 1 }
     );
-    res.render("user/allProducts.ejs", { user, products, Category });
+    res.render("user/allProducts.ejs", { user, products, Category,ratting,totalPages,
+      currentPage: page, // Add currentPage here
+      limit});
   } catch (error) {}
 };
 
 export const viewdetail = async (req, res) => {
   try {
+    const ratting=await Rattings.find();
     const user = await User.findOne({ _id: req.session._id });
     const productId = req.query.productId; // Get productId from query parameter
     const product = await Product.findOne({ _id: productId }); // Fetch product by _id
     const products = await Product.find();
 
-    res.render("user/product_details.ejs", { user, product, products });
+    res.render("user/product_details.ejs", { user, product, products,ratting });
   } catch (error) {
     console.log(error);
   }
@@ -74,7 +80,9 @@ export const sortproducts = async (req, res) => {
 };
 
 export const addRatting = async (req, res) => {
+
   const userId = req.session._id;
+  const User = req.query.user;
   const productID = req.query.productId;
   const ratting = req.query.rating;
   const description = req.query.review;
@@ -94,6 +102,7 @@ export const addRatting = async (req, res) => {
         productID,
             products: [
                 {
+                    User,
                     userId,
                     ratting,
                     description 
@@ -105,14 +114,17 @@ export const addRatting = async (req, res) => {
         }); 
     }else{
         userRatting.products.push({
-            userId,
-            ratting,
-            description 
+          User,
+          userId,
+          ratting,
+          description 
         });
         const result=await userRatting.save();
         
     }
   } catch (error) {
     console.log(error);
-  }
+  } 
 };
+
+

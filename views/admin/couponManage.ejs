@@ -1,4 +1,192 @@
 <%- include('layout/adminpage_header') %>
+  <div class="w-full">
+    <div class="flex justify-between w-full">
+      <div class="p-6 font-bold text-orange-500">Available Coupons</div>
+      <!-- create coupon -->
+      <div class="p-4">
+        <button onclick="window.location.href='/admin/coupons'" class="bg-orange-500 rounded-lg p-2">
+          <h1 class="font-bold text-white">+ Create new Coupon</h1>
+        </button>
+      </div>
+    </div>
+    <!-- table -->
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-orange-400 text-white text-sm uppercase text-center">
+          <th class="py-3 px-4">Coupon Code</th>
+          <th class="py-3 px-4">Discount Value</th>
+          <th class="py-3 px-4">Maximum Discount</th>
+          <th class="py-3 px-4">Usage Limit</th>
+          <th class="py-3 px-4">Valid From</th>
+          <th class="py-3 px-4">Valid Until</th>
+          <th class="py-3 px-4">Coupon status</th>
+          <th class="py-3 px-4">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%coupon.forEach((coupon)=>{%>
+          <tr class="text-center">
+            <td class="py-3 px-4 text-black font-sans underline" onclick="clicked('<%=coupon.code%>')">
+              <%=coupon.code%>
+            </td>
+            <div class="h-20 absolute bg-red-200">
 
+            </div>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=coupon.discountValue%>%
+            </td>
+            <td class="py-3 px-4 text-black font-sans">₹<%=coupon.maximumDiscount%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=coupon.usageLimit%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=coupon.validFrom.toISOString().split('T')[0]%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=coupon.validUntil.toISOString().split('T')[0]%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans <%=(coupon.status=='active')?'text-green-500':'text-black'%>">
+              <%=coupon.status%>
+            </td>
+            <td class="py-3 px-4 font-bold text-red-500 hover:font-extrabold"
+              onclick="couponView('<%=coupon.code%>','<%=coupon.maximumDiscount%>','<%=coupon.validFrom%>','<%=coupon.validUntil%>')">
+              View</td>
+
+          </tr>
+          <%})%>
+
+      </tbody>
+    </table>
+    <div class="flex justify-center mt-8">
+      <nav class="inline-flex space-x-2">
+        <% if (currentPage > 1) { %>
+          <!-- Previous Button -->
+          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+            
+          </a>
+        <% } %>
     
-<%- include('layout/admin_footer') %>
+        <!-- Page Numbers -->
+        <% for (let i = 1; i <= totalPages; i++) { %>
+          <a href="?page=<%= i %>&limit=<%= limit %>"
+            class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+            <%= i %>
+          </a>
+        <% } %>
+    
+        <% if (currentPage < totalPages) { %>
+          
+          <!-- Next Button -->
+       <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+          </a>
+        <% } %> 
+      </nav>
+    </div>
+
+
+  </div>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function couponView(code, maximumDiscount, validFrom, validUntil) {
+      swal.fire({
+        title: "Coupon Code: " + code,
+        html: `
+              <form id="coupon-form" class="space-y-4">
+                  <div>
+                      <label for="discountValue" class="block text-sm font-medium text-gray-700">Discount Value</label>
+                      <input
+                          type="text"
+                          id="discountValue"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value="${code}"
+                          readonly
+                      />
+                      <label for="maximumDiscount" class="block text-sm font-medium text-gray-700">Maximum Discount</label>
+                      <input
+                          type="text"
+                          id="maximumDiscount"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value="${maximumDiscount}"
+                          readonly
+                      />
+                      <label for="validFrom" class="block text-sm font-medium text-gray-700">Valid From</label>
+                      <input
+                          type="text"
+                          id="validFrom"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value="${validFrom}"
+                          readonly
+                      />
+                      <label for="validUntil" class="block text-sm font-medium text-gray-700">Valid Until</label>
+                      <input
+                          type="text"
+                           id="validUntil"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          value="${validUntil}"
+                          readonly
+                      />
+                      <div class="flex justify-between w-full pt-6">
+                          <button id="edit" type="button" class="bg-orange-500 rounded-lg p-2">
+                              <h1 class="font-bold text-white">EDIT</h1>
+                          </button>
+                          <button id="viewProduct" type="button" class="bg-orange-500 rounded-lg p-2">
+                              <h1 class="font-bold text-white">VIEW PRODUCT</h1>
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          `,
+        showCancelButton: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          const editButton = document.getElementById("edit");
+          const inputs = document.querySelectorAll("#coupon-form input");
+          const validFromField = document.getElementById("validFrom");
+          const validUntilField = document.getElementById("validUntil");
+
+          editButton.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            if (inputs[0].readOnly) {
+              // Enable edit mode
+              inputs.forEach((input) => input.readOnly = false);
+              validFromField.type = "date";
+              validUntilField.type = "date";
+              editButton.textContent = "SAVE";
+            } else {
+              const discountValue=document.getElementById('discountValue').value;
+              const maximumDiscount=document.getElementById('maximumDiscount').value;
+              const validFrom=document.getElementById('validFrom').value;
+              const validUntil=document.getElementById('validUntil').value;
+              fetch(`/admin/data/?discountValue=${discountValue}&maximumDiscount=${maximumDiscount}&validFrom=${validFrom}&validUntil=${validUntil}`, {
+  method: "GET",
+  headers: {
+    'Content-Type': 'application/json',
+  }
+})
+
+
+              inputs.forEach((input) => input.readOnly = true);
+              validFromField.type = "text";
+              validUntilField.type = "text";
+              editButton.textContent = "EDIT";
+
+              // Update placeholders to reflect changes
+              validFromField.placeholder = updatedData.validFrom;
+              validUntilField.placeholder = updatedData.validUntil;
+            }
+          });
+
+          document.getElementById("viewProduct").addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("View Product button clicked");
+          });
+        }
+      });
+    }
+  </script>
+
+  <%- include('layout/admin_footer') %>

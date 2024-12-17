@@ -44,24 +44,22 @@ export const unblockproduct = async (req, res) => {
 //product list
 export const productDetails = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 6; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 6; 
     const skip = (page - 1) * limit;
-
     const user = await User.findOne({ email: req.session.adminEmail });
-    const totalProducts = await Product.countDocuments(); // Total number of products
-    const totalPages = Math.ceil(totalProducts / limit);  // Calculate total pages
+      const totalProducts = await Product.countDocuments(); 
+      const totalPages = Math.ceil(totalProducts / limit);  
 
     const products = await Product.find()
       .skip(skip)
       .limit(limit);
-
-    // Pass all necessary variables to the template
+ 
     res.render('admin/productList.ejs', {
       user,
       products,
       totalPages,
-      currentPage: page, // Add currentPage here
+      currentPage: page, 
       limit
     });
   } catch (error) {
@@ -103,16 +101,21 @@ export const addProduct = async (req, res) => {
 
 // product routes
 const uploadBase64ImageToCloudinary = async (base64Data) => {
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(
-      base64Data,
-      { folder: "products" }, // Specify folder if needed
-      (error, result) => {
-        if (error) return reject(error);
-        return resolve(result.secure_url);
-      }
-    );
-  });
+  try {
+    return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(
+        base64Data,
+        { folder: "products" }, // Specify folder if needed
+        (error, result) => {
+          if (error) return reject(error);
+          return resolve(result.secure_url);
+        }
+      );
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  
 };
 
 const reder=(req,res)=>{
@@ -124,6 +127,7 @@ export const createProduct = async (req, res) => {
   const product = await Product.find();
   const imageUrls = [];
   try {
+    console.log(await uploadBase64ImageToCloudinary(req.body.croppedImage1));
     if (
       req.body.croppedImage1 &&
       req.body.croppedImage2 &&
@@ -142,12 +146,8 @@ export const createProduct = async (req, res) => {
     const {
       product_name,
       product_slug,
-      sku,
       brand,
       price,
-      sale_price,
-      additional_discount,
-      discount,
       stock_quantity,
       stock_status,
       expiry,
@@ -162,7 +162,7 @@ export const createProduct = async (req, res) => {
       serving_size,
       protein_per_serving,
       nutrition_information={},
-      status,// Default to an empty object if undefined
+      status,
       categoryId,
       product_certifications,
       additional_information,
@@ -182,12 +182,8 @@ export const createProduct = async (req, res) => {
     const newProduct = new Product({
       product_name,
       product_slug,
-      sku,
       brand,
       price,
-      sale_price,
-      additional_discount,
-      discount,
       stock_quantity,
       stock_status,
       expiry,
@@ -247,12 +243,8 @@ export const updateProduct = async (req, res) => {
     product_id,
   product_name,
   product_slug,
-  sku,
   brand,
   price,
-  sale_price,
-  additional_discount,
-  discount,
   stock_quantity,
   stock_status,
   expiry,
@@ -263,14 +255,10 @@ export const updateProduct = async (req, res) => {
   }=req.body;
   try {
     const updatedProduct = await Product.findByIdAndUpdate(product_id, {
-      product_name,
+  product_name,
   product_slug,
-  sku,
   brand,
   price,
-  sale_price,
-  additional_discount,
-  discount,
   stock_quantity,
   stock_status,
   expiry,
@@ -299,3 +287,17 @@ export const updateProduct = async (req, res) => {
 }
  
 };
+
+export const addQuantity=async(req,res)=>{
+const {id,quantity}=req.body;
+try {
+    const product = await Product.findById({ _id: req.query.id});
+    product.stock_quantity=Number(product.stock_quantity)+Number(quantity);
+    await product.save();
+    res.status(200).json({ success: true, message: 'Quantity updated successfully' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+}
+}  

@@ -45,14 +45,14 @@
             <div class="flex justify-between items-center py-4 flex-col md:flex-row">
 
                 <!-- Logo and Brand Name -->
-                <div class="flex items-center mb-4 md:mb-0">
+                <div  onclick="window.location.href='/'" class="flex items-center mb-4 md:mb-0">
                     <img src="/site_logo.webp" alt="Protein Hub Logo" class="h-10 rounded-2xl mr-3" />
                     <div class="text-2xl font-bold text-gray-800">Protein Hub</div>
                 </div>
 
                 <!-- Search Bar -->
                 <div class="flex items-center w-full max-w-md mb-4 md:mb-0" id="Search">
-                    <input type="text" class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"
+                    <input id="search" type="text" class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"
                         placeholder="Type a product name">
                     <button 
                         class="bg-orange-600 text-white px-4 py-2 rounded-r-xl hover:bg-orange-700">Search</button>
@@ -97,7 +97,10 @@
             <nav class="mt-10">
                 <ul class="space-y-4">
                     <%  const menu = [
-                    
+                    {
+                      title: "Home",
+                      action: "/"
+                    },
                     {
                       title: "My profile",
                       action: "my-profile"
@@ -112,11 +115,11 @@
                     },
                     {
                       title: "Wish List",
-                      action: "wish-list"
+                      action: "wishList"
                     },
                     {
-                      title: "Order History",
-                      action: "order-history"
+                      title: "My Returns",
+                      action: "My_Returns"
                     },
                     {
                       title: "Coupons",
@@ -143,6 +146,8 @@
                     
                 </ul>
             </nav>
+            
         </aside>
+        
     
   

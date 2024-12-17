@@ -1,83 +1,95 @@
 <%- include('layout/adminpage_header') %>
-<div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
-  <h2 class="text-2xl font-bold text-center mb-6">User Details</h2>
-  <p class="text-center text-gray-500">View user details and make changes</p>
+  <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full ml-2 mr-2">
+    <h2 class="text-2xl font-bold text-center mb-6">User Details</h2>
+    <p class="text-center text-gray-500">View user details and make changes</p>
 
-  
 
-  <table class="min-w-full border border-gray-300">
-    <thead class="bg-blue-500 text-white">
-      <tr>
-        <th class="py-2 px-4 border-b">User Name</th>
-        <th class="py-2 px-4 border-b">Date of Registration</th>
-        <th class="py-2 px-4 border-b">Email</th>
-        <th class="py-2 px-4 border-b">Phone</th>
-        <th class="py-2 px-4 border-b">Status</th>
-        <th class="py-2 px-4 border-b">Action</th>
-      </tr>
-    </thead>
-    <tbody class="bg-gray-100">
-      <!-- Example row (repeat this for each user) -->
-       <%if(Users){%>
-        <%Users.forEach((user)=>{%>
-          <tr>
-            <th class="py-2 px-4 border-b"><%= user.
-              username%></th>:
-            <th class="py-2 px-4 border-b"><%= new
-                                Date(user.createdAt).toLocaleDateString('en-US') %></th>
-            <th class="py-2 px-4 border-b"><%= user.email%></th>
-            <th class="py-2 px-4 border-b"><%= user.phone%></th>
-            <%if(user.is_blocked){%>
-              <th class="py-2 px-4 border-b">Active</th>
-              <%}else{%>
-                <th class="py-2 px-4 border-b">Blocked</th>
-                <%}%>
-            
-            <th class="py-2 px-4 border-b">
-              <%if(!user.is_blocked){%>
-                <button class="text-white bg-green-500 p-1 w-24 rounded-sm " onclick="window.location.href='/admin/blockUser/<%= user._id %>'">Unblock</button>
+
+    <table class="min-w-full border border-gray-300">
+      <thead class="bg-blue-500 text-white">
+        <tr>
+          <th class="py-2 px-4 border-b">User Name</th>
+          <th class="py-2 px-4 border-b">Date of Registration</th>
+          <th class="py-2 px-4 border-b">Email</th>
+          <th class="py-2 px-4 border-b">Phone</th>
+          <th class="py-2 px-4 border-b">Status</th>
+          <th class="py-2 px-4 border-b">Action</th>
+        </tr>
+      </thead>
+      <tbody class="bg-gray-100">
+        <!-- Example row (repeat this for each user) -->
+        <%if(Users){%>
+          <%Users.forEach((user)=>{%>
+            <tr>
+              <th class="py-2 px-4 border-b">
+                <%= user. username%>
+              </th>:
+              <th class="py-2 px-4 border-b">
+                <%= new Date(user.createdAt).toLocaleDateString('en-US') %>
+              </th>
+              <th class="py-2 px-4 border-b">
+                <%= user.email%>
+              </th>
+              <th class="py-2 px-4 border-b">
+                <%= user.phone%>
+              </th>
+              <%if(user.is_blocked){%>
+                <th class="py-2 px-4 border-b">Active</th>
                 <%}else{%>
-                  <button class="text-white bg-red-500 p-1 w-24  rounded-sm" onclick="window.location.href='/admin/unblockUser/<%= user._id %>'">Block</button>
+                  <th class="py-2 px-4 border-b">Blocked</th>
                   <%}%>
 
-              <button class="text-white bg-green-500 p-1 w-24 rounded-sm"  onclick="window.location.href='/admin/userDetails'" >view</button>
-            </th>
-          <%})%>
-        <%}%>
-        
-      
-      </tr>      <!-- Repeat the above row for other users -->
-    </tbody>
-  </table>
-  <div class="flex justify-center mt-8">
-    <nav class="inline-flex space-x-2">
-      <% if (currentPage > 1) { %>
-        <!-- Previous Button -->
-        <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
-          
-        </a>
-      <% } %>
-  
-      <!-- Page Numbers -->
-      <% for (let i = 1; i <= totalPages; i++) { %>
-        <a href="?page=<%= i %>&limit=<%= limit %>"
-          class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
-          <%= i %>
-        </a>
-      <% } %>
-  
-      <% if (currentPage < totalPages) { %>
-        <!-- Next Button -->
-     <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
-        </a>
-      <% } %>
-    </nav>
+                    <th class="py-2 px-4 border-b">
+                      <%if(!user.is_blocked){%>
+                        <button class="text-white bg-red-500 p-1 w-24  rounded-sm"
+                          onclick="window.location.href='/admin/blockUser/<%= user._id %>'">Block</button>
+                        <%}else{%>
+                          <button class="text-white bg-green-500 p-1 w-24 rounded-sm "
+                            onclick="window.location.href='/admin/unblockUser/<%= user._id %>'">Unblock</button>
+                          <%}%>
+
+                            <button class="text-white bg-green-500 p-1 w-24 rounded-sm"
+                              onclick="window.location.href='/admin/userDetails/<%= user._id %>'">view</button>
+                    </th>
+                    <%})%>
+                      <%}%>
+
+
+            </tr> <!-- Repeat the above row for other users -->
+      </tbody>
+    </table>
+    <div class="flex justify-center mt-8">
+      <nav class="inline-flex space-x-2">
+        <% if (currentPage> 1) { %>
+          <!-- Previous Button -->
+          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+            class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+
+          </a>
+          <% } %>
+
+            <!-- Page Numbers -->
+            <% for (let i=1; i <=totalPages; i++) { %>
+              <a href="?page=<%= i %>&limit=<%= limit %>"
+                class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                <%= i %>
+              </a>
+              <% } %>
+
+                <% if (currentPage < totalPages) { %>
+
+                  <!-- Next Button -->
+                  <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                    class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+                  </a>
+                  <% } %>
+      </nav>
+    </div>
   </div>
-</div>
 
 
-</div>
-
-
-    <%- include('layout/admin_footer') %>
   </div>
+
+
+  <%- include('layout/admin_footer') %>
+    </div>

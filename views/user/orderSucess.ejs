@@ -1,15 +1,199 @@
-<%- include('layout/page_header') %>
-<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-    <div class="bg-white shadow-md rounded-lg p-8 max-w-md text-center">
-      <h2 class="text-gray-700 font-semibold text-lg">YOUR ORDER HAS BEEN PLACED SUCCESSFULLY</h2>
-      
-      <p class="text-green-600 mt-4">
-        You will get a confirmation email soon. The rest of your items are now ready to check out.
-      </p>
-      
-      <button onclick="window.location.href = '/';" class="mt-6 bg-orange-600 text-white font-semibold py-2 px-6 rounded hover:bg-orange-700">
-        Continue shopping
-      </button>
+<%- include('layout/page_header',{user}) %>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4 pb-0 space-x-8 flex-wrap normal">
+            <% let dropdata=["Sports Nutrition", "General Wellness" , "Vitamins & Supplements" , "Fitness Accessories"
+                ]; %>
+                <% dropdata.forEach((i)=> { %>
+                    <div class="relative dropdiv category" onmouseover="javascript:mouseon()">
+                        <div class="flex items-center space-x-2 mb-2 md:mb-0 group">
+                            <p class="text-gray-700 group-hover:text-orange-700 font-bold text-base md:text-lg">
+                                <%= i %>
+                            </p>
+                            <i
+                                class="fa-solid fa-angle-down text-gray-600 group-hover:rotate-180 group-hover:text-orange-700"></i>
+                        </div>
+                    </div>
+                    <% }) %>
+
+
+        </div>
     </div>
-  </div>
-<%- include('layout/footer') %>
+
+    <!-- hidden menu -->
+    <div class="relative w-full h-4/6 mx-auto overflow-hidden">
+        <div class="absolute inset-0 z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-100 h-max" id="opt"
+            onmouseover="javascript:mouseon()" onmouseleave="javascript:mouseoff()">
+            <div class="flex justify-between items-center py-4 pb-0 space-x-8 ">
+                <% let menu=["Proteins", "Gainers" , "Pre/Intra Workouts" , "Workout Essentials" ]; %>
+                    <% menu.forEach((category)=> { %>
+                        <div>
+                            <p class="text-gray-700 font-bold hover:underline decoration-orange-700">
+                                <%= category %>
+                            </p>
+                        </div>
+                        <% }); %>
+            </div>
+        </div>
+
+
+        <div class="w-full flex justify-center">
+            <div class="p-6 bg-white rounded-lg shadow-lg w-8/12 mt-5">
+                <h2 class="text-2xl font-semibold mb-4 text-center font-sans">Order Summary</h2>
+
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium font-sans">Order ID: <span id="orderId" class="font-sans">
+                            <%=order._id%>
+                        </span></h3>
+                    <p class="text-gray-600 font-sans">Order Date: <span id="orderDate" class="font-sans">
+                            <%=order.updatedAt.toLocaleDateString()%>
+                        </span></p>
+                    <p class="text-gray-600 font-sans">Payment Mode: <span id="paymentMode" class="font-sans">
+                            <%=order.paymentMode==='cod' ? 'Cash On Delivery' : order.paymentMode==='Razorpay'
+                                ? 'Paid Using Razorpay' : order.paymentMode==='wallet' ? 'Paid Using Wallet' : '' %>
+                        </span></p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium font-sans">Shipping Address</h3>
+                    <p id="contactName" class="font-sans">
+                        <%=shippingAddress.contactName.toUpperCase()%>
+                    </p>
+                    <p id="addressLine1" class="font-sans">
+                        <%=shippingAddress.building%>
+                    </p>
+                    <p id="city" class="font-sans">
+                        <%=shippingAddress.city%>
+                    </p>
+                    <p id="pincode" class="font-sans">
+                        <%=shippingAddress.pincode%>
+                    </p>
+                    <p id="phoneNumber" class="font-sans">
+                        <%=shippingAddress.phonenumber%>
+                    </p>
+                    <p id="landmark" class="font-sans">
+                        <%=shippingAddress.landmark%>
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h3 class="text-lg font-medium font-sans">Items Purchased</h3>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-left font-sans">Product</th>
+                                <th class="px-6 py-3 text-right font-sans">MRP</th>
+                                <th class="px-6 py-3 text-right font-sans">Qty</th>
+                                <th class="px-6 py-3 text-right font-sans">Discount</th>
+                                <th class="px-6 py-3 text-right font-sans">Tax</th>
+                                <th class="px-6 py-3 text-right font-sans">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            <% order.products.forEach((item)=> { %>
+                                <tr>
+                                    <td class="px-6 py-3 text-left font-sans">
+                                        <%= item.product.product_name.slice(0, 11) %>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-sans">
+                                        <%= item.price.toString() %>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-sans">
+                                        <%= item.quantity.toString() %>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-sans">
+                                        <%= item.discount.toString() %>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-sans">
+                                        <%= item.gst.toString() %>
+                                    </td>
+                                    <td class="px-6 py-3 text-right font-sans">₹<%= ((item.price * item.quantity) / 100)
+                                            * (100 - item.discount) + ((item.price * item.quantity) / 100) * item.gst %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <div class="flex justify-between items-center border-t pt-4">
+                    <div>
+                        <h3 class="text-lg font-medium font-sans">Subtotal:</h3>
+                        <p id="grandTotal" class="text-xl font-bold text-right font-sans">₹<%=order.grandTottal%>
+                        </p>
+                    </div>
+                    <button id="downloadReceipt" onclick="generateOrderPDF('<%=order._id%>')"
+                        class="btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-sans">Download
+                        Receipt</button>
+                    <h1 id="msg" class="font-bold text-green-500 hidden">Receipt downloaded successfully. Thank you for
+                        your purchase!
+
+                    </h1>   
+                </div>
+                <button id="downloadReceipt"
+                    class="btn mt-5 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-sans">
+                    <a href="/my_order">Go To Orders</a></button>
+            </div>
+        </div>
+
+
+
+
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+
+        <script>
+            document.getElementById("butt").addEventListener("click", function () {
+                const element = document.querySelector('#content');
+                const options = {
+                    filename: 'my-document.pdf',
+                    margin: 0.5,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 1 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+                };
+
+                // Delay the rendering to ensure visibility
+                setTimeout(() => {
+                    html2pdf().set(options).from(element).save();
+                }, 500);
+            });
+
+            // generate pdf
+            function generateOrderPDF(orderId) {
+                fetch(`/generatePdf?orderId=${orderId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }).then(async (response) => {
+                    if (response) {
+                        const blob = await response.blob();
+                        const downloadUrl = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = downloadUrl;
+                        link.download = `order-${orderId}.pdf`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(downloadUrl);
+                    } else {
+                        Swal.fire({
+                            title: `Failed to Generate PDF`,
+                            text: 'Failed to Generate PDF',
+                            icon: 'error',
+                        })
+                    }
+                })
+
+                const downloadButton = document.getElementById('downloadReceipt')
+                const msg = document.getElementById('msg')
+                msg.classList.remove('hidden')
+                downloadButton.classList.add('hidden')
+            }
+        </script>
+
+        <%- include('layout/utility') %>
+            <%- include('layout/footer') %>

@@ -1,4 +1,3 @@
-
 </div>
 <footer class="py-10">
     <div class=" mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 bg-black text-gray-400 text-center py-8">
@@ -70,23 +69,21 @@
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function mouseon()
-    {
-        const opt=document.getElementById('opt').style.display="block"  
+    function mouseon() {
+        const opt = document.getElementById('opt').style.display = "block"
 
     }
-    function mouseoff()
-    {
-        const opt=document.getElementById('opt').style.display="none"   
+    function mouseoff() {
+        const opt = document.getElementById('opt').style.display = "none"
 
     }
-    
+
 
     document.getElementById('send-otp-form').addEventListener('submit', async function (e) {
         e.preventDefault();
         const email = e.target.email.value;
 
-        const response = await fetch('/api/otp/send-otp', { 
+        const response = await fetch('/api/otp/send-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
@@ -95,10 +92,11 @@
         const result = await response.text();
         alert(result);
     });
-  
+
 </script>
 
-</html><script>
+</html>
+<script>
     let currentIndex = 0;
     const items = document.querySelectorAll('#carousel div');
     const totalItems = items.length;
@@ -120,88 +118,112 @@
         currentIndex = (currentIndex === totalItems - 1) ? 0 : currentIndex + 1;
         showSlide(currentIndex);
     });
-    
+
     function decreaseValue() {
-    const input = document.getElementById('number-input');
-    let currentValue = parseInt(input.value);
-    
-    // Allow going below 0
-    if (currentValue >1) {
-        input.value = currentValue - 1;
-    }
-    if(input.value<2)
-    {
-        Swal.fire({
-    title: 'Oops!',
-    text: 'The quantity in your cart must be between 1 and 3 items. Please adjust accordingly.',
-    icon: 'error',
-    confirmButtonText: 'OK'
-});
+        const input = document.getElementById('number-input');
+        let currentValue = parseInt(input.value);
+
+        // Allow going below 0
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+        }
+        if (input.value < 2) {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'The quantity in your cart must be between 1 and 3 items. Please adjust accordingly.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+
+        }
 
     }
-    
-}
 
-function increaseValue() {
-    const input = document.getElementById('number-input');
-    let currentValue = parseInt(input.value);
-    
-    // Ensure value doesn't exceed 3
-    if (currentValue < 3) {
-        input.value = currentValue + 1;
+    function increaseValue() {
+        const input = document.getElementById('number-input');
+        let currentValue = parseInt(input.value);
+
+        // Ensure value doesn't exceed 3
+        if (currentValue < 3) {
+            input.value = currentValue + 1;
+        }
+        if (input.value > 2) {
+            Swal.fire({
+                title: 'Oops!',
+                text: 'You can only add a maximum of 3 items to the cart. Please adjust the quantity.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+
+        }
     }
-    if(input.value>2)
-    {
-        Swal.fire({
-    title: 'Oops!',
-    text: 'You can only add a maximum of 3 items to the cart. Please adjust the quantity.',
-    icon: 'error',
-    confirmButtonText: 'OK'
-});
 
+    function showAddInfo() {
+        // Hide 'disc' and show 'add_inf'
+        document.getElementById('disc').classList.add('hidden');   // Adds the Tailwind 'hidden' class
+        document.getElementById('add_inf').classList.remove('hidden');  // Removes the Tailwind 'hidden' class
     }
-}
 
-function showAddInfo() {
-    // Hide 'disc' and show 'add_inf'
-    document.getElementById('disc').classList.add('hidden');   // Adds the Tailwind 'hidden' class
-    document.getElementById('add_inf').classList.remove('hidden');  // Removes the Tailwind 'hidden' class
-}
+    function showDisc() {
+        // Hide 'add_inf' and show 'disc'
+        document.getElementById('add_inf').classList.add('hidden');   // Adds the Tailwind 'hidden' class
+        document.getElementById('disc').classList.remove('hidden');   // Removes the Tailwind 'hidden' class
+    }
+    function toggleBorder(activeBtnId, inactiveBtnId) {
+        // Get the active and inactive buttons by ID
+        const activeBtn = document.getElementById(activeBtnId);
+        const inactiveBtn = document.getElementById(inactiveBtnId);
 
-function showDisc() {
-    // Hide 'add_inf' and show 'disc'
-    document.getElementById('add_inf').classList.add('hidden');   // Adds the Tailwind 'hidden' class
-    document.getElementById('disc').classList.remove('hidden');   // Removes the Tailwind 'hidden' class
-}
-function toggleBorder(activeBtnId, inactiveBtnId) {
-    // Get the active and inactive buttons by ID
-    const activeBtn = document.getElementById(activeBtnId);
-    const inactiveBtn = document.getElementById(inactiveBtnId);
+        // Add the orange border to the active button
+        activeBtn.classList.remove('border-transparent');
+        activeBtn.classList.add('border-orange-500');
 
-    // Add the orange border to the active button
-    activeBtn.classList.remove('border-transparent');
-    activeBtn.classList.add('border-orange-500');
+        // Remove the orange border from the inactive button
+        inactiveBtn.classList.remove('border-orange-500');
+        inactiveBtn.classList.add('border-transparent');
+    }
+    //cart product+qty
+    function addToCart(productId) {
 
-    // Remove the orange border from the inactive button
-    inactiveBtn.classList.remove('border-orange-500');
-    inactiveBtn.classList.add('border-transparent');
-}
-//cart product+qty
-function addToCart(productId) {
-    
-    const quantity = document.getElementById('number-input').value;
-    const flavor = document.getElementById('flavor').value;
+        const quantity = document.getElementById('number-input').value;
+        const flavor = document.getElementById('flavor').value;
 
-    const url = `/viewCart?productId=${productId}&quantity=${quantity}&flavor=${flavor}`;
+        const url = `/viewCart?productId=${productId}&quantity=${quantity}&flavor=${flavor}`;
 
-    window.location.href = url;
-}
+        window.location.href = url;
+    }
+
+
+    function addToFav(_id) {
+        try {
+            if (_id) {
+                fetch(`/addToFav?_id=${_id}`, {
+                    method: "get",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    }
+                }).then((response) => {
+                    if (response.status == 200) {
+                        Swal.fire({
+                            title: 'Added to Favorites',
+                            icon: 'success',
+                            timer: 2000
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'Failed to add to favorites',
+                            timer: 2000
+                        });
+                    }
+                })
+            }
+        } catch (error) {
+
+        }
+    }
 
 
 </script>
-
-
-
-
-
-

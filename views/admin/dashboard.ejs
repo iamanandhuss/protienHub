@@ -1,126 +1,246 @@
-
-         <%- include('layout/adminpage_header') %>
-        <!-- Dashboard Content -->
-        <main class="flex-1 bg-gray-50 p-6 mx-2">
-            <div class="flex justify-between items-center mb-6">
-                <div>
-                    <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
-                    <p class="text-sm text-gray-500">Home > Dashboard</p>
-                </div>
-                <div class="text-sm text-gray-500">
-                    <span>Oct 11, 2023 - Nov 11, 2022</span>
-                </div>
+<%- include('layout/adminpage_header') %>
+    <!-- Dashboard Content -->
+    <main class="flex-1 bg-gray-50 p-6 mx-2">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-800">Dashboard</h1>
+                <p class="text-sm text-gray-500">Home > Dashboard</p>
             </div>
-
-            <!-- Stats Section -->
-            <div class="grid grid-cols-3 gap-4 mb-6">
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Total Orders</p>
-                            <h2 class="text-lg font-semibold">₹126.500</h2>
-                        </div>
-                        <span class="text-green-500">↑ 34.7%</span>
-                    </div>
-                    <p class="text-sm text-gray-400 mt-1">Compared to Oct 2023</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Active Orders</p>
-                            <h2 class="text-lg font-semibold">₹126.500</h2>
-                        </div>
-                        <span class="text-green-500">↑ 34.7%</span>
-                    </div>
-                    <p class="text-sm text-gray-400 mt-1">Compared to Oct 2023</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow">
-                    <div class="flex justify-between">
-                        <div>
-                            <p class="text-sm text-gray-600">Completed Orders</p>
-                            <h2 class="text-lg font-semibold">₹126.500</h2>
-                        </div>
-                        <span class="text-green-500">↑ 34.7%</span>
-                    </div>
-                    <p class="text-sm text-gray-400 mt-1">Compared to Oct 2023</p>
-                </div>
+            <div class="text-sm text-gray-500">
+                <span>Oct 11, 2023 - <%= new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %></span>
             </div>
+        </div>
 
-            <!-- Sales Graph Section -->
-            <div class="bg-white p-4 rounded-lg shadow mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Sale Graph</h3>
-                    <div class="flex space-x-2">
-                        <button class="bg-gray-200 px-3 py-1 rounded">WEEKLY</button>
-                        <button class="bg-orange-500 text-white px-3 py-1 rounded">MONTHLY</button>
-                        <button class="bg-gray-200 px-3 py-1 rounded">YEARLY</button>
-                    </div>
-                </div>
-                <div class="h-48">
-                    <!-- Placeholder for Graph (You can integrate with a graph library like Chart.js) -->
-                    <p class="text-center text-gray-400">Graph Placeholder</p>
-                </div>
-            </div>
-
-            <!-- Best Sellers Section -->
-            <div class="bg-white p-4 rounded-lg shadow mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Best Sellers</h3>
-                <ul class="space-y-2">
-                    <li class="flex justify-between text-gray-600">
-                        <span>Lorem Ipsum</span>
-                        <span class="text-gray-800 font-semibold">₹126.50</span>
-                    </li>
-                    <li class="flex justify-between text-gray-600">
-                        <span>Lorem Ipsum</span>
-                        <span class="text-gray-800 font-semibold">₹126.50</span>
-                    </li>
-                    <li class="flex justify-between text-gray-600">
-                        <span>Lorem Ipsum</span>
-                        <span class="text-gray-800 font-semibold">₹126.50</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Recent Orders Section -->
+        <!-- Stats Section -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
             <div class="bg-white p-4 rounded-lg shadow">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h3>
-                <table class="w-full table-auto">
-                    <thead>
-                        <tr class="text-left text-gray-600">
-                            <th class="pb-2">Product</th>
-                            <th class="pb-2">Order ID</th>
-                            <th class="pb-2">Date</th>
-                            <th class="pb-2">Customer Name</th>
-                            <th class="pb-2">Status</th>
-                            <th class="pb-2">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-700">
-                        <tr class="border-t">
-                            <td class="py-2">Lorem Ipsum</td>
-                            <td>#25426</td>
-                            <td>Nov 8th, 2023</td>
-                            <td>Kavin</td>
-                            <td><span class="text-green-500">● Delivered</span></td>
-                            <td>₹200.00</td>
-                        </tr>
-                        <tr class="border-t">
-                            <td class="py-2">Lorem Ipsum</td>
-                            <td>#25425</td>
-                            <td>Nov 7th, 2023</td>
-                            <td>Komael</td>
-                            <td><span class="text-orange-500">● Canceled</span></td>
-                            <td>₹200.00</td>
-                        </tr>
-                        <!-- Repeat for more orders -->
-                    </tbody>
-                </table>
+                <div class="flex justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Total Orders</p>
+                        <h2 class="text-lg font-semibold">₹<%=tottalvalue%>
+                        </h2>
+                    </div>
+                    <span class="text-green-500">↑ 34.7%</span>
+                </div>
+                <p class="text-sm text-gray-400 mt-1">Compared to <%= new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></p>
             </div>
-        </main>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Active Orders</p>
+                        <h2 class="text-lg font-semibold">₹<%=activeOrderTot%>
+                        </h2>
+                    </div>
+                    <span class="text-green-500">↑ 34.7%</span>
+                </div>
+                <p class="text-sm text-gray-400 mt-1">Compared to <%= new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <div class="flex justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">Completed Orders</p>
+                        <h2 class="text-lg font-semibold">₹<%=compOrderTot%>
+                        </h2>
+                    </div>
+                    <span class="text-green-500">↑ 34.7%</span>
+                </div>
+                <p class="text-sm text-gray-400 mt-1">Compared to <%= new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) %></p>
+            </div>
+        </div>
+
+
+
+        <div class="bg-white p-4 rounded-lg shadow mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Sale Graph</h3>
+                <div class="flex space-x-2">
+                    <button class="btn-filter bg-orange-500 text-white px-3 py-1 rounded">WEEKLY</button>
+                    <button class="btn-filter bg-gray-200 text-gray-800 px-3 py-1 rounded">MONTHLY</button>
+                    <button class="btn-filter bg-gray-200 text-gray-800 px-3 py-1 rounded">YEARLY</button>
+                </div>
+            </div>
+            
+            <div class="chart-controls flex space-x-4 mt-4">
+                <div class="chart-type-selector">
+                    <select id="chartType" class="border rounded px-3 py-1">
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                        <option value="pie">Pie</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="h-full">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Orders Section -->
+        <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Orders</h3>
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="text-left text-gray-600">
+                        <th class="pb-2">Product</th>
+                        <th class="pb-2">Order ID</th>
+                        <th class="pb-2">Date</th>
+                        <th class="pb-2">Customer Name</th>
+                        <th class="pb-2">Status</th>
+                        <th class="pb-2">Amount</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    <%orders.forEach((order)=>{%>
+                        <tr class="border-t">
+                            <td class="py-2">
+                                <%=order.products[0].product.product_name%>
+                            </td>
+                            <td>
+                                <%=order._id%>
+                            </td>
+                            <td>
+                                <%=new Date(order.createdAt.getTime() + 6 * 24 * 60 * 60 *
+                                    1000).toLocaleDateString("en-GB")%>
+                            </td>
+                            <td>
+                                <%=order.user.username%>
+                            </td>
+                            <td>
+                                <span
+                                    class="<%= order.orderStatus === 'Delivered' ? 'text-green-500' : 'text-orange-500' %>">
+                                    ● <%= order.orderStatus %>
+                                </span>
+                            </td>
+                            <td>₹<%=order.totalAmount%>
+                            </td>
+                        </tr>
+                        <%})%>
+
+                </tbody>
+            </table>
+            <div class="flex justify-center mt-8">
+                <nav class="inline-flex space-x-2">
+                  <% if (currentPage > 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+                      
+                    </a>
+                  <% } %>
+              
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="?page=<%= i %>&limit=<%= limit %>"
+                      class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                      <%= i %>
+                    </a>
+                  <% } %>
+              
+                  <% if (currentPage < totalPages) { %>
+                    
+                 <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+                    </a>
+                  <% } %>
+                </nav>
+              </div>
+        </div>
+
+        <h1 class="font-bold">Best selling product</h1>
+        <div class="w-full">
+        </div>
+    </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('salesChart').getContext('2d');
+    
+        const MONTHLY = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Sales (in ₹)',
+                data: [12000, 15000, 8000, 18000, 20000, 15000], 
+                backgroundColor: 'rgba(241, 90, 34, 1)',
+                borderColor: 'rgba(241, 90, 34, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        const YEARLY = {
+            labels: ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+            datasets: [{
+                label: 'Sales (in ₹)',
+                data: [12000, 15000, 8000, 18000, 20000, 15000, 17000, 19000, 21000], 
+                backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                borderColor: 'rgba(255, 165, 0, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        const WEEKLY = {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'], 
+            datasets: [{
+                label: 'Sales (in ₹)',
+                data: [2500, 3000, 1800, 4000, 3500, 4500], 
+                backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                borderColor: 'rgba(255, 165, 0, 1)',
+                borderWidth: 1
+            }]
+        };
+    
+        let currentData = MONTHLY;
+        let currentType = 'bar'; 
+    
+        const config = {
+            type: currentType,
+            data: currentData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+    
+        const salesChart = new Chart(ctx, config);
+    
+        document.querySelectorAll('.btn-filter').forEach(button => {
+            button.addEventListener('click', function () {
+                document.querySelectorAll('.btn-filter').forEach(btn => {
+                    btn.classList.remove('bg-orange-500', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-800');
+                });
+    
+                this.classList.remove('bg-gray-200', 'text-gray-800');
+                this.classList.add('bg-orange-500', 'text-white');
+    
+                const buttonText = this.textContent.trim();
+                if (buttonText === 'WEEKLY') {
+                    currentData = WEEKLY;
+                } else if (buttonText === 'MONTHLY') {
+                    currentData = MONTHLY;
+                } else if (buttonText === 'YEARLY') {
+                    currentData = YEARLY;
+                }
+    
+                salesChart.data = currentData;
+                salesChart.update();
+            });
+        });
+    
+        document.getElementById('chartType').addEventListener('change', function () {
+            currentType = this.value;
+            salesChart.config.type = currentType; 
+            salesChart.update(); 
+        });
+    </script>
+    
+    
+
+
     <%- include('layout/admin_footer') %>
-
-
-
-
-

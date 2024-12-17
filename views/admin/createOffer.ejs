@@ -1,0 +1,336 @@
+<%- include('layout/adminpage_header') %>
+<div class="w-full m-4 bg-white rounded-md p-6">
+  <div class="flex justify-between">
+    <!--  -->
+  <button id="createBtn" class=" p-1 rounded-lg" onclick="window.location.reload()">
+    <h1 id="listText" class="font-bold  ">OFFER LIST</h1>
+  </button>
+  <!--  -->
+    <button id="create" class="bg-orange-500 p-1 rounded-lg">
+      <h1 id="creatText" class="font-bold  text-white">+CREATE</h1>
+    </button>
+  </div>
+  <!-- list -->
+  <div id="orderList" class="w-full  rounded-md flex justify-center pt-6">
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr class="bg-orange-400 text-white text-sm uppercase text-center">
+          <th class="py-3 px-4">Offer Name</th>
+          <th class="py-3 px-4">Discount Value</th>
+          <th class="py-3 px-4">Maximum Discount</th>
+          <th class="py-3 px-4">Offer For</th>
+          <th class="py-3 px-4">Created At</th>
+          <th class="py-3 px-4">Number of Items</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <%offers.forEach((offer)=>{%>
+          <tr class="text-center">
+            <td class="py-3 px-4 text-black font-sans font-bold">
+              <%=offer.offerName%>
+            </td>
+            <div class="h-20 absolute bg-red-200">
+            </div>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=offer.offerPercentage%>%
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=offer.offerPercentage%>%
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=offer.offerType%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=new Date(offer.createdAt.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB")%>
+            </td>
+            <td class="py-3 px-4 text-black font-sans">
+              <%=offer.associatedData.length%>
+            </td>
+          </tr>
+          <%})%>
+          
+
+      </tbody>
+    </table>
+  </div>
+  <%if(!offers.length){%>
+  <div class="flex w-full justify-center text-red-500 font-bold">
+    <button id="noOrder" class=" p-1 rounded-lg">
+      <h1 id="creatText" class="font-bold  text-red-500">NO OFFERS ADDED</h1>
+    </button>
+  </div>
+  <%}%>
+<!-- paggination -->
+<div id="paggination" class="flex justify-center mt-8">
+  <nav class="inline-flex space-x-2">
+    <% if (currentPage > 1) { %>
+      <!-- Previous Button -->
+      <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+      </a>
+    <% } %> 
+
+    <!-- Page Numbers -->
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <a href="?page=<%= i %>&limit=<%= limit %>"
+        class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+        <%= i %>
+      </a>
+    <% } %>
+    <% if (currentPage < totalPages) { %>
+      <!-- Next Button -->
+   <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+      </a>
+    <% } %>
+  </nav>
+</div>
+   
+<!-- create  -->
+   <div id="createDiv" class="w-full  rounded-md flex justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+          <h1 class="text-2xl font-bold text-gray-800 mb-6">Create Offer</h1>
+          
+          <!-- Offer Name -->
+          <div class="mb-4">
+            <label for="offerName" class="block text-sm font-medium text-gray-700">Offer Name</label>
+            <input type="text" id="offerName" placeholder="Enter offer name" 
+                   class="w-full mt-1 p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+
+          <!-- discount percentage -->
+          <div class="mb-4">
+            <label for="offerName" class="block text-sm font-medium text-gray-700">Offer Percentage</label>
+            <input type="number" id="percentage" placeholder="Enter offer Percentage" 
+                   class="w-full mt-1 p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500">
+          </div>
+    
+          <!-- Offer Description -->
+          <div class="mb-4">
+            <label for="offerDescription" class="block text-sm font-medium text-gray-700">Offer Description</label>
+            <textarea id="offerDescription" rows="4" placeholder="Enter offer description" 
+                      class="w-full mt-1 p-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+          </div>
+    
+          <!-- Offer Type -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Offer Type</label>
+            <div class="mt-2 space-y-2">
+              <div>
+                <input type="radio" id="allProducts" name="offerType" value="all" checked 
+                       class="focus:ring-blue-500 text-blue-600 border-gray-300">
+                <label for="allProducts" class="text-gray-700">For All Products</label>
+              </div>
+              <div>
+                <input type="radio" id="specificCategory" name="offerType" value="category" 
+                       class="focus:ring-blue-500 text-blue-600 border-gray-300">
+                <label for="specificCategory" class="text-gray-700">For Specific Category</label>
+              </div>
+              <div>
+                <input type="radio" id="specificProduct" name="offerType" value="product" 
+                       class="focus:ring-blue-500 text-blue-600 border-gray-300">
+                <label for="specificProduct" class="text-gray-700">For Specific Product</label>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Associated products -->
+          <div id="products" class="mb-4 hidden">
+            <label id="associatedLabel" class="block text-sm font-medium text-gray-700">
+              Select Products
+            </label>
+            <div class="mt-2 grid grid-cols-2 gap-4">
+              <% products.forEach((product) => { %>
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="product_<%= product.id %>"
+                    name="selectedProducts"
+                    value="<%= product.id %>"
+                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label for="product_<%= product.id %>" class="ml-2 text-sm text-gray-700">
+                    <%= product.product_name %>
+                  </label>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+
+          <!-- associated catagories -->
+          <div id="catagories" class="mb-4 hidden">
+            <label id="associatedLabel" class="block text-sm font-medium text-gray-700">
+              Select Category
+            </label>
+            <div class="mt-2 grid grid-cols-2 gap-4">
+              <% Category.forEach((Cate) => { %>
+                <div class="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="product_<%= Cate.id %>"
+                    name="selectedProducts"
+                    value="<%= Cate.id %>"
+                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  />
+                  <label for="product_<%= Cate.id %>" class="ml-2 text-sm text-gray-700">
+                    <%= Cate.category_name %>
+                  </label>
+                </div>
+              <% }); %>
+            </div>
+          </div>
+
+
+          
+    
+          <!-- Submit Button -->
+          <div class="flex justify-end">
+            <button type="submit" onclick="addOffer()"
+                    class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
+              Create Offer
+            </button>
+          </div>
+        </div>
+      </div>
+   </div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // JavaScript for dynamic form behavior
+    const offerTypeRadios = document.querySelectorAll('input[name="offerType"]');
+    const catagoriesDiv = document.getElementById('catagories');
+    const productsDiv = document.getElementById('products');
+    const associatedLabel = document.getElementById('associatedLabel');
+    const associatedSelect = document.getElementById('associatedSelect');
+    let selected='';
+    offerTypeRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        selected=radio.value;
+        if (radio.value === 'category') {
+            catagoriesDiv.classList.remove('hidden');
+            productsDiv.classList.add('hidden')
+          associatedLabel.textContent = 'Select Product';
+        } else if (radio.value === 'product') {
+          productsDiv.classList.remove('hidden');
+          catagoriesDiv.classList.add('hidden')
+          associatedLabel.textContent = 'Select Product';
+
+          
+          
+        } else {
+          productsDiv.classList.add('hidden');
+          catagoriesDiv.classList.add('hidden');
+        }
+      });
+    });
+
+
+    async function addOffer() {
+    try {
+        // Collecting form data
+        const offerName = document.getElementById('offerName').value.trim();
+        const offerDescription = document.getElementById('offerDescription').value.trim();
+        const offerPercentage = document.getElementById('percentage').value.trim();
+
+        let associatedData = [];
+        
+        // Determine the selected offer type
+        if (selected === "category") {
+          associatedData = Array.from(
+                document.querySelectorAll('#catagories input[type="checkbox"]:checked')
+            ).map(checkbox => checkbox.value);
+        } else if (selected === "product") {
+          associatedData = Array.from( 
+                document.querySelectorAll('#products input[type="checkbox"]:checked')
+            ).map(checkbox => checkbox.value);
+        }else if (selected === '') {
+          associatedData = Array.from(
+                document.querySelectorAll('#products input[type="checkbox"]:checked')
+            ).map(checkbox => checkbox.value);
+        }
+
+        // Construct the payload
+        const payload = {
+            offerName,
+            offerDescription,
+            offerPercentage,
+            offerType: selected,
+            associatedData,
+        };
+
+        // Sending data to the server
+        const response = await fetch('/admin/create-offer', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+        // Handling server response
+        if(response.status==201){
+          Swal.fire({
+            title: 'Offer Created',
+            text: 'Offer created successfully',
+            icon: 'success',
+          })
+          setTimeout(() => {
+            window.location.reload()
+          }, 3000);
+        }else if(response.status==409){
+          Swal.fire({
+            title: 'Error',
+            text: 'Offer already exists',
+            icon: 'error',
+          })
+        }else{
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to create offer',
+            icon: 'error',
+          })
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while creating the offer.');
+    }
+}
+document.getElementById('percentage').addEventListener('input', function (event) {
+    const percentageField = event.target;
+    const value = parseInt(percentageField.value, 10);
+    // Validate that the input is a number and does not exceed 50
+    if (isNaN(value) || value < 0 || value > 50) {
+        percentageField.setCustomValidity('Please enter a valid number between 0 and 50.');
+        percentageField.classList.add('border-red-500');
+        percentageField.classList.remove('border-blue-500');
+    } else {
+        percentageField.setCustomValidity('');
+        percentageField.classList.remove('border-red-500');
+        percentageField.classList.add('border-blue-500');
+    }
+
+    // Display error message if needed
+    percentageField.reportValidity();
+});
+
+document.getElementById('create').addEventListener('click',(event)=>{
+  event.preventDefault();
+  document.getElementById('createDiv').classList.remove('hidden')
+  document.getElementById('orderList').classList.add('hidden')
+  document.getElementById('createBtn').classList.add('bg-orange-500')
+  document.getElementById('paggination').classList.add('hidden')
+  document.getElementById('listText').classList.add('text-white')
+  document.getElementById('create').classList.add('hidden')
+})
+// no order
+document.getElementById('noOrder').addEventListener('click',(event)=>{
+  event.preventDefault();
+  document.getElementById('createDiv').classList.remove('hidden')
+  document.getElementById('orderList').classList.add('hidden')
+  document.getElementById('createBtn').classList.add('bg-orange-500')
+  document.getElementById('paggination').classList.add('hidden')
+  document.getElementById('listText').classList.add('text-white')
+  document.getElementById('noOrder').classList.add('hidden')
+})
+  </script>
+<%- include('layout/admin_footer') %>
