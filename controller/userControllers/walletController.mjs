@@ -20,7 +20,7 @@ export const wallet = async(req,res)=>{
     .limit(limit);;
     try {
         res.render('user/userWallet.ejs',{user,wallet,totalPages,
-            currentPage: page, // Add currentPage here
+            currentPage: page, 
             limit})
     } catch (error) {
          

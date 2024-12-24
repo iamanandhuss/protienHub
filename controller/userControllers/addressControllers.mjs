@@ -3,7 +3,6 @@ import Product from '../../model/productSchema.mjs'
 import { countries } from "countries-list";
 
 //get the address page
-
 export const addresspage=async(req,res)=>{
     try {
         const user = await User.findOne({_id:req.session._id});
@@ -27,7 +26,6 @@ export const addAddressPage=async(req,res)=>{
 //post add address
 export const insertAddress = async (req, res) => {
     try { 
-      // Get the user by their session ID (assuming you're using session for user identification)
       const user = await User.findOne({ _id: req.session._id });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -69,7 +67,7 @@ export const insertEdited = async (req, res) => {
         const userId = req.session._id; 
 
         const result = await User.find(
-            { "address._id": ObjectId("addressId") }, // Find user and address by IDs
+            { "address._id": ObjectId("addressId") }, 
             {
                 $set: {
                     "address.$.contactName": contactName,
@@ -102,13 +100,12 @@ export const deleteAddress = async(req, res) => {
     const userId=req.session._id 
   
     try {
-      // Find the user and remove the address from the address array
       const user = await User.findByIdAndUpdate(
         userId,
         {
           $pull: { address: { _id: addressId } }
         },
-        { new: true } // Return the updated document
+        { new: true } 
       );    
   
       if (!user) {

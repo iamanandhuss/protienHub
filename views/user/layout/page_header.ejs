@@ -55,12 +55,22 @@
                 </div>
 
                 <!-- Search Bar -->
-                <div class="flex items-center w-full max-w-md mb-4 md:mb-0">
-                    <input id="searchButton" type="text" class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"autofocus
-                        placeholder="Type a product name">
+                 <form id="searchForm" class="flex items-center">
+                <div class="flex items-center w-full max-w-lg mb-4 md:mb-0">
+                    <input  
+                    id="searchQuery"
+                    class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"autofocus
+                    placeholder="Type a product name">
                     <button 
-                        class="bg-orange-600 text-white px-4 py-2 rounded-r-xl hover:bg-orange-700">Search</button>
+                    type="submit"
+                    class="bg-orange-600 text-white px-4 py-2 rounded-r-xl hover:bg-orange-700">Search</button>
                 </div>
+              </form>
+              <div
+        id="searchResults"
+        class="absolute w-11/12 bg-white shadow-lg border rounded-lg mt-1 z-50 hidden top-14 left-6">
+        <!-- Results will populate here dynamically -->
+      </div>
 
                 <!-- Icons and Login Button -->
                 <div class="flex items-center space-x-6"> 

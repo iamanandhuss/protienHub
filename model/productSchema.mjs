@@ -11,7 +11,7 @@ const ProductSchema = new mongoose.Schema({
     gst:{type:Number,required: false},
     stock_quantity: { type: Number, required: true },   
     expiry: { type: Date, required: true }, 
-    mfg: { type: Date, required: true },
+    mfg: { type: Date, required: true }, 
     Flavor: {type: [String]},
     countryof_origin: { type: String, required: true },
     dietary_choices: { type: String, required: true },

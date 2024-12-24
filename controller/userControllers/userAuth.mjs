@@ -59,7 +59,7 @@ The ProteinHub Team`
 export const signupPost = async (req, res) => {
     const { First_name, Last_name, email, Phone, password, conform_password } = req.body;
     try {
-        const existingUser = await User.findOne({ email })//check user existinggg
+        const existingUser = await User.findOne({ email })
         const username = First_name + " " + Last_name;
         const nameexist = await User.findOne({ username })
         const passwortSame = await password == conform_password;
@@ -86,7 +86,7 @@ export const signupPost = async (req, res) => {
 
 
         // Hash the password before saving
-        const hashedPassword = await bcrypt.hash(password, 10); // 10 rounds for salting
+        const hashedPassword = await bcrypt.hash(password, 10); 
 
 
         //Create new user but set isVerified to false until OTP is verified
@@ -197,8 +197,9 @@ export const postLogin = async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
+        
         if (user) {
-            if (!user.is_varified) {
+            if (!user.is_varified||user.is_blocked) {
                 return res.status(403).json({ message: "not allowed to login" });
             } else {
                 const passwordCheck = await bcrypt.compare(password, user.password);

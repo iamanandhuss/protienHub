@@ -6,24 +6,26 @@ import Categories from "../../model/CategorySchema.mjs";
 import Rattings from "../../model/ratting.mjs";
 import Coupon from "../../model/couponSchema.mjs";
 import Order from "../../model/orderItemSchema.mjs"
+import Carts from '../../model/cartSchema.js' 
+
 
 
 export const coupon=async(req,res)=>{
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 5; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 6;
     const skip = (page - 1) * limit;
-    const totalProducts = await Coupon.countDocuments(); // Total number of products
-    const totalPages = Math.ceil(totalProducts / limit);  // Calculate total pages
+    const totalProducts = await Coupon.countDocuments();
+    const totalPages = Math.ceil(totalProducts / limit);  
 
     const user= await User.findOne({_id:req.session._id});
     const coupon=await Coupon.find().skip(skip)
-    .limit(limit);;
+    .limit(limit).sort({validUntil:-1});
     try {
      res.render("user/coupons.ejs",{user,coupon, totalPages,
-        currentPage: page, // Add currentPage here
+        currentPage: page, 
         limit})   
     } catch (error) { 
-        console.log(error)
+        console.log(error) 
     }
 }
 
@@ -64,23 +66,27 @@ export const removeCoupon=async(req,res)=>{
         console.log(error)
     }
 }
-
+ 
 export const couponWiseProduct=async(req,res)=>{
-    console.log(req.query.couponId);
-    const user= await User.findOne({_id:req.session._id});
-    const coupon=await Coupon.find({_id:req.query.couponId}).populate({
-        path: 'applicableProducts',
-        model: Product,
-        options: { strictPopulate: false },
-    }); 
-    req.session.code=coupon[0].code;
-    req.session.discountValue=coupon[0].discountValue;
-    req.session.coupon_id=coupon[0]._id;
-    console.log(req.session);
-    res.render("user/couponWiseProduct.ejs",{user,coupon})
-        try {
+    let  cart=await Carts.findOne({userId:req.session._id}) ;
+    const page = parseInt(req.query.page) || 1; 
+  const limit = parseInt(req.query.limit) || 6; 
+  const skip = (page - 1) * limit;
+      
+      const ratting=await Rattings.find();
+  try {
+    const user = await User.findOne({ _id: req.session._id });
+    const totalProducts = await Product.countDocuments(); 
+    const totalPages = Math.ceil(totalProducts / limit);  
 
-        } catch (error) {
-           console.log(error); 
-        }
+    const products = await Product.find({ status: "active" }).skip(skip)
+    .limit(limit); 
+    const Category = await Categories.find(
+      { status: "active" },
+      { category_name: 1 }
+    );
+    res.render("user/couponWiseProduct.ejs", { user, products, Category,ratting,totalPages,cart,
+      currentPage: page, // Add currentPage here
+      limit});
+  } catch (error) {}
 }

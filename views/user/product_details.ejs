@@ -5,7 +5,7 @@
             margin: 0;
             box-sizing: border-box;
         }
-
+ 
         .image-container {
             width: 30%;
             margin: 5% 0 0 5%;
@@ -132,35 +132,37 @@
 
                             <%if(product.stock_quantity>1){%>
 
-                                <div class="relative flex items-center max-w-[8rem] pt-4">
-                                    <button onclick="decreaseValue()" type="button" id="decrement-button"
-                                        data-input-counter-decrement="quantity-input"
-                                        class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100">
-                                        <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M1 1h16" />
-                                        </svg>
+                                
+                                <div class="flex  h-fit align-middle <%= 
+                            (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+                            ? 'block' 
+                            : 'hidden' %>">
+                        
+                                    <button onclick="addToCart('<%= product._id %>')" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
+                                        Add To Cart
                                     </button>
-                                    <input type="text" id="number-input" data-input-counter
-                                        aria-describedby="helper-text-explanation"
-                                        class="font-sans bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 "
-                                        placeholder='1' required value="1" />
-
-                                    <button onclick="increaseValue()" type="button" id="increment-button"
-                                        data-input-counter-increment="quantity-input"
-                                        class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100">
-                                        <svg class="w-3 h-3 text-gray-900 dark:text-white" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="M9 1v16M1 9h16" />
+                                    <div class="bg-white ml-6 rounded-full shadow-lg h-fit align-middle p-1 mt-4" onclick="addToFav('<%= product._id %>')">
+                                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                            <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                            </path>
                                         </svg>
-                                    </button>
+                                    </div>
                                 </div>
-                                <button onclick="addToCart('<%= product._id %>')"
-                                    class=" w-2/12 mt-4 bg-orange-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-orange-600">
-                                    Add to Cart
-                                </button>
+                                <div class="flex  h-fit align-middle <%= 
+    (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+    ? 'hidden' 
+    : 'block' %>">
+
+                                    <button onclick="window.location.href='/cart'" class="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 addToCart" data-product-id="<%= product._id %>">
+                                        View Cart
+                                    </button>
+                                    <div class="bg-white ml-6 rounded-full shadow-lg h-fit align-middle p-1 mt-4" onclick="addToFav('<%= product._id %>')">
+                                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                            <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
                                 <%}else{%>
                                     <H1 class="font-bold text-red-500 p-5">Product OutOff Stock</H1>
                                     <%}%>

@@ -5,13 +5,13 @@ import {upload} from '../uploads/cloudinary.mjs'
 
 
 import {adminLogin,loginCred,adminlogOut} from '../controller/adminControllers/adminAuth.mjs'
-import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,createProduct,editProduct,updateProduct,addQuantity} from '../controller/adminControllers/productManagement.mjs'
+import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,addProductPost,editProduct,updateProduct,addQuantity} from '../controller/adminControllers/productManagement.mjs'
 import {is_adminLogedin,is_adminLogedOut} from '../middleware/admin/adminAuth.mjs'
 import { dashboard } from '../controller/adminControllers/dashBoard.mjs';
 import {view_order_list,order_manage,changeStatus} from '../controller/adminControllers/orderManager.mjs'
 import {view_categories,unblockcategory,blockcategory,addCategory,createCategory,viewproduct} from'../controller/adminControllers/categoryManager.mjs'
 import {listUser,blockUser,unblockUser,userDetails} from '../controller/adminControllers/userManager.mjs'
-import {manage_coupons,addCoupons,view_coupon_details} from '../controller/adminControllers/couponManager.mjs'
+import {manage_coupons,addCoupons,view_coupon_details,editCoupon} from '../controller/adminControllers/couponManager.mjs'
 import {refund} from '../controller/adminControllers/refundManager.mjs'
 import {create_Offers,addOffers} from '../controller/adminControllers/offerControllers.mjs'
 
@@ -43,13 +43,19 @@ adminRouter.get('/view_product_details/:id',is_adminLogedin,viewDetails)//view p
 adminRouter.get('/blockproduct/:id',is_adminLogedin,blockproduct);//block product
 adminRouter.get('/unblockproduct/:id',is_adminLogedin,unblockproduct);//unblock product
 adminRouter.get('/addProduct',is_adminLogedin,addProduct);//add product
-adminRouter.post('/addProduct',is_adminLogedin,upload.array('image',3),createProduct)
+
+
+adminRouter.post('/newProduct',upload.array('image',3),(req,res)=>{
+    console.log("dd");
+})
+
+
 adminRouter.get('/editProduct/:id',is_adminLogedin,editProduct)
 adminRouter.post('/editProduct/:id',is_adminLogedin,updateProduct)
 adminRouter.post('/addQty',addQuantity)
 
  
-
+ 
 
 
 //categories
@@ -78,15 +84,18 @@ adminRouter.post('/data',is_adminLogedin,updateProduct)
 // refund
 adminRouter.get('/refund',refund)
 
-
+ 
  
 // coupons
 adminRouter.get('/manage_coupons',is_adminLogedin,view_coupon_details)
 adminRouter.post('/coupons',is_adminLogedin,addCoupons)
 adminRouter.get('/coupons/',is_adminLogedin,manage_coupons)
+adminRouter.post('/editCoupon',is_adminLogedin,editCoupon)
 
 //offers
 adminRouter.get('/manage_offers',is_adminLogedin,create_Offers)
 adminRouter.put('/create-offer',is_adminLogedin,addOffers)
+
+
 
 export default adminRouter;   

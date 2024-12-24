@@ -12,8 +12,8 @@ import Order from '../../model/orderItemSchema.mjs';
 
 export const view_order_list = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 5; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 5; 
     const skip = (page - 1) * limit;
     const totalOrder = await Order.countDocuments()
     const totalPages = Math.ceil(totalOrder / limit);
@@ -42,7 +42,7 @@ export const order_manage = async (req, res) => {
 
   const user = await User.findOne({ email: req.session.adminEmail })
   const products = await Product.find()
-  const orderId = req.query; // Extract orderId from query parameter
+  const orderId = req.query; 
   const order = await Order.findOne({ _id: orderId.OrderId }).populate({
     path: 'user',
     select: 'username email Phone address',

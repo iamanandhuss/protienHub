@@ -17,15 +17,7 @@
           class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"></textarea>
       </div>
 
-      <!-- Discount Type -->
-      <div>
-        <label for="discountType" class="block text-sm font-medium text-gray-700">Discount Type</label>
-        <select id="discountType" name="discountType" required
-          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
-          <option value="percentage">Percentage</option>
-          <option value="fixed_amount">Fixed Amount</option>
-        </select>
-      </div>
+      
 
       <!-- Discount Value -->
       <div>
@@ -34,25 +26,14 @@
           class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
       </div>
 
-      <!-- Maximum Discount -->
+      <!-- minimum cart Value -->
       <div>
-        <label for="maximumDiscount" class="block text-sm font-medium text-gray-700">Maximum Discount</label>
-        <input type="number" id="maximumDiscount" name="maximumDiscount" min="0"
+        <label for="discountValue" class="block text-sm font-medium text-gray-700">Minimum Cart Value</label>
+        <input type="number" id="discountValue" name="discountValue" min="0" required
           class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm" />
       </div>
 
-      <!-- Applicable Products -->
-      <div>
-        <label for="applicableProducts" class="block text-sm font-medium text-gray-700">Applicable Products</label>
-        <select id="applicableProducts" name="applicableProducts" multiple
-          class="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm">
-          <% products.forEach(product => { %>
-            <option value="<%= product._id %>"><%= product.product_name %></option>
-          <% }); %>
-        </select>
-        <p class="text-sm text-gray-500 mt-1">Hold Ctrl/Command to select multiple products.</p>
-      </div>
-
+      
       <!-- Validity -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Valid From -->
@@ -88,13 +69,8 @@
   
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-  
       const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-  
-      data.applicableProducts = Array.from(
-        form.querySelector("#applicableProducts").selectedOptions
-      ).map((option) => option.value);
+      const data = Object.fromEntries(formData.entries());  
   const response=fetch('/admin/coupons',{
     method:'POST',
     headers:{

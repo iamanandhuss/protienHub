@@ -3,7 +3,6 @@
 <body class="bg-gray-100">
     
 
-    <!-- Navigation Bar --> 
     <!-- Dropdown Menus -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4 pb-0 space-x-8 flex-wrap normal">
@@ -70,7 +69,7 @@
                 <% offer.associatedData.forEach((product)=>{ %>
 
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                        <div class="flex justify-center">
+                        <div onclick="window.location.href='/viewdetail?productId=<%= product._id %>'" class="flex justify-center">
                             <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
         
                         </div>
@@ -118,21 +117,37 @@
                             <!-- Button with data attributes -->                           
         
                             
-                            
-                            <div class="flex justify-between h-fit align-middle">
-                                <button onclick="window.location.href='/viewdetail?productId=<%= product._id %>'" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
-                                    Add to cart
-                                </button>
-                                <div class="bg-white  rounded-full shadow-lg  h-fit align-middle p-1 mt-3
-                                "onclick="addToFav('<%= product._id %>')">
-                                    <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6  <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
-                                        <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
-                                        </path>
-                                      </svg>
-                                      
+                            <div class="flex justify-between h-fit align-middle <%= 
+                            (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+                            ? 'block' 
+                            : 'hidden' %>">
+                        
+                                    <button onclick="addToCart('<%= product._id %>')" class="mt-4 bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 addToCart" data-product-id="<%= product._id %>">
+                                        Add To Cart
+                                    </button>
+                                    <div class="bg-white rounded-full shadow-lg h-fit align-middle p-1 mt-3" onclick="addToFav('<%= product._id %>')">
+                                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                            <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between h-fit align-middle <%= 
+    (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+    ? 'hidden' 
+    : 'block' %>">
+
+                                    <button onclick="window.location.href='/cart'" class="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 addToCart" data-product-id="<%= product._id %>">
+                                        View Cart
+                                    </button>
+                                    <div class="bg-white rounded-full shadow-lg h-fit align-middle p-1 mt-3" onclick="addToFav('<%= product._id %>')">
+                                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                            <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                            </path>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
                     </div>
                             <%}else{%>
@@ -221,5 +236,9 @@
         </div>
     <% }) %>
     <%- include('layout/footer') %>
-    <%- include('layout/utility') %>    
+
+
+
+    <%- include('layout/search') %>
+
 </body>

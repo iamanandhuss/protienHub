@@ -14,8 +14,8 @@ import Returns from "../../model/returns.mjs"
 
 export const listUser = async (req, res) => {
     const user = await User.findOne({ email: req.session.adminEmail })
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 6; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 6; 
     const skip = (page - 1) * limit;
     const totalUser = await User.countDocuments()
     const totalPages = Math.ceil(totalUser / limit);

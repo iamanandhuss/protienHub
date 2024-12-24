@@ -184,13 +184,18 @@
     }
     //cart product+qty
     function addToCart(productId) {
-
-        const quantity = document.getElementById('number-input').value;
-        const flavor = document.getElementById('flavor').value;
-
-        const url = `/viewCart?productId=${productId}&quantity=${quantity}&flavor=${flavor}`;
-
-        window.location.href = url;
+        const url = `/viewCart?productId=${productId}`;
+        const responce=fetch(`/viewCart?productId=${productId}`,{
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+        }).then((response)=>{
+            console.log(response.ok);
+           if(response.ok){
+            window.location.reload()
+           }
+        })
     }
 
 
@@ -209,6 +214,8 @@
                             title: 'Added to Favorites',
                             icon: 'success',
                             timer: 2000
+                        }).then(()=>{
+                            window.location.reload();
                         });
                     } else {
                         Swal.fire({
@@ -224,6 +231,5 @@
 
         }
     }
-
 
 </script>

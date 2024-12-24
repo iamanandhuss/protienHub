@@ -11,7 +11,7 @@ import { profile, editProfile } from '../controller/userControllers/profileContr
 import { orderDetails, orderDetail, addToOrder, addOrderAddress, paymentMethod, orderSucess, paymentDetails, my_order, cancelOrder, orderRevQty,paymentRender,OrderListPay} from '../controller/userControllers/orderControllers.mjs'
 import { viewCart, Cart, removeItem, reverseQty } from '../controller/userControllers/cartControllers.mjs'
 import { addresspage, addAddressPage, insertAddress, editAddress, insertEdited, deleteAddress } from '../controller/userControllers/addressControllers.mjs'
-import { viewdetail, allProduct, sortproducts, addRatting } from '../controller/userControllers/productControllers.mjs'
+import { viewdetail, allProduct, sortproducts, addRatting ,searchProducts,searchedProducts} from '../controller/userControllers/productControllers.mjs'
 import { isLoggedIn, isLoggedOut, isBlocked } from '../middleware/user/userAuth.mjs'
 import { addToFav, wishList, removeFromFav } from '../controller/userControllers/favoritesControllers.mjs'
 import {newReturn,My_Returns} from '../controller/userControllers/returnControllers.mjs'
@@ -56,78 +56,80 @@ userRouter.post('/password_update', isLoggedOut, password_update)
 
 
 
-
+ 
 // to home page
-userRouter.get('/', isLoggedIn, isBlocked, isLoggedIn, homepage)
+userRouter.get('/', isLoggedIn, homepage)
 //products details
-userRouter.get('/viewdetail', isBlocked, isLoggedIn, viewdetail)
-userRouter.get('/allProduct', isBlocked, isLoggedIn, allProduct)
-userRouter.get('/sort-products', isBlocked, isLoggedIn, sortproducts);
+userRouter.get('/viewdetail', isLoggedIn, viewdetail)
+userRouter.get('/allProduct', isLoggedIn, allProduct)
+userRouter.get('/sort-products', isLoggedIn, sortproducts);
+userRouter.get('/search',searchProducts)
+userRouter.get('/searchedProducts',searchedProducts)
 
 
 
 ///to user profile
-userRouter.get('/my-profile', isBlocked, isLoggedIn, profile)
-userRouter.post('/editProfile', isBlocked, isLoggedIn, editProfile)
+userRouter.get('/my-profile', isLoggedIn, profile)
+userRouter.post('/editProfile', isLoggedIn, editProfile)
 //to the orderlist page  
-userRouter.get('/my-order', isBlocked, isLoggedIn, orderDetails)
+userRouter.get('/my-order', isLoggedIn, orderDetails)
 //to the address page 
-userRouter.get('/my-address', isBlocked, isLoggedIn, addresspage)
-userRouter.get('/addAddress', isBlocked, isLoggedIn, addAddressPage)
-userRouter.post('/addAddress', isBlocked, isLoggedIn, insertAddress)
-userRouter.get('/EditAddress/:addressId', isBlocked, isLoggedIn, editAddress)
-userRouter.post('/editAddress/:addressId', isBlocked, isLoggedIn, insertEdited)
-userRouter.delete('/DeleteAddress/:addressId', isBlocked, isLoggedIn, deleteAddress);
+userRouter.get('/my-address', isLoggedIn, addresspage)
+userRouter.get('/addAddress', isLoggedIn, addAddressPage)
+userRouter.post('/addAddress', isLoggedIn, insertAddress)
+userRouter.get('/EditAddress/:addressId', isLoggedIn, editAddress)
+userRouter.post('/editAddress/:addressId', isLoggedIn, insertEdited)
+userRouter.delete('/DeleteAddress/:addressId', isLoggedIn, deleteAddress);
 
 
-userRouter.get('/forgotPassword', isBlocked, isLoggedIn, forgetPassword)
+userRouter.get('/forgotPassword', isLoggedIn, forgetPassword)
 userRouter.post("/verifie_email", isLoggedIn, verifie_email)
 
 //cart page 
-userRouter.get('/viewCart', isBlocked, isLoggedIn, viewCart)
-userRouter.get('/Cart', isBlocked, isLoggedIn, Cart)
-userRouter.get("/removeItem/:productId", isBlocked, isLoggedIn, removeItem)
-userRouter.get("/reverseQty", reverseQty)
+userRouter.get('/viewCart', isLoggedIn, viewCart)
+userRouter.get('/Cart', isLoggedIn, Cart)
+userRouter.get("/removeItem/:productId", isLoggedIn, removeItem)
+userRouter.get("/reverseQty", isLoggedIn, reverseQty)
 
 
 //payment details
-userRouter.get('/payment', isBlocked, isLoggedIn, paymentDetails)
+userRouter.get('/payment', isLoggedIn, paymentDetails)
  
 //order
-userRouter.post('/addToOrder', addToOrder)
-userRouter.get('/viewOrderAddress/:orderId', isBlocked, isLoggedIn, orderDetail)
-userRouter.post('/addOrderAddress', addOrderAddress)
-userRouter.post('/paymentMethod', isBlocked, isLoggedIn, paymentMethod)
-userRouter.get('/orderSucess', isBlocked, isLoggedIn, orderSucess)
+userRouter.post('/addToOrder', isLoggedIn, addToOrder)
+userRouter.get('/viewOrderAddress/:orderId', isLoggedIn, orderDetail)
+userRouter.post('/addOrderAddress', isLoggedIn, addOrderAddress)
+userRouter.post('/paymentMethod', isLoggedIn, paymentMethod)
+userRouter.get('/orderSucess', isLoggedIn, orderSucess)
 userRouter.get('/my_order', my_order)
-userRouter.post('/cancel_Order', cancelOrder)
-userRouter.post('/addRatting', addRatting)
-userRouter.get('/orderRevQty', orderRevQty)
-userRouter.post('/paymentRender',paymentRender)
+userRouter.post('/cancel_Order', isLoggedIn, cancelOrder)
+userRouter.post('/addRatting', isLoggedIn, addRatting)
+userRouter.get('/orderRevQty', isLoggedIn, orderRevQty)
+userRouter.post('/paymentRender', isLoggedIn,paymentRender)
 
 
 //addToFav
-userRouter.get('/addToFav', addToFav)
-userRouter.get('/wishList', wishList)
-userRouter.post('/favRemoveItem', removeFromFav)
+userRouter.get('/addToFav', isLoggedIn, addToFav)
+userRouter.get('/wishList', isLoggedIn, wishList)
+userRouter.post('/favRemoveItem', isLoggedIn, removeFromFav)
 
 
 //returns
-userRouter.post('/returnProduct',newReturn)
-userRouter.get('/My_Returns',My_Returns)
+userRouter.post('/returnProduct', isLoggedIn,newReturn)
+userRouter.get('/My_Returns', isLoggedIn,My_Returns)
 
 //coupons
-userRouter.get('/coupons', coupon)
-userRouter.get('/data',addCoupon)
-userRouter.get('/removeCoupon',removeCoupon)
-userRouter.get('/couponWiseProduct',couponWiseProduct)
-userRouter.get('/payNow',OrderListPay)
+userRouter.get('/coupons', isLoggedIn, coupon)
+userRouter.get('/data', isLoggedIn,addCoupon)
+userRouter.get('/removeCoupon', isLoggedIn,removeCoupon)
+userRouter.get('/couponWiseProduct', isLoggedIn,couponWiseProduct)
+userRouter.get('/payNow', isLoggedIn,OrderListPay)
 // wallet
-userRouter.get('/wallet',wallet)
-userRouter.post('/walletDebit',walletDebit)
+userRouter.get('/wallet', isLoggedIn,wallet)
+userRouter.post('/walletDebit', isLoggedIn,walletDebit)
 
 // generate pdf
-userRouter.post('/generatePdf',generateOrderPDF)
+userRouter.post('/generatePdf', isLoggedIn,generateOrderPDF)
 
 
 

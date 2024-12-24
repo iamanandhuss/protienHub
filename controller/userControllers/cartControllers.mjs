@@ -15,21 +15,17 @@ export const viewCart = async (req,res)=>{
             console.log(user);
             let  cart=await Carts.findOne({userId:req.session._id}) ;
             const productId = req.query.productId;
-            const quantity= req.query.quantity;
-            const Flavor=req.query.flavor;
             const product = await Product.findById(productId);
-            product.stock_quantity-quantity
+            product.stock_quantity-1
             if (!cart) {
                 // If no cart, create a new cart object
                 cart = new Carts({
                     userId: user._id,
                     products: [{
                         productId: product._id,
-                        quantity: quantity,
                         price: product.price,
                         discount: product.discount,
                         gst:product.gst,
-                        Flavor: Flavor
                     }]
                 });
             } else {
@@ -38,31 +34,28 @@ export const viewCart = async (req,res)=>{
                 if(productIndex>-1)
                 {
                     const product = await Product.findOne({ _id: productId});
-                    if(!cart.products[productIndex].quantity+Number(quantity)<product.stock_quantity)
+                    if(!cart.products[productIndex].quantity+Number(1)<product.stock_quantity)
                     {
-                        cart.products[productIndex].quantity += Number(quantity);
+                        cart.products[productIndex].quantity += Number(1);
                     }else{
                         res.status(400).json({message:"Maximum quantity reached"})
                     }
                      
                 }else{cart.products.push({
                     productId: product._id,
-                    quantity: quantity,
                     price: product.price,
                     discount: product.discount,
                     gst:product.gst,
-                    Flavor: Flavor
                 } ); 
             }
                  
             } 
     
-            product.stock_quantity -= quantity;
+            product.stock_quantity -= 1;
              await product.save();
             // Save the cart and render the view
             await cart.save().then(() => {
-                res.redirect('/Cart')
-                
+                res.status(200).json({ message: 'Product added to cart'}); 
             });
         } catch (error) { 
             console.log(error)

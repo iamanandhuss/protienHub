@@ -33,7 +33,7 @@ export const orderDetails=async(req,res)=>{
           const user = await User.findOne({_id:req.session._id});
           
           const order=await Order.findById(orderId)
-          const productIds = order.products.map(item => item.product); // Extract product IDs
+          const productIds = order.products.map(item => item.product); 
           const items = await Product.find({ _id: { $in: productIds } });
           
  
@@ -54,12 +54,12 @@ let orderId="";
       const cart = await Carts.findById(cartId);
       try {
         const products = cart.products.map(item => ({
-          product: item.productId, // Mapping productId from cart to product in the order
+          product: item.productId, 
           quantity: item.quantity,
           price: item.price,
           gst:item.gst,
           discount: item.discount,
-          orderStatus: "Pending", // Initial order status
+          orderStatus: "Pending", 
 
         }));
         const totalAmount = cart.totalAmount;
@@ -68,8 +68,8 @@ let orderId="";
           products: products,
           totalAmount: totalAmount,
           grandTottal:totalAmount,
-          paymentMode: cart.paymentMode || "cod", // Default to COD if not specified
-          shipping_address: cart.shipping_address, // Optional address field
+          paymentMode: cart.paymentMode || "cod", 
+          shipping_address: cart.shipping_address, 
           orderStatus: "Pending",
           paymentStatus: "Pending",
           couponCode:"",
@@ -125,7 +125,7 @@ export const paymentDetails =async(req,res)=>{
    const msg="sd" 
    const order=await Order.findById(orderId)
    req.session.amount=order.grandTottal;
-   const productIds = order.products.map(item => item.product); // Extract product IDs
+   const productIds = order.products.map(item => item.product); 
    const items = await Product.find({ _id: { $in: productIds } });
    const address = await User.findOne({_id:req.session._id},{ address: 1});
    const user = await User.findOne({_id:req.session._id});
@@ -175,10 +175,8 @@ export const orderSucess = async (req, res) => {
           throw new Error('Order ID is missing');
       }
 
-      // Find the user from the session
       const user = await User.findOne({ _id: req.session._id });
 
-      // Find the order by its ID and populate the product details
       const order = await Order.findById(orderId).populate({
           path: 'products.product',
           select: 'product_name price product_image categories discount Flavor',
@@ -186,12 +184,10 @@ export const orderSucess = async (req, res) => {
           options: { strictPopulate: false },
       });
 
-      // Find the shipping address associated with the order
       const shippingAddress = user.address.find((address) =>
           address._id.equals(order.shipping_address)
       );
 
-      // Render the success page with user, order, and shipping address details
       res.render('user/orderSucess.ejs', { user, order, shippingAddress });
   } catch (error) {
       console.error('Error fetching order details:', error.message);
@@ -201,16 +197,15 @@ export const orderSucess = async (req, res) => {
 
 
 
-// to the order page showing order details
 export const my_order= async(req,res)=>{
   try {
     const user = await User.findOne({_id:req.session._id});
     try {
-      const page = parseInt(req.query.page) || 1; // Current page, default is 1
-      const limit = parseInt(req.query.limit) || 3; // Items per page, default is 10
+      const page = parseInt(req.query.page) || 1; 
+      const limit = parseInt(req.query.limit) || 3; 
       const skip = (page - 1) * limit;
-      const totalOrders = await Order.countDocuments({ user: req.session._id }); // Total number of products
-      const totalPages = Math.ceil(totalOrders / limit);  // Calculate total pages
+      const totalOrders = await Order.countDocuments({ user: req.session._id }); 
+      const totalPages = Math.ceil(totalOrders / limit);  
 
 
       const orders=await Order.find({ user: req.session._id }).sort({createdAt: -1}).populate({
@@ -221,7 +216,7 @@ export const my_order= async(req,res)=>{
       }).skip(skip)
       .limit(limit);
     res.render("user/userOrderhistory.ejs",{orders,user,totalPages,
-      currentPage: page, // Add currentPage here
+      currentPage: page, 
       limit})
   } catch (error) { 
       console.error("Error fetching orders:", error);

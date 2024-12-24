@@ -10,8 +10,8 @@ import Product from '../../model/productSchema.mjs';
 //view_categories
 export const view_categories = async (req, res) => {
     const products = await Product.find();
-    const page = parseInt(req.query.page) || 1; // Current page, default is 1
-    const limit = parseInt(req.query.limit) || 6; // Items per page, default is 10
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 6; 
     const skip = (page - 1) * limit;
     const totalcategories = await category.countDocuments()
     const totalPages = Math.ceil(totalcategories / limit);
@@ -19,8 +19,8 @@ export const view_categories = async (req, res) => {
     const item = await category.find().sort({ _id: 1 }).skip(skip)
     .limit(limit);
     const categories = item.map((item, index) => ({
-        serialNumber: "#" + (index + 200 + 1), // Serial number starting from 1
-        ...item.toObject(), // Convert Mongoose document to plain object
+        serialNumber: "#" + (index + 200 + 1), 
+        ...item.toObject(), 
     }))
     const user = await User.find();
     res.render('admin/categoryList.ejs', {
@@ -85,7 +85,7 @@ export const addCategory = async (req, res) => {
 //create new category
 export const createCategory = async (req, res) => {
 
-    // Destructure the form data from req.body
+    
     const { category_name, category_slug, description, parent_category, status } = req.body;
     try {
         const existingCategory = await category.findOne({ category_name });

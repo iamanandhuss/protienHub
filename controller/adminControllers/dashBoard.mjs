@@ -12,8 +12,8 @@ export const dashboard=async(req,res)=>{
     try {
       const order=await Order.find()
       let tottalvalue=order.map((order)=>order.totalAmount).reduce((tottal,amount)=>tottal+=amount)
-      const page = parseInt(req.query.page) || 1; // Current page, default is 1
-      const limit = parseInt(req.query.limit) || 5; // Items per page, default is 10
+      const page = parseInt(req.query.page) || 1; 
+      const limit = parseInt(req.query.limit) || 5; 
       const skip = (page - 1) * limit;
       const totalOrder = await Order.countDocuments()
       const totalPages = Math.ceil(totalOrder / limit);
@@ -40,7 +40,6 @@ export const dashboard=async(req,res)=>{
       }else{
          activeOrderTot=activeOrder.map((order)=>order.grandTottal).reduce((tottal,curent)=>tottal+=curent);
       }
-      // compOrder
       if(!compOrder.length){
         compOrderTot=0
       }else{

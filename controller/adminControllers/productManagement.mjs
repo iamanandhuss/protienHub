@@ -105,7 +105,7 @@ const uploadBase64ImageToCloudinary = async (base64Data) => {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.upload(
         base64Data,
-        { folder: "products" }, // Specify folder if needed
+        { folder: "products" }, 
         (error, result) => {
           if (error) return reject(error);
           return resolve(result.secure_url);
@@ -121,13 +121,40 @@ const uploadBase64ImageToCloudinary = async (base64Data) => {
 const reder=(req,res)=>{
   res.redirect('/admin/view_all_products')
 }
-
-
-export const createProduct = async (req, res) => {
-  const product = await Product.find();
-  const imageUrls = [];
+// //////////////////////////////////////////////////////////////////////////////////////////////////
+export const addProductPost = async (req, res) => {
+  console.log("addProductPost");
   try {
-    console.log(await uploadBase64ImageToCloudinary(req.body.croppedImage1));
+    const {
+  productName,
+  productSlug,
+  brand,
+  price,
+  hsnCode,
+  gst,
+  stockQuantity,
+  status,
+  expiryDate,
+  manufacturingDate,
+  flavor,
+  countryOfOrigin,
+  dietaryChoices,
+  material_compositions,
+  ean,
+  number_of_serving,
+  weight,
+  serving_size,
+  protein_per_serving,
+  calories_per_serving,
+  sugar_per_serving,
+  fat_per_serving,
+  carb_per_serving,
+  categoryId,
+  product_certifications,
+  additional_information,
+    } = req.body;
+    // Convert Base64 images from the request body
+    const imageUrls = [];
     if (
       req.body.croppedImage1 &&
       req.body.croppedImage2 &&
@@ -143,90 +170,18 @@ export const createProduct = async (req, res) => {
         await uploadBase64ImageToCloudinary(req.body.croppedImage3)
       );
     }
-    const {
-      product_name,
-      product_slug,
-      brand,
-      price,
-      stock_quantity,
-      stock_status,
-      expiry,
-      mfg,
-      Flavor,
-      countryof_origin,
-      dietary_choices,
-      material_compositions,
-      ean,
-      number_of_serving,
-      weight,
-      serving_size,
-      protein_per_serving,
-      nutrition_information={},
-      status,
-      categoryId,
-      product_certifications,
-      additional_information,
-    } = req.body;
-
-    const {
-      calories_per_serving = 0, // Default value if not provided
-      sugar_per_serving = 0,
-      fat_per_serving = 0,
-      carb_per_serving = 0
-    } = nutrition_information;
-
-
 
     
-    // Create a new product document using the Product model
-    const newProduct = new Product({
-      product_name,
-      product_slug,
-      brand,
-      price,
-      stock_quantity,
-      stock_status,
-      expiry,
-      mfg,
-      Flavor,
-      countryof_origin,
-      dietary_choices,
-      material_compositions,
-      ean,
-      number_of_serving,
-      weight,
-      serving_size,
-      protein_per_serving,
-      nutrition_information:{
-        calories_per_serving, // Default value if not provided
-        sugar_per_serving,
-        fat_per_serving,
-        carb_per_serving
-      }, 
-      categories: [categoryId],
-      product_image: imageUrls,
-      status,
-      product_certifications,
-      additional_information: { additional_information }
-    });
-    
 
-    const savedProduct = await newProduct.save();
-  res.status(201).json({
-    message: "Product added successfully",
-    product: savedProduct,
-    success: true,
-    url: "/admin/view_all_products" // URL for redirection
-  });
-} catch (error) {
-  console.error("Error adding product:", error);
-  res.status(500).json({
-    error: "Server error, could not add product",
-    success: false
-  });
-}
-}
 
+   
+  } catch (error) {
+    req.flash("failed", "could not add product");
+    console.error("Error adding product:", error);
+    res.status(500).json({ error: "Server error, could not add product" });
+  }
+};
+// /////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const editProduct=async(req,res)=>{
   const productId = await Product.findById(req.params.id)
   const user = await User.findOne({ email: req.session.adminEmail })
@@ -253,6 +208,7 @@ export const updateProduct = async (req, res) => {
   countryof_origin,
   dietary_choices
   }=req.body;
+  console.log(req.body );
   try {
     const updatedProduct = await Product.findByIdAndUpdate(product_id, {
   product_name,
@@ -271,7 +227,7 @@ export const updateProduct = async (req, res) => {
   if (!updatedProduct) {
     return res.status(404).json({
       error: "Product not found",
-      success: false
+      success: false 
     }); 
   }
   return res.status(200).json({
