@@ -1,4 +1,39 @@
 <%- include('layout/adminpage_header') %>
+<div class="container">
+    <h1>Change Banner</h1>
+    <form id="bannerForm" enctype="multipart/form-data">
+        <label for="banner">Choose a banner image:</label>
+        <input type="file" id="banner" name="banner" accept="image/*" required>
+        <button type="submit">Upload Banner</button>
+    </form>
+    <div id="response"></div>
+</div>
 
+<script>
+    const form = document.getElementById('bannerForm');
+    const responseDiv = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        try {
+            const res = await fetch('/change-banner', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                responseDiv.innerHTML = `<p>Banner updated successfully!</p><img src="${data.bannerPath}" alt="New Banner" width="500" />`;
+            } else {
+                responseDiv.innerHTML = `<p>Error: ${data.message}</p>`;
+            }
+        } catch (error) {
+            responseDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+    });
+</script>
     
 <%- include('layout/admin_footer') %>

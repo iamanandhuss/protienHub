@@ -1,19 +1,7 @@
 <%- include('profile_layout/header') %>
   <div class="flex-1 p-2">
     <!-- Search bar -->
-    <div class="flex items-center mb-4">
-      <input type="text" placeholder="Search your order here"
-        class="flex-grow border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-orange-400" />
-      <button class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20"
-          fill="currentColor">
-          <path fill-rule="evenodd"
-            d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.387a1 1 0 11-1.414 1.414l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
-            clip-rule="evenodd" />
-        </svg>
-        Search Order
-      </button>
-    </div>
+    
     <div class="flex group">
       <img src="/filter.png" alt="" class="h-6 pt-1">
       <div class="hidden group-hover:block">
@@ -73,7 +61,7 @@
                   <%}%>
               </div>
 
-
+ 
             </div>
             <div class="w-full flex justify-end">
               <%if(data.orderStatus=="Returned"){%>
@@ -170,13 +158,20 @@
 
 
                               <%if(order.orderStatus!=="Delivered"){%>
-                                <div class="absolute right-72">
+                                <%if(order.orderStatus!=="cancelled"){%>
+                                  <div class="flex  absolute right-72  ">
+                                    <span class="text-base text-red-500 ">Order Cancelled</span>
 
-                                  <button onclick="cancel_Order('<%=order._id%>')"
-                                    class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
-                                    Cancel Order
-                                  </button>
-                                </div>
+                                  </div>
+                                  <%}else{%>
+                                  <div class="absolute right-72">
+
+                                    <button onclick="cancel_Order('<%=order._id%>')"
+                                      class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
+                                      Cancel Order
+                                    </button>
+                                  </div>
+                                  <%}%>
                                 <%}%>
 
                 </div>

@@ -5,7 +5,7 @@
                 <div class="min-w-full">
                     <!-- balance amount -->
                     <h1 class="text-2xl p-6 font-semibold">Available Balance</h1>
-                    <h1 class="text-2xl p-6 pt-0 font-sans">₹<%=wallet.transactions.map((wallet)=>wallet.walletAmount).reduce((a,b)=>a+=b)%>
+                    <h1 class="text-2xl p-6 pt-0 font-sans">₹<%=wallet.balance%>
                     </h1>
                     <!-- transaction details -->
                     <table class="min-w-full bg-white border border-gray-200 w-full">

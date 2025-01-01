@@ -5,7 +5,7 @@ import {upload} from '../uploads/cloudinary.mjs'
 
 
 import {adminLogin,loginCred,adminlogOut} from '../controller/adminControllers/adminAuth.mjs'
-import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,addProductPost,editProduct,updateProduct,addQuantity} from '../controller/adminControllers/productManagement.mjs'
+import {blockproduct,unblockproduct,viewDetails,productDetails,addProduct,editProduct,updateProduct,addQuantity,createProduct} from '../controller/adminControllers/productManagement.mjs'
 import {is_adminLogedin,is_adminLogedOut} from '../middleware/admin/adminAuth.mjs'
 import { dashboard } from '../controller/adminControllers/dashBoard.mjs';
 import {view_order_list,order_manage,changeStatus} from '../controller/adminControllers/orderManager.mjs'
@@ -18,7 +18,7 @@ import {create_Offers,addOffers} from '../controller/adminControllers/offerContr
 
 //home page for admin desides admin in loge in or not
 adminRouter.get('/',(req,res)=>{
-    if(req.session.adminEmail){
+    if(req.session.adminEmail){ 
         res.redirect('/admin/dashboard')
     }
     else{
@@ -29,7 +29,7 @@ adminRouter.get('/',(req,res)=>{
 adminRouter.get('/login',is_adminLogedOut,adminLogin)//login page
 adminRouter.post('/admin_login',is_adminLogedOut,loginCred)//post login page
 adminRouter.get('/logout',is_adminLogedin,adminlogOut)//logout
-
+ 
 //dashboard
 adminRouter.get('/dashboard',is_adminLogedin,dashboard)
 adminRouter.get('/view_order_list',is_adminLogedin,view_order_list)
@@ -43,12 +43,10 @@ adminRouter.get('/view_product_details/:id',is_adminLogedin,viewDetails)//view p
 adminRouter.get('/blockproduct/:id',is_adminLogedin,blockproduct);//block product
 adminRouter.get('/unblockproduct/:id',is_adminLogedin,unblockproduct);//unblock product
 adminRouter.get('/addProduct',is_adminLogedin,addProduct);//add product
+adminRouter.post('/products',upload.array('image',3),createProduct)
 
 
-adminRouter.post('/newProduct',upload.array('image',3),(req,res)=>{
-    console.log("dd");
-})
-
+ 
 
 adminRouter.get('/editProduct/:id',is_adminLogedin,editProduct)
 adminRouter.post('/editProduct/:id',is_adminLogedin,updateProduct)
@@ -96,6 +94,8 @@ adminRouter.post('/editCoupon',is_adminLogedin,editCoupon)
 adminRouter.get('/manage_offers',is_adminLogedin,create_Offers)
 adminRouter.put('/create-offer',is_adminLogedin,addOffers)
 
+
+// banner
 
 
 export default adminRouter;   

@@ -18,10 +18,11 @@ export const coupon=async(req,res)=>{
     const totalPages = Math.ceil(totalProducts / limit);  
 
     const user= await User.findOne({_id:req.session._id});
-    const coupon=await Coupon.find().skip(skip)
+    const coupon=await Coupon.find()
+    const avalCoupon=await Coupon.find().skip(skip)
     .limit(limit).sort({validUntil:-1});
     try {
-     res.render("user/coupons.ejs",{user,coupon, totalPages,
+     res.render("user/coupons.ejs",{user,coupon,avalCoupon, totalPages,
         currentPage: page, 
         limit})   
     } catch (error) { 
@@ -39,6 +40,33 @@ export const addCoupon=async(req,res)=>{
         order.couponDiscound=coupon.discountValue;
         order.couponId=coupon._id;
         order.grandTottal=(order.totalAmount/100)*(100-order.couponDiscound)
+        {
+
+            const user= await User.findOne({_id:req.session._id});
+            if (!user) {
+                throw new Error('User not found');
+            }
+            const coupon=await Coupon.findOne({_id:couponId});
+            if (!coupon) {
+                throw new Error('Coupon not found');
+            }
+                // Check if the coupon is already in the user's `couponUsed` array
+                const couponIndex = user.couponUsed.findIndex((item) => item.couponId.toString() === couponId);
+
+                if (couponIndex > -1) {
+                    // If the coupon exists, increment its usage count
+                    user.couponUsed[couponIndex].usageCount += 1;
+                  } else {
+                    // Otherwise, add a new couponUsage object to the array
+                    user.couponUsed.push({
+                      couponId: coupon._id,
+                      usageCount: 1, // Initial usage count
+                    });
+                  }
+
+                  await user.save();
+
+        }
         const response=await order.save();
         if(response){
             res.status(200).json({ message: 'Coupon added to the order'});

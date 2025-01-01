@@ -5,9 +5,26 @@ import ProteinHubContent from "../../model/ProteinHub.mjs";
 import Categories from "../../model/CategorySchema.mjs";
 import Rattings from "../../model/ratting.mjs";
 import Carts from '../../model/cartSchema.js'
-
+ 
 
 export const allProduct = async (req, res) => {
+  const orderStatus=req.query.orderStatus;
+  const orderTime=req.query.orderTime;
+  const filter = {}; 
+
+  if (orderStatus) {
+    filter.orderStatus = { $in: orderStatus.split(',') };
+  }
+  if (orderTime) {
+    if (orderTime.includes('Last 30 days')) {
+      filter.createdAt = { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) };
+    } else if (orderTime.includes('Last 1 week')) {
+      filter.createdAt = { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) };
+    } else if (orderTime.includes('Today')) {
+      filter.createdAt = { $gte: new Date().setHours(0, 0, 0, 0) };
+    }
+  }
+  
   let  cart=await Carts.findOne({userId:req.session._id}) ;
   const page = parseInt(req.query.page) || 1; 
   const limit = parseInt(req.query.limit) || 8; 
@@ -19,13 +36,13 @@ export const allProduct = async (req, res) => {
     const totalProducts = await Product.countDocuments(); 
     const totalPages = Math.ceil(totalProducts / limit);  
 
-    const products = await Product.find({ status: "active" }).skip(skip)
+    const products = await Product.find({ status: "active" },filter).skip(skip)
     .limit(limit); 
     const Category = await Categories.find(
       { status: "active" },
       { category_name: 1 }
     );
-    res.render("user/allProducts.ejs", { user, products, Category,ratting,cart,totalPages,
+    res.render("user/allProducts.ejs", { user, products, Category,ratting,orderStatus,orderTime,cart,totalPages,
       currentPage: page, 
       limit});
   } catch (error) {}

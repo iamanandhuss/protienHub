@@ -50,7 +50,11 @@ favorites:{
   is_varified: { type: Boolean, default: false }, // Consider renaming to 'is_verified'
   is_admin: { type: Number, default: 0 },
   googleId: { type: String },
- 
+  
+couponUsed:{
+  type : [couponUsageSchema],
+  default:[]
+}
 },
 { timestamps: true } );
 

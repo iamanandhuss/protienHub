@@ -56,27 +56,29 @@
     </table>
     <div class="flex justify-center mt-8">
       <nav class="inline-flex space-x-2">
-        <% if (currentPage > 1) { %>
+        <% if (currentPage> 1) { %>
           <!-- Previous Button -->
-          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
-            
+          <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+            class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+
           </a>
-        <% } %>
-    
-        <!-- Page Numbers -->
-        <% for (let i = 1; i <= totalPages; i++) { %>
-          <a href="?page=<%= i %>&limit=<%= limit %>"
-            class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
-            <%= i %>
-          </a>
-        <% } %>
-    
-        <% if (currentPage < totalPages) { %>
-          
-          <!-- Next Button -->
-       <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
-          </a>
-        <% } %> 
+          <% } %>
+
+            <!-- Page Numbers -->
+            <% for (let i=1; i <=totalPages; i++) { %>
+              <a href="?page=<%= i %>&limit=<%= limit %>"
+                class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                <%= i %>
+              </a>
+              <% } %>
+
+                <% if (currentPage < totalPages) { %>
+
+                  <!-- Next Button -->
+                  <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                    class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+                  </a>
+                  <% } %>
       </nav>
     </div>
 
@@ -147,10 +149,10 @@
           const inputs = document.querySelectorAll("#coupon-form input");
           const validFromField = document.getElementById("validFrom");
           const validUntilField = document.getElementById("validUntil");
-  
+
           editButton.addEventListener("click", async (event) => {
             event.preventDefault();
-  
+
             if (inputs[0].readOnly) {
               // Enable edit mode
               inputs.forEach((input) => (input.readOnly = false));
@@ -159,22 +161,22 @@
               editButton.textContent = "SAVE";
             } else {
               // Collect updated data
-              const updatedCode=document.getElementById("code").value;
+              const updatedCode = document.getElementById("code").value;
               const updatedDiscountValue = document.getElementById("discountValue").value;
               const updatedMaximumDiscount = document.getElementById("maximumDiscount").value;
               const updatedValidFrom = document.getElementById("validFrom").value;
               const updatedValidUntil = document.getElementById("validUntil").value;
-  
+
               // Validate inputs
               if (!updatedValidFrom || !updatedValidUntil) {
                 swal.fire("Error", "Please fill all fields before saving.", "error");
                 return;
               }
-              else if(updatedCode.trim()!==updatedCode){
+              else if (updatedCode.trim() !== updatedCode) {
                 console.log("space not allowed");
               }
-          
-  
+
+
               // Send data to server
               try {
                 const response = await fetch(`/admin/editCoupon`, {
@@ -183,28 +185,45 @@
                     "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
-                    code:updatedCode,
+                    code: updatedCode,
                     discountValue: updatedDiscountValue,
                     maximumDiscount: updatedMaximumDiscount,
                     validFrom: updatedValidFrom,
                     validUntil: updatedValidUntil,
-                    cCode:code,
+                    cCode: code,
                   }),
-                }).then((response)=>{
-                  console.log(response);
-                });
-  
-               
+                })
+
+
+                if (!response.ok) {
+                  const errorData = await response.json(); // Parse error response
+                  throw new Error(errorData.message || 'Something went wrong');
+                }
+
+                const data = await response.json(); 
+                swal.fire({
+                title: 'Edited successfully',
+                text: 'Coupon Edited successfully',
+                icon: 'success',
+                }).then(()=>{
+                  window.location.reload()
+                })
               } catch (error) {
-                console.error("Error updating coupon:", error);
-                swal.fire("Error", "An unexpected error occurred.", "error");
+                // Handle the error and display the message
+                swal.fire({
+                title: 'Error',
+                text: `${error.message}`,
+                icon: 'error',
+                }).then(()=>{
+                  window.location.reload()
+                })
               }
-            }
-          });
-        },
+            };
+      });
+    },
       });
     }
   </script>
-  
+
 
   <%- include('layout/admin_footer') %>

@@ -9,7 +9,7 @@ import {
 import { homepage } from '../controller/userControllers/userControllers.mjs'
 import { profile, editProfile } from '../controller/userControllers/profileControllers.mjs'
 import { orderDetails, orderDetail, addToOrder, addOrderAddress, paymentMethod, orderSucess, paymentDetails, my_order, cancelOrder, orderRevQty,paymentRender,OrderListPay} from '../controller/userControllers/orderControllers.mjs'
-import { viewCart, Cart, removeItem, reverseQty } from '../controller/userControllers/cartControllers.mjs'
+import { viewCart, Cart, removeItem, reverseQty,updateQty } from '../controller/userControllers/cartControllers.mjs'
 import { addresspage, addAddressPage, insertAddress, editAddress, insertEdited, deleteAddress } from '../controller/userControllers/addressControllers.mjs'
 import { viewdetail, allProduct, sortproducts, addRatting ,searchProducts,searchedProducts} from '../controller/userControllers/productControllers.mjs'
 import { isLoggedIn, isLoggedOut, isBlocked } from '../middleware/user/userAuth.mjs'
@@ -83,13 +83,14 @@ userRouter.delete('/DeleteAddress/:addressId', isLoggedIn, deleteAddress);
 
 
 userRouter.get('/forgotPassword', isLoggedIn, forgetPassword)
-userRouter.post("/verifie_email", isLoggedIn, verifie_email)
+userRouter.post("/verifie_email", isLoggedIn, verifie_email) 
 
 //cart page 
 userRouter.get('/viewCart', isLoggedIn, viewCart)
 userRouter.get('/Cart', isLoggedIn, Cart)
 userRouter.get("/removeItem/:productId", isLoggedIn, removeItem)
 userRouter.get("/reverseQty", isLoggedIn, reverseQty)
+userRouter.put("/updateQty", isLoggedIn, updateQty)
 
 
 //payment details

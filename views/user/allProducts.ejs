@@ -1,4 +1,8 @@
 <%- include('layout/page_header',{user}) %>
+<% 
+  const dummyCart = { products: [] }; 
+  const currentCart = cart || dummyCart; 
+%>
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center py-4 pb-0 space-x-8 flex-wrap normal">
         <% let dropdata = ["Sports Nutrition", "General Wellness", "Vitamins & Supplements", "Fitness Accessories"]; %>
@@ -107,13 +111,11 @@
 <button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">Submit</button>
 </form>
     </aside>
+    
 
-    <!-- Product Listing Section -->
-     <div>
-        <div class="flex justify-between"> 
-            <h2 class="text-xl font-bold mb-4 pl-4">All Products</h2>
-            <h2 class="text-xl font-bold mb-4 pr-4">(<%= products.length %> Items)</h2>
-        </div>
+    
+        
+
        
     <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
         <% products.forEach((product)=>{ %>
@@ -228,24 +230,25 @@
         <nav class="inline-flex space-x-2">
           <% if (currentPage > 1) { %>
             <!-- Previous Button -->
-            <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
-            </a>
-          <% } %> 
+            <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&orderStatus=<%= orderStatus %>&orderTime=<%= orderTime %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+          <% } %>
       
           <!-- Page Numbers -->
           <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="?page=<%= i %>&limit=<%= limit %>"
+            <a href="?page=<%= i %>&limit=<%= limit %>&orderStatus=<%= orderStatus %>&orderTime=<%= orderTime %>"
               class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
               <%= i %>
             </a>
           <% } %>
+      
           <% if (currentPage < totalPages) { %>
             <!-- Next Button -->
-         <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
-            </a>
+            <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&orderStatus=<%= orderStatus %>&orderTime=<%= orderTime %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
           <% } %>
         </nav>
       </div>
+      
+      
 </div>
   <script>
 // set curser
@@ -308,6 +311,45 @@ $(document).ready(function(){
             })
             .catch(error => console.error("Error fetching filtered products:", error));
     });
+
+
+    // ////////////////////////////////////////////////////////////////////////
+    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+  checkbox.addEventListener('change', updateURL);
+});
+
+function updateURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedOrderStatuses = [];
+  const selectedOrderTimes = [];
+
+  // Get selected order status filters
+  document.querySelectorAll('input[name="orderStatus"]:checked').forEach((checkbox) => {
+    selectedOrderStatuses.push(checkbox.value);
+  });
+
+  // Get selected order time filters
+  document.querySelectorAll('input[name="orderTime"]:checked').forEach((checkbox) => {
+    selectedOrderTimes.push(checkbox.value);
+  });
+
+  // Update the query parameters
+  if (selectedOrderStatuses.length > 0) {
+    urlParams.set('orderStatus', selectedOrderStatuses.join(','));
+  } else {
+    urlParams.delete('orderStatus');
+  }
+
+  if (selectedOrderTimes.length > 0) {
+    urlParams.set('orderTime', selectedOrderTimes.join(','));
+  } else {
+    urlParams.delete('orderTime');
+  }
+
+  // Reload the page with the updated URL
+  window.location.search = urlParams.toString();
+}
+
 </script>
  
 

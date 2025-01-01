@@ -1,6 +1,10 @@
 <%- include('layout/page_header') %>
 
 <body class="bg-gray-100">
+    <% 
+  const dummyCart = { products: [] }; 
+  const currentCart = cart || dummyCart; 
+%>
     
 
     <!-- Dropdown Menus -->
@@ -114,11 +118,12 @@
                                 
                             <h3 class="text-lg font-semibold mt-2">Current Quantity:<span class="font-sans <%=(product.stock_quantity<6? 'text-red-500': 'text-green-500') %>"><%= product.stock_quantity %></span></h3>
                             
-                            <!-- Button with data attributes -->                           
+                            <!-- Button with data attributes -->   
+
         
                             
                             <div class="flex justify-between h-fit align-middle <%= 
-                            (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+                            (!currentCart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
                             ? 'block' 
                             : 'hidden' %>">
                         
@@ -133,7 +138,7 @@
                                     </div>
                                 </div>
                                 <div class="flex justify-between h-fit align-middle <%= 
-    (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+    (!currentCart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
     ? 'hidden' 
     : 'block' %>">
 
@@ -236,9 +241,6 @@
         </div>
     <% }) %>
     <%- include('layout/footer') %>
-
-
-
     <%- include('layout/search') %>
 
 </body>

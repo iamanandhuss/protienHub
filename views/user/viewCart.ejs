@@ -33,33 +33,45 @@
                             </div>
                             <div class="flex">
                                 <p class="text-sm text-gray-600 mb-2 pt-0 font-sans">Ratting: </p>
-                                <% for(let i=0; i < 5; i++) { %>
-                                    <% if(i < parseInt(product.product_rating)) { %>
+                                <% for(let i = 0; i < 5; i++) { %>
+                                    <% if(i < parseInt((
+                                        (ratting.filter((a) => String(a.productID) === String(product._id)).map((a)=>a.products[0].ratting).length)?(ratting.filter((a) => String(a.productID) === String(product._id)).map((a)=>a.products[0].ratting).reduce((sum,val)=>sum+=val))/ratting.filter((a) => String(a.productID) === String(product._id)).length:0
     
+                                    ))) { %>
                                         <!-- Filled Star -->
-                                        <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                            <path
-                                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                                        <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
                                         </svg>
-                                        <% } else { %>
-                                            <!-- Unfilled Star -->
-                                            <svg class="w-4 h-4 text-gray-300 ms-1" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path
-                                                    d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                            </svg>
-                                            <% } %>
-                                                <% } %>
+                                    <% } else { %>
+                                        <!-- Unfilled Star -->
+                                        <svg class="w-4 h-4 text-gray-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                        </svg>
+                                    <% } %>
+                                <% } %>
                             </div>
                             <div  class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
-                                <span><%=
+                                <span class="font-sans"><%=
                                     (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst)) %></span>
                             </div>
-                            <div class="text-gray-500 mt-1">
-                                <Qty:span class="font-sans">Qty : <%= cartItem.quantity %>
-                                </Qty:span>
-                            </div>
+                            
+                            
+                    <div class="flex items-center">
+                      <!-- Decrement button with unique ID -->
+                      <button type="button" onclick="changeQty(`<%=product._id%>`,-1)"   class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                        <svg class="h-2.5 w-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
+                        </svg>
+                      </button>
+                      <!-- Quantity with unique ID -->
+                      <p  class="font-bold font-sans p-2 dark:text-black"><%= cartItem.quantity %></p>
+                      <!-- Increment button with unique ID -->
+                      <button type="button" onclick="changeQty(`<%=product._id%>`,1)"   class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700">
+                        <svg class="h-2.5 w-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
+                        </svg>
+                      </button>
+                    </div>
                             
                             
                         </div>
@@ -151,7 +163,7 @@
                 >Place
                 Order</button>
                 <%}else{%>
-                    <h1 class="text-red-500">No Bill Available</h1>
+                    <h1 class="text-red-500">Your Cart is Empty</h1>
                     
                     <button onclick="window.location.href='/'" class="mt-6 w-full bg-orange-500 text-white py-3 rounded hover:bg-orange-600"
                         >continue Shopping</button>
@@ -164,7 +176,18 @@
     <script>
         function deleteItem(_id,quantity) {
             try {
-                const responce=fetch(`/removeItem/${_id}`, {
+                Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+        const responce=fetch(`/removeItem/${_id}`, {
                     method: "get",
                     headers: {
                         "Content-Type": "application/json",
@@ -207,10 +230,15 @@
                         confirmButtonText: 'OK'
                     });
                 })
+            }
+      }).catch((err) => {
+        console.log(err);
+      });
+                
 
 
             } catch (error) {
-
+console.log(error);
             }
 
         }
@@ -234,7 +262,7 @@
                 confirmButtonText: 'OK'
                 }); 
         }
-        else { 
+        else {  
             Swal.fire({
                 title: 'Sucess!',
                 text: 'Product Added To Order',
@@ -242,7 +270,7 @@
                 confirmButtonText: 'OK'
                 });
             setInterval(() => {
-                window.location.href = `/viewOrderAddress/${cart.cartId}`;  
+                window.location.href = `/viewOrderAddress/${cart}`;  
             }, 2000);          
             }
     } 
@@ -253,5 +281,41 @@ catch(error){
       let price=document.getElementById('price').textContent;
       console.log(tottal); 
       console.log(price);
+
+
+      function changeQty(productId,qty){
+        console.log(productId,qty);
+        fetch(`/updateQty/?productId=${productId}&qty=${qty}`,{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+                },
+        }).then((responce)=>{
+            if(responce.status==200){
+                window.location.reload()
+            }else if(responce.status==400){
+                Swal.fire({
+                title: 'fail!',
+                text: 'Quantity cannot exceed 3.',
+                icon: 'fail',
+                confirmButtonText: 'OK'
+                }); 
+            }else if(responce.status==401){
+                Swal.fire({
+                title: 'fail!',
+                text: 'Quantity cannot be less than 1.',
+                icon: 'fail',
+                confirmButtonText: 'OK'
+                }); 
+            }else if(responce.status==404){
+                Swal.fire({
+                title: 'fail!',
+                text: 'Product not found in the cart.',
+                icon: 'fail',
+                confirmButtonText: 'OK'
+                }); 
+            }
+        })
+      }
     </script>
     <%- include('layout/footer') %>

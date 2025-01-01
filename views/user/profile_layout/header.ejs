@@ -58,11 +58,15 @@
                       class="border border-gray-300 rounded-l-xl p-2 w-full focus:outline-none"autofocus
                       placeholder="Type a product name">
                       <button 
-                      id="button"
                       type="submit"
                       class="bg-orange-600 text-white px-4 py-2 rounded-r-xl hover:bg-orange-700">Search</button>
                   </div>
                 </form>
+                <div
+        id="searchResults"
+        class="absolute w-11/12 bg-white shadow-lg border rounded-lg mt-1 z-50 hidden top-14 left-6">
+        <!-- Results will populate here dynamically -->
+      </div>
               <div id="add_Address" class="hidden">
                 <h1 class="  p-3 font-bold text-gray-700 ">Manage Addresses</h1>
                 <button  class="bg-green-500 p-3 rounded-lg text-white">+ADD</button>

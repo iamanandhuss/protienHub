@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose"; 
 
 
 // Define the Product schema
@@ -7,7 +7,7 @@ const ProductSchema = new mongoose.Schema({
     product_slug: { type: String, required: true,},
     brand: { type: String, required: true },
     price: { type: Number, required: true },
-    discount: { type: Number, required: false },
+    discount: { type: Number, required: false ,default:13},
     gst:{type:Number,required: false},
     stock_quantity: { type: Number, required: true },   
     expiry: { type: Date, required: true }, 
@@ -29,7 +29,7 @@ const ProductSchema = new mongoose.Schema({
     },
     categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }], // Reference Tag model
-    product_image: { type: [String] },
+    product_image: { type: [String], required: true },
     product_rating: [{ 
         Rattings: {
             type: Schema.Types.ObjectId, 
@@ -40,8 +40,8 @@ const ProductSchema = new mongoose.Schema({
     status: { type: String, enum: ['active', 'inactive'], default: 'active' },
     product_certifications: { type: [String] },
     additional_information: { 
-        type: Map,
-        of: String, 
+        type: String,
+
     }
 }, { timestamps: true });
 

@@ -1,11 +1,14 @@
 <%- include('profile_layout/header') %>
+<div class="">
+<!--COUPONS AVAILABLE -------------------------------------------------------------------------------------------------- -->
   <div class="h-1/2">
-    <h1 class="font-bold p-6">COUPONS AVAILABLE</h1>
+    <h1 class="font-bold p-6 pb-0">COUPONS AVAILABLE</h1>
+    <hr class="border-t-2 border-gray-300  mx-6">
 
 
-    <div class="container m-6 p-6 w-full h-96 bg-white drop-shadow-2xl rounded-lg">
+    <div class="container m-6 p-6 w-11/12 h-96 bg-white drop-shadow-2xl rounded-lg">
       <div class="flex justify-between flex-wrap">
-        <% coupon.forEach((coupons) => { %>
+        <% avalCoupon.forEach((coupons) => { %>
           <div 
             onclick="<%= (new Date(coupons.validUntil) <= new Date()) ? '' : `viewProducts('${coupons._id}')` %>" 
             class="<%= (new Date(coupons.validUntil) <= new Date()) ? 'grayscale' : '' %> flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4  shadow-sm m-6 h-2/4"
@@ -63,6 +66,55 @@
 
     
   </div>
+  <!--used Coupon -------------------------------------------------------------------------------------------------- -->
+  <div class="h-full">
+    <h1 class="font-bold p-6 pb-0 pt-0">COUPONS USED</h1>
+    <hr class="border-t-2 border-gray-300  mx-6">
+
+
+    <div class="container m-6 p-6 w-11/12 h-96 bg-white drop-shadow-2xl rounded-lg ">
+      <div class="flex justify-between flex-wrap ">
+        <% user.couponUsed.forEach((usedCoupon) => { 
+          const usedCouponId = usedCoupon.couponId;
+          const couponDetails = coupon.find(coupon => coupon._id.toString() === usedCouponId.toString());
+          if (couponDetails) {
+     %>
+           <div 
+             onclick="<%= (new Date(couponDetails.validUntil) <= new Date()) ? '' : `viewProducts('${couponDetails._id}')` %>" 
+             class="<%= (new Date(couponDetails.validUntil) <= new Date()) ? 'grayscale' : '' %> flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm m-6 h-2/4"
+             >
+             <div class="flex items-center space-x-3">
+               <img src="/Voucher.png" alt="Cash On Delivery" class="w-10 h-12 mr-4">
+               <div>
+                 <p class="text-gray-900 font-semibold">
+                   <span class="font-bold font-sans">Coupon Code:</span>
+                   <span class="text-green-500">"<%= couponDetails.code %>"</span>
+                 </p>
+                 <p class="text-gray-600 text-sm font-sans">
+                   Save additional <%= couponDetails.discountValue %>% 
+                   <span>
+                     <button 
+                       useCoupon('<%= couponDetails._id %>');" 
+                       class="text-orange-500 hover:font-semibold"
+                     >
+                       <%=(new Date(couponDetails.validUntil) <= new Date()) ? 'EXPIRED' : 'USE'%>
+                     </button>
+                   </span>
+                 </p>
+               </div>
+             </div>
+           </div>
+     <%   }
+      }) %>
+     
+      </div>
+      
+      
+    </div>
+  </div>
+  <!-- Expired coupon----------------------------------------------------------------------------------- -->
+   
+  </div>
   <script>
     const couponSearch = document.getElementById('search')
     couponSearch.placeholder = "Search Coupon Here"
@@ -73,7 +125,6 @@
     }
 
   </script> 
-
 
 <%- include('layout/utility') %>
 <%- include('layout/footer') %>

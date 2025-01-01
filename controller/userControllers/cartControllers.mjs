@@ -6,13 +6,13 @@ import session from 'express-session';
 import User from '../../model/userSchema.mjs';
 import Product from '../../model/productSchema.mjs'
 import ProteinHubContent from '../../model/ProteinHub.mjs'
+import Rattings from "../../model/ratting.mjs";
 import Carts from '../../model/cartSchema.js' 
 
 
 export const viewCart = async (req,res)=>{
         try {
             const user= await User.findOne({_id:req.session._id});
-            console.log(user);
             let  cart=await Carts.findOne({userId:req.session._id}) ;
             const productId = req.query.productId;
             const product = await Product.findById(productId);
@@ -65,6 +65,7 @@ export const viewCart = async (req,res)=>{
 
     export const Cart = async (req,res)=>{
         try {
+            const ratting=await Rattings.find();
             const user= await User.findOne({_id:req.session._id});
             let  cart=await Carts.findOne({userId:req.session._id}) ;
             if(!cart){
@@ -86,7 +87,7 @@ export const viewCart = async (req,res)=>{
             let address_akn
             let payment_akn 
             let msg
-            res.render('user/viewCart.ejs', { user, cart, products, totalAmount: cart.totalAmount,num_item,cart_akn:true,address_akn:false,payment_akn:false,msg:''});
+            res.render('user/viewCart.ejs', { user, cart,ratting, products, totalAmount: cart.totalAmount,num_item,cart_akn:true,address_akn:false,payment_akn:false,msg:''});
     
         }
         catch(error){
@@ -116,6 +117,50 @@ export const viewCart = async (req,res)=>{
         }
         
     }
+
+    export const updateQty = async (req, res) => {
+        const { productId, qty } = req.query; // Assumes qty is the increment/decrement value
+        const userId = req.session._id;
+    
+        try {
+            // Retrieve the cart and the specific product
+            const cart = await Carts.findOne({ userId, 'products.productId': productId });
+            if (!cart) {
+                return res.status(404).json({ message: "Cart or product not found." });
+            }
+    
+            // Find the product in the cart
+            const product = cart.products.find(p => p.productId.toString() === productId);
+            if (!product) {
+                return res.status(404).json({ message: "Product not found in the cart." });
+            }
+    
+            // Calculate the new quantity
+            const newQuantity = product.quantity + parseInt(qty, 10);
+    
+            // Validate the new quantity
+            if (newQuantity > 3) {
+                return res.status(400).json({ message: "Quantity cannot exceed 3." });
+            }
+            if (newQuantity < 1) {
+                return res.status(401).json({ message: "Quantity cannot be less than 1." });
+            }
+    
+            // Update the quantity if validation passes
+            const updatedCart = await Carts.findOneAndUpdate(
+                { userId, 'products.productId': productId },
+                { $set: { 'products.$.quantity': newQuantity } },
+                { new: true }
+            );
+    
+            // Respond with the updated cart
+            return res.status(200).json({ message: "Quantity updated successfully.", updatedCart });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "An error occurred while updating the cart.", error });
+        }
+    };
+    
 
 export const reverseQty=async(req,res)=>{
     try {

@@ -36,6 +36,10 @@ export const addCoupons = async (req, res) => {
 export const editCoupon = async (req, res) => {
     try {
         const { code,discountValue,maximumDiscount,validFrom,validUntil,cCode} = req.body;
+        const  checkCoupon = await Coupon.findOne({ code: code.trim() });
+        if(checkCoupon){
+            return res.status(401).json({ message: "Coupon name already takken"})
+        }
         if(discountValue<1){
             return res.status(400).json({ message: "Discount value should be greater than 1"})
         }

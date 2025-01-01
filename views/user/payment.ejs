@@ -8,7 +8,7 @@
         <h2 class="text-2xl font-semibold mb-5">Thank You for Your Purchase!</h2>
         <form id="PaymentMethodForm">
           <div class="bg-gray-100 p-5 rounded-lg">
-            <h3 class="text-xl font-semibold mb-2">Select payment method</h3>
+            <h3 class="text-xl font-semibold mb-2">Select any payment method to checkout</h3>
             <p class="text-gray-500 mb-4">Preferred method with secure transaction</p>
 
 
@@ -26,54 +26,60 @@
                 </label>
               </div>
             </div>
-<%if(order.grandTottal<=1000){%>
-  <!-- Cash On Delivery -->
-  <div class="flex items-center p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
-    <img src="/paymentcod.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
-    <p class="text-lg">Pay with Cash On Delivery</p>
-    <div class="ml-auto">
-      <label class="flex items-center">
-        <input oninput="Wallet('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio"
-          name="PaymentMethod" value="cod"> Select
-      </label>
-    </div>
-  </div>
-  <%}%>
-            <!-- Wallet -->
-             <%if(wallet){%>
-            <div class="<%=(order.grandTottal<(wallet.balance))?'':'grayscale'%> flex items-center p-4 mt-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400 group">
-              <img src="/wallet.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
-              <p class="text-lg">Pay with Wallet</p>
-              
-                <%if(order.grandTottal<(wallet.transactions.map((wallet)=>wallet.walletAmount).reduce((a,b)=>a+=b))){%>
-                  <p class="text-sm pl-8 font-sans text-green-500 group-hover:text-white">Available Balance ₹<%=wallet.transactions.map((wallet)=>wallet.walletAmount).reduce((a,b)=>a+=b)%></p>
-              <div class="ml-auto">
-                <label class="flex items-center">
-                  <input oninput="Wallet('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio"
-                    name="PaymentMethod" value="wallet"> Select
-                </label>
-                  <%}else{%>
-                    <p class="text-sm pl-8 font-sans text-red-500 group-hover:text-white">Available Balance ₹<%=wallet.transactions.map((wallet)=>wallet.walletAmount).reduce((a,b)=>a+=b)%> (Insufficient balance)</p>
-                    <div class="ml-auto">
-                    <%}%>
-                
-              </div>
-            </div>
-            <%}%>
-            <%if(order.grandTottal>1000){%>
+            <%if(order.grandTottal<=1000){%>
               <!-- Cash On Delivery -->
-              <div class="flex items-center p-4 mt-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
-                <img src="/paymentcod.png" alt="Cash On Delivery" class="w-12 h-12 mr-4 grayscale">
-                <p class="text-lg text-gray-300 font-sans">Cash On Delivery is not available for order above ₹1000</p>
+              <div class="flex items-center p-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
+                <img src="/paymentcod.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
+                <p class="text-lg">Pay with Cash On Delivery</p>
                 <div class="ml-auto">
                   <label class="flex items-center">
-                    
+                    <input oninput="Wallet('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash" type="radio"
+                      name="PaymentMethod" value="cod"> Select
                   </label>
                 </div>
               </div>
               <%}%>
+                <!-- Wallet -->
+                <%if(wallet){%>
+                  <div
+                    class="<%=(order.grandTottal<(wallet.balance))?'':'grayscale'%> flex items-center p-4 mt-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400 group">
+                    <img src="/wallet.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
+                    <p class="text-lg">Pay with Wallet</p>
 
-          </div>
+                    <%if(order.grandTottal<(wallet.balance)){%>
+                      <p class="text-sm pl-8 font-sans text-green-500 group-hover:text-white">Available Balance ₹
+                        <%=wallet.balance%></p>
+                      <div class="ml-auto">
+                        <label class="flex items-center">
+                          <input oninput="Wallet('<%=order.grandTottal%>','<%=order._id%>')" id="Pay_with_Cash"
+                            type="radio" name="PaymentMethod" value="wallet"> Select
+                        </label>
+                        <%}else{%>
+                          <p class="text-sm pl-8 font-sans text-red-500 group-hover:text-white">Available Balance ₹
+                            <%=wallet.balance%>
+                              (Insufficient balance)</p>
+                          <div class="ml-auto">
+                            <%}%>
+
+                          </div>
+                      </div>
+                      <%}%>
+                        <%if(order.grandTottal>1000){%>
+                          <!-- Cash On Delivery -->
+                          <div
+                            class="flex items-center p-4 mt-4 border rounded-lg bg-white hover:border-red-400 hover:bg-gray-400">
+                            <img src="/paymentcod.png" alt="Cash On Delivery" class="w-12 h-12 mr-4 grayscale">
+                            <p class="text-lg text-gray-300 font-sans">Cash On Delivery is not available for order above
+                              ₹1000</p>
+                            <div class="ml-auto">
+                              <label class="flex items-center">
+
+                              </label>
+                            </div>
+                          </div>
+                          <%}%>
+
+                  </div>
         </form>
 
       </div>
@@ -84,22 +90,24 @@
       <!-- Right div -->
       <div class="w-1/3 bg-white p-6 rounded-lg shadow-md ml-6">
         <!-- hidden div for coupons -->
-        <div id="allCoupons" class="bg-gray-400 rounded-lg absolute border hidden">
+        <div id="allCoupons" class="bg-gray-400 rounded-lg absolute border hidden max-h-96 overflow-y-scroll">
           <!-- coupons -->
-<div class="flex justify-between">
-  <h1 class="p-4 pb-0 font-bold text-white">Available Coupons</h1>
-  <button class="p-4 pb-0" onclick="hide()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20">
-      <!-- Red Circle -->
-      <circle cx="50" cy="50" r="50" fill="#F44336" />
-      <!-- White "X" -->
-      <line x1="30" y1="30" x2="70" y2="70" stroke="white" stroke-width="10" stroke-linecap="round" />
-      <line x1="70" y1="30" x2="30" y2="70" stroke="white" stroke-width="10" stroke-linecap="round" />
-    </svg>
-  </button>
-</div>          <hr class="my-4">
+          <div class="flex justify-between">
+            <h1 class="p-4 pb-0 font-bold text-white">Available Coupons</h1>
+            <button class="p-4 pb-0" onclick="hide()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="20" height="20">
+                <!-- Red Circle -->
+                <circle cx="50" cy="50" r="50" fill="#F44336" />
+                <!-- White "X" -->
+                <line x1="30" y1="30" x2="70" y2="70" stroke="white" stroke-width="10" stroke-linecap="round" />
+                <line x1="70" y1="30" x2="30" y2="70" stroke="white" stroke-width="10" stroke-linecap="round" />
+              </svg>
+            </button>
+          </div>
+          <hr class="my-4">
           <%coupon.forEach((coupons)=>{%>
-            <div class="<%= (new Date(coupons.validUntil) <= new Date()) ? 'grayscale' : '' %> flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm m-6">
+            <div
+              class="<%= (new Date(coupons.validUntil) <= new Date()) ? 'grayscale' : '' %> flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm m-6">
               <div class="flex items-center space-x-3">
                 <img src="/Voucher.png" alt="Cash On Delivery" class="w-12 h-12 mr-4">
                 <div>
@@ -108,22 +116,20 @@
                         "</span>
                   </p>
                   <p class="text-gray-600 text-sm font-sans">Save additional <%=coupons.discountValue%>% <span>
-                        <%if(new Date(coupons.validUntil) <= new Date()){%>
-                          <button 
-                            class="text-orange-500  hover:font-semibold">Expired</button>
+                        <%if(new Date(coupons.validUntil) <=new Date()){%>
+                          <button class="text-orange-500  hover:font-semibold">Expired</button>
                           <%}else{%>
                             <button onclick="addCoupon('<%=coupons._id%>','<%=order._id%>')"
                               class="text-orange-500  hover:font-semibold">ADD</button>
-                              <%}%>
-                    
+                            <%}%>
+        
                       </span></p>
                 </div>
               </div>
-
-
             </div>
-            <%})%>
+          <%})%>
         </div>
+        
         <!--  -->
         <%if(order.couponCode){%>
           <div class="flex items-center justify-between bg-white border border-gray-300 rounded-lg p-4 shadow-sm group">
@@ -173,20 +179,22 @@
                     <div class="flex">
                       <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>"
                         alt="Product 1" class="w-16 h-16 object-cover rounded-md">
-                        <div class="ml-4">
-                          <p class="text-lg font-sans"><span class="line-through text-red-500 font-sans">₹<%= product.price %>
-                                </span>₹<%= ((product.price/100)*(100-product.discount))+(product.price/100)*(product.gst) %>
-                          </p>
-                          <div>
-                            <span class="text-green-600 font-sans">(GST:<%=product.gst%>)%</span>
-                          </div>
-                          <div class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
-                            <span>
-                              <%= (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst))
-                                %>
-                            </span>
-                          </div>
+                      <div class="ml-4">
+                        <p class="text-lg font-sans"><span class="line-through text-red-500 font-sans">₹<%=
+                              product.price %>
+                          </span>₹<%= ((product.price/100)*(100-product.discount))+(product.price/100)*(product.gst) %>
+                        </p>
+                        <div>
+                          <span class="text-green-600 font-sans">(GST:<%=product.gst%>)%</span>
                         </div>
+                        <div class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
+                          <span>
+                            <%=
+                              (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst))
+                              %>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <%})%>
@@ -202,7 +210,7 @@
                         <p class="font-sans">Delivery Charge</p>
                         <p id="deliveryCharge font-sans">₹50</p>
                       </div>
-      
+
                       <hr class="my-4">
                       <div class="flex justify-between font-semibold text-xl">
                         <p class="font-sans">Grand Total</p>
@@ -211,11 +219,11 @@
                       </div>
                     </div>
 
-                    <%}%>
-                     
+      <%}%>
+
       </div>
 
-<button>print</button>
+      <button>print</button>
 
 
     </div>
@@ -314,7 +322,7 @@
         if (selectedPaymentMethod == "razorpay") {
           fetch(`/paymentRender/?orderId=${orderId}`, {
             method: 'POST',
-            headers: { 
+            headers: {
               'Content-Type': 'application/json',
             },
           }).then((res) => {
@@ -370,61 +378,60 @@
           }).catch((error) => {
             console.log(error);
           })
-        } else if(selectedPaymentMethod == "cod") {
+        } else if (selectedPaymentMethod == "cod") {
           fetch("/paymentMethod", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ paymentMethod: selectedPaymentMethod })
-          }).then((response)=>{
-            if(response.status==201){
+          }).then((response) => {
+            if (response.status == 201) {
               Swal.fire({
                 title: `Your Order Has Been Placed`,
                 text: 'Your Order Has Been Placed',
                 icon: 'success',
                 timer: 2000
-                }).then(()=>{
-                  window.location.href = `/orderSucess?orderId=${orderId}`;
-                })
+              }).then(() => {
+                window.location.href = `/orderSucess?orderId=${orderId}`;
+              })
             }
-          })  
-        }else if(selectedPaymentMethod == "wallet")
-        {
+          })
+        } else if (selectedPaymentMethod == "wallet") {
           amounts, orderId
-          fetch(`/walletDebit?amount=${amounts}&orderId=${orderId}`,{
+          fetch(`/walletDebit?amount=${amounts}&orderId=${orderId}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              },
-          }).then((response)=>{
-            if(response.ok){
+            },
+          }).then((response) => {
+            if (response.ok) {
               Swal.fire({
                 title: `Wallet Debit Successful`,
                 text: 'Wallet Debit Successful',
                 icon: 'success',
                 timer: 2000
-              }).then(()=>{
+              }).then(() => {
                 window.location.href = `/orderSucess?orderId=${orderId}`;
               })
-            }else{
+            } else {
               Swal.fire({
                 title: `Wallet Debit Failed`,
                 text: 'Wallet Debit Failed',
                 icon: 'error',
-                })
+              })
             }
           })
         }
 
       }
     }
-    function hide(){
+    function hide() {
       allCoupons.classList.add('hidden');
     }
 
-    
+
 
   </script>
   <%- include('layout/utility') %>
-  <%- include('layout/footer') %>
+    <%- include('layout/footer') %>

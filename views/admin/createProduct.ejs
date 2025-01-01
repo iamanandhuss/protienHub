@@ -2,11 +2,9 @@
 
   <div class="container mx-auto my-10 p-6 bg-gray-100 shadow-lg rounded-lg">
     <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Create Products</h1>
-    <form  id="productForm"
-           method="POST"
-           enctype="multipart/form-data">
-      <div class="grid grid-cols-3 gap-6">
 
+    <form id="productForm" method="post" enctype="multipart/form-data">
+      <div class="grid grid-cols-3 gap-6">
         <!-- Product Name -->
         <div class="col-span-3 sm:col-span-1">
           <label class="block text-sm font-medium">Product Name</label>
@@ -135,6 +133,14 @@
             <option value="Pea">Pea</option>
             <option value="Protein hummus">Protein hummus</option>
           </select>
+        </div>
+        <div id="spinner" class=" hidden fixed inset-0 flex justify-center items-center z-[1000] backdrop-blur-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 animate-spin fill-blue-600 block mx-auto"
+            viewBox="0 0 24 24">
+            <path
+              d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
+              data-original="#000000" />
+          </svg>
         </div>
 
         <!-- Material Compositions -->
@@ -285,8 +291,15 @@
       </div>
       <div class="col-span-2">
         <label class="block text-sm text-white mb-2">Upload Files</label>
-        <input id="fileInput" type="file" name="image" accept="image/*" multiple required
-          class="block w-full text-sm text-gray-400 file:bg-gray-700 file:border-none file:rounded file:text-white file:cursor-pointer file:px-4 file:py-2 hover:file:bg-gray-600" />
+        <input
+          id="fileInput"
+          type="file"
+          name="image"
+          accept="image/*"
+          multiple
+          required
+          class="block w-full text-sm text-gray-400 file:bg-gray-700 file:border-none file:rounded file:text-white file:cursor-pointer file:px-4 file:py-2 hover:file:bg-gray-600"
+        />
         <p class="mt-2 text-xs text-gray-400">
           Allowed formats: PNG, JPG, SVG, WEBP, GIF (Max: 3 files).
         </p>
@@ -317,209 +330,213 @@
 
 
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
         <button id="addProductBtn" type="submit"
           class="mt-8 w-full rounded bg-blue-500 px-6 py-3 text-sm text-white hover:bg-blue-600 transition">
           Add Product
         </button>
+
     </form>
 
 
   </div>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     //-----------------------------------Image croping adding----------------------------
-  
-    const fileInput = document.getElementById("fileInput");
-    const previewContainer = document.getElementById("previewContainer");
-    const cropModal = document.getElementById("cropModal");
-    const imageToCrop = document.getElementById("imageToCrop");
-    const addProductBtn = document.getElementById("addProductBtn"); // Add Product button
-    const productForm = document.getElementById("productForm");
-    const successModal = document.getElementById("successModal");
-  
-    let cropper;
-    let fileCount = 0;
-    let croppedImages = []; // To store all cropped images
-  
-    // File input handling
-    fileInput.addEventListener("change", handleFiles);
-  
-    function handleFiles(event) {
-      const files = event.target.files;
-      const maxFiles = 3;
-  
-      if (files.length > maxFiles) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Too Many Files',
-          text: 'You can upload a maximum of 3 files.',
-          confirmButtonText: 'OK'
-        });
-    return;
-      }
-  
-      Array.from(files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          imageToCrop.src = e.target.result;
-          cropModal.classList.remove("hidden");
-          cropper = new Cropper(imageToCrop, {
-            aspectRatio: 1,
-            viewMode: 1,
-            background: false,
-          });
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-  
-    // Handle the crop button click
-    document.getElementById("cropButton").addEventListener("click", function () {
-      const croppedCanvas = cropper.getCroppedCanvas();
-      const croppedImageURL = croppedCanvas.toDataURL();
-  
-      const imgWrapper = document.createElement("div");
-      imgWrapper.classList.add("relative", "inline-block");
-  
-      const imgElement = document.createElement("img");
-      imgElement.src = croppedImageURL;
-      imgElement.classList.add("rounded", "border", "border-gray-700", "p-2");
-  
-  
-      const removeBtn = document.createElement("button");
-      removeBtn.innerHTML = "&times;"; // Cross icon
-      removeBtn.classList.add(
-      "absolute",
-      "top-0",
-      "right-0",
-      "bg-red-500",
-      "text-white",
-      "rounded-full",
-      "p-1",
-      "cursor-pointer"
-    );
-    removeBtn.title = "Remove Image";
-  
-    removeBtn.addEventListener('click', function(){
-  
-      // Remove the image element from the DOM
-      previewContainer.removeChild(imgWrapper);
-  
-      // Remove the image from the croppedImages array
-      const imageIndex = croppedImages.indexOf(croppedImageURL);
-      if (imageIndex > -1) {
-        croppedImages.splice(imageIndex, 1);
-      }
-  
-      // Decrement file count
-      fileCount -= 1;
-  
-      // Notify user that an image has been removed
-      alert(`Image removed. You can now upload ${3 - fileCount} more image(s).`);
-  
-    })
-  
-  
-      imgWrapper.appendChild(imgElement);
-      imgWrapper.appendChild(removeBtn);
-  
-  
-  // Append the wrapper to the preview container
-    previewContainer.appendChild(imgWrapper);
-  
-    // Store the cropped image in an array for submission
-    croppedImages.push(croppedImageURL);
-  
-    // Hide the modal and destroy the cropper instance
-    cropper.destroy();
-    cropModal.classList.add("hidden");
-  
-    // Increment file count
-    fileCount += 1;
-  
-    // Check if the maximum file count has been reached
-    if (fileCount === 3) {
-      Swal.fire({
-    icon: 'success',
-    title: 'All Images Cropped',
-    text: 'All images have been successfully cropped.',
-    confirmButtonText: 'OK'
-  });
-    }
-    });
-  
-    // Form validation and submission handler
-    productForm.addEventListener("submit", function (e) {
-      e.preventDefault(); 
 
-      // Validate image upload (exactly 3 images should be cropped)
-      if (croppedImages.length !== 3) {
-        alert("Please upload and crop exactly 3 images.");
-        return;
-      }
-  
-  
-      // If validation passes, submit the form via fetch
-      const formData = new FormData(productForm);
-  
-      // Append the cropped images as Base64 strings
-      croppedImages.forEach((img, index) => {
-        formData.append(`croppedImage${index + 1}`, img);
+    const fileInput = document.getElementById("fileInput");
+  const previewContainer = document.getElementById("previewContainer");
+  const cropModal = document.getElementById("cropModal");
+  const imageToCrop = document.getElementById("imageToCrop");
+  const addProductBtn = document.getElementById("addProductBtn"); // Add Product button
+  const productForm = document.getElementById("productForm");
+  const spinner = document.getElementById("spinner");
+  const successModal = document.getElementById("successModal");
+
+  let cropper;
+  let fileCount = 0;
+  let croppedImages = []; // To store all cropped images
+
+  // File input handling
+  fileInput.addEventListener("change", handleFiles);
+
+  function handleFiles(event) {
+    const files = event.target.files;
+    const maxFiles = 3;
+
+    if (files.length > maxFiles) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Too Many Files',
+        text: 'You can upload a maximum of 3 files.',
+        confirmButtonText: 'OK'
       });
-  
-      // Submit form data with fetch API
-      fetch("/admin/newProduct", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          if (data.message) {
-            // Show success modal
-            successModal.classList.remove("hidden");
-            // Optionally reset the form or redirect the user
-            productForm.reset();
-            previewContainer.innerHTML = ""; // Clear the image preview
-            croppedImages = []; // Clear the cropped image array
-            fileCount = 0;
-          }
-        })
-        .catch((error) => {
-          console.error("Error adding product:", error);
-          alert("An error occurred while adding the product.");
+  return;
+    }
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imageToCrop.src = e.target.result;
+        cropModal.classList.remove("hidden");
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1,
+          viewMode: 1,
+          background: false,
         });
+      };
+      reader.readAsDataURL(file);
     });
-  
-    successBtn.addEventListener("click", function () {
-      successModal.classList.add("hidden");
+  }
+
+  // Handle the crop button click
+  document.getElementById("cropButton").addEventListener("click", function () {
+    const croppedCanvas = cropper.getCroppedCanvas();
+    const croppedImageURL = croppedCanvas.toDataURL();
+
+    const imgWrapper = document.createElement("div");
+    imgWrapper.classList.add("relative", "inline-block");
+
+    const imgElement = document.createElement("img");
+    imgElement.src = croppedImageURL;
+    imgElement.classList.add("rounded", "border", "border-gray-700", "p-2");
+
+
+    const removeBtn = document.createElement("button");
+    removeBtn.innerHTML = "&times;"; // Cross icon
+    removeBtn.classList.add(
+    "absolute",
+    "top-0",
+    "right-0",
+    "bg-red-500",
+    "text-white",
+    "rounded-full",
+    "p-1",
+    "cursor-pointer"
+  );
+  removeBtn.title = "Remove Image";
+
+  removeBtn.addEventListener('click', function(){
+
+    // Remove the image element from the DOM
+    previewContainer.removeChild(imgWrapper);
+
+    // Remove the image from the croppedImages array
+    const imageIndex = croppedImages.indexOf(croppedImageURL);
+    if (imageIndex > -1) {
+      croppedImages.splice(imageIndex, 1);
+    }
+
+    // Decrement file count
+    fileCount -= 1;
+
+    // Notify user that an image has been removed
+    alert(`Image removed. You can now upload ${3 - fileCount} more image(s).`);
+
+  })
+
+
+    imgWrapper.appendChild(imgElement);
+    imgWrapper.appendChild(removeBtn);
+
+
+// Append the wrapper to the preview container
+  previewContainer.appendChild(imgWrapper);
+
+  // Store the cropped image in an array for submission
+  croppedImages.push(croppedImageURL);
+
+  // Hide the modal and destroy the cropper instance
+  cropper.destroy();
+  cropModal.classList.add("hidden");
+
+  // Increment file count
+  fileCount += 1;
+
+  // Check if the maximum file count has been reached
+  if (fileCount === 3) {
+    Swal.fire({
+  icon: 'success',
+  title: 'All Images Cropped',
+  text: 'All images have been successfully cropped.',
+  confirmButtonText: 'OK'
+});
+  }
+  });
+
+
+    const form = document.getElementById('productForm');
+
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    spinner.classList.remove("hidden");
+    const formData = new FormData(form);
+    formData.delete('fileInput'); 
+
+    croppedImages.forEach((img, index) => {
+      formData.append(`croppedImage${index + 1}`, img);
+    });  
+
+    const formObject = {};
+    formData.forEach((value, key) => {
+        formObject[key] = value;
     });
-    //-----------------------------------Category dropdwon ----------------------------
-  
-    let dropdownToggle = document.getElementById("dropdownToggle");
-    let dropdownMenu = document.getElementById("dropdownMenu");
-  
-    // Toggle dropdown visibility
-    function handleClick() {
-      dropdownMenu.classList.toggle("hidden");
+
+    try {
+        const response = await fetch('/admin/products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formObject),
+        });
+
+        if (response.status==201) {
+            const result = await response.json();
+            console.log('Server response:', result);
+            Swal.fire({
+                    title: 'sucess',
+                    text: response.statusText,
+                    icon: 'sucess',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                  spinner.classList.add("hidden");
+                  window.history.go(-1)
+                }).catch((err) => {
+                  console.log(err);
+                });
+        } else {
+          Swal.fire({
+          title:'warning',
+          text:response.statusText,
+          icon:'warning',
+          confirmButtonText:'ok'
+        }).then((result) => {
+                  spinner.classList.add("hidden");
+                  window.history.go(-1)
+                }).catch((err) => {
+                  console.log(err);
+                }); 
+        }
+    } catch (error) {
+
+      Swal.fire({
+          title:'warning',
+          text:'An error occurred while submitting the form.',
+          icon:'warning',
+          confirmButtonText:'ok'
+        }).then((result) => {
+                  spinner.classList.add("hidden");
+                  window.history.go(-1)
+                })
     }
+});
+
+
   
-    dropdownToggle.addEventListener("click", handleClick);
-  
-    // Select category and update button with SVG icon
-    function selectCategory(categoryName) {
-      dropdownToggle.innerHTML =
-        categoryName +
-        `
-        <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 inline w-3 fill-white" viewBox="0 0 24 24">
-          <path fill-rule="evenodd"
-            d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z"
-            clip-rule="evenodd" />
-        </svg>`;
-      dropdownMenu.classList.add("hidden");
-    }
+
   </script>
   <%- include('layout/JS') %>
     <%- include('layout/admin_footer') %>

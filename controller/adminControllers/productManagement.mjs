@@ -5,7 +5,7 @@ import session from 'express-session';
 import User from '../../model/userSchema.mjs';
 import category from '../../model/CategorySchema.mjs'
 import Product from '../../model/productSchema.mjs';
-
+import { Buffer } from "buffer";
 import { upload } from '../../uploads/cloudinary.mjs'
 import { v2 as cloudinary } from "cloudinary";
 
@@ -122,63 +122,93 @@ const reder=(req,res)=>{
   res.redirect('/admin/view_all_products')
 }
 // //////////////////////////////////////////////////////////////////////////////////////////////////
-export const addProductPost = async (req, res) => {
-  console.log("addProductPost");
+export const createProduct = async (req, res) => {
   try {
+    // Validate required fields in req.body
     const {
-  productName,
-  productSlug,
-  brand,
-  price,
-  hsnCode,
-  gst,
-  stockQuantity,
-  status,
-  expiryDate,
-  manufacturingDate,
-  flavor,
-  countryOfOrigin,
-  dietaryChoices,
-  material_compositions,
-  ean,
-  number_of_serving,
-  weight,
-  serving_size,
-  protein_per_serving,
-  calories_per_serving,
-  sugar_per_serving,
-  fat_per_serving,
-  carb_per_serving,
-  categoryId,
-  product_certifications,
-  additional_information,
+      product_name, product_slug, brand, price, gst,
+      stock_quantity, status, expiry, mfg, Flavor, countryof_origin,
+      dietary_choices, material_compositions, ean, number_of_serving,
+      weight, serving_size, protein_per_serving, calories_per_serving,
+      sugar_per_serving, fat_per_serving, carb_per_serving, categoryId,
+      product_certifications, additional_information, croppedImage1,
+      croppedImage2, croppedImage3
     } = req.body;
-    // Convert Base64 images from the request body
-    const imageUrls = [];
-    if (
-      req.body.croppedImage1 &&
-      req.body.croppedImage2 &&
-      req.body.croppedImage3
-    ) {
-      imageUrls.push(
-        await uploadBase64ImageToCloudinary(req.body.croppedImage1)
-      );
-      imageUrls.push(
-        await uploadBase64ImageToCloudinary(req.body.croppedImage2)
-      );
-      imageUrls.push(
-        await uploadBase64ImageToCloudinary(req.body.croppedImage3)
-      );
+
+    if (!product_name || !product_slug || !price || !categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields. Please check your input.",
+      });
     }
 
-    
+    // Handle image uploads
+    const imageUrls = [];
+    try {
+      if (croppedImage1) {
+        imageUrls.push(await uploadBase64ImageToCloudinary(croppedImage1));
+      }
+      if (croppedImage2) {
+        imageUrls.push(await uploadBase64ImageToCloudinary(croppedImage2));
+      }
+      if (croppedImage3) {
+        imageUrls.push(await uploadBase64ImageToCloudinary(croppedImage3));
+      }
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to upload images. Please try again.",
+        error: error.message,
+      });
+    }
 
+    // Create a new product instance
+    const newProduct = new Product({
+      product_name,
+      product_slug,
+      brand,
+      price,
+      gst,
+      stock_quantity,
+      expiry,
+      mfg,
+      Flavor,
+      countryof_origin,
+      dietary_choices,
+      material_compositions,
+      ean,
+      number_of_serving,
+      weight,
+      serving_size,
+      protein_per_serving,
+      nutrition_information: {
+        calories_per_serving,
+        sugar_per_serving,
+        fat_per_serving,
+        carb_per_serving,
+      },
+      categories: categoryId,
+      product_image: imageUrls,
+      status,
+      product_certifications,
+      additional_information,
+    });
 
-   
+    // Save the product to the database
+    const savedProduct = await newProduct.save();
+    return res.status(201).json({
+      success: true,
+      message: "Product created successfully!",
+      product: savedProduct,
+    });
   } catch (error) {
-    req.flash("failed", "could not add product");
-    console.error("Error adding product:", error);
-    res.status(500).json({ error: "Server error, could not add product" });
+    console.error("Error creating product:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while creating the product.",
+      error: error.message,
+    });
   }
 };
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,6 +217,7 @@ export const editProduct=async(req,res)=>{
   const user = await User.findOne({ email: req.session.adminEmail })
   const categories = await category.find();
   const product = await Product.findById(productId)
+  
   try {
     res.render('admin/editProduct.ejs',{user,product,categories})
   } catch (error) {
@@ -209,9 +240,10 @@ export const updateProduct = async (req, res) => {
   dietary_choices
   }=req.body;
   console.log(req.body );
+
   try {
     const updatedProduct = await Product.findByIdAndUpdate(product_id, {
-  product_name,
+  product_name: stock_quantity < 5 ? product_name + '-low stock' : product_name,
   product_slug,
   brand,
   price,
@@ -257,3 +289,6 @@ try {
     res.status(500).json({ success: false, message: 'Internal server error' });
 }
 }  
+
+
+

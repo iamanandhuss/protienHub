@@ -193,6 +193,10 @@
                 msg.classList.remove('hidden')
                 downloadButton.classList.add('hidden')
             }
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function () {
+            window.location.href = "/";
+};
         </script>
 
         <%- include('layout/utility') %>
