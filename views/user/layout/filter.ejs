@@ -5,38 +5,42 @@
   <div class="mb-6">
     <h3 class="text-sm font-semibold mb-2">ORDER STATUS</h3>
     <div class="space-y-2">
-      <label class="flex items-center">
-        <input type="checkbox" name="orderStatus" value="On the way" class="form-checkbox h-4 w-4 text-blue-600">
+      <a href="?orderStatus=pending" class="flex items-center">
+        <input type="radio" name="orderStatus" value="On the way" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">On the way</span>
-      </label>
-      <label class="flex items-center">
-        <input type="checkbox" name="orderStatus" value="Delivered" class="form-checkbox h-4 w-4 text-blue-600">
+      </a>
+      <a href="?orderStatus=Delivered" class="flex items-center">
+        <input type="radio" name="orderStatus" value="Delivered" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Delivered</span>
-      </label>
-      <label class="flex items-center">
-        <input type="checkbox" name="orderStatus" value="Cancelled" class="form-checkbox h-4 w-4 text-blue-600">
+      </a>
+      <a href="?orderStatus=Cancelled" class="flex items-center">
+        <input type="radio" name="orderStatus" value="Cancelled" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Cancelled</span>
-      </label>
-      <label class="flex items-center">
-        <input type="checkbox" name="orderStatus" value="Returned" class="form-checkbox h-4 w-4 text-blue-600">
+      </a>
+      <a href="?orderStatus=Returned" class="flex items-center">
+        <input type="radio" name="orderStatus" value="Returned" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Returned</span>
-      </label>
+      </a>
     </div>
 
     <h3 class="text-sm font-semibold mb-2">ORDER TIME</h3>
     <div class="space-y-2">
-      <label class="flex items-center">
-        <input type="checkbox" name="orderTime" value="Last 30 days" class="form-checkbox h-4 w-4 text-blue-600">
+      <a href="?orderTime=Last%2030%20days" class="flex items-center">
+        <input type="radio" name="orderTime" value="Last 30 days" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Last 30 days</span>
-      </label>
-      <label class="flex items-center">
-        <input type="checkbox" name="orderTime" value="Last 1 week" class="form-checkbox h-4 w-4 text-blue-600">
+      </a>
+      <a href="?orderTime=Last%201%20week" class="flex items-center">
+        <input type="radio" name="orderTime" value="Last 1 week" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Last 1 week</span>
-      </label>
-      <label class="flex items-center">
-        <input type="checkbox" name="orderTime" value="Today" class="form-checkbox h-4 w-4 text-blue-600">
+      </a>
+      <a href="?orderTime=Today" class="flex items-center">
+        <input type="radio" name="orderTime" value="Today" class="form-radio h-4 w-4 text-blue-600">
         <span class="ml-2 text-sm">Today</span>
-      </label>
+      </a>
+      <a href="?orderTime=Older" class="flex items-center">
+        <input type="radio" name="orderTime" value="Older" class="form-radio h-4 w-4 text-blue-600">
+        <span class="ml-2 text-sm">Older</span>
+      </a>
     </div>
   </div>
 </div>

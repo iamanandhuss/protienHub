@@ -41,10 +41,15 @@
         
         <!-- carousel -->
         <div id="carousel" class="flex transition-transform duration-700 ease-in-out">
-            <% let bannerimg=["img1.avif","img2.jpg","img3.jpg"]%>
-                <%bannerimg.forEach((i)=> {%>
+         <%
+         let banner=[]
+         banners.forEach((data)=>{
+            banner.push(data.bannerImage[0])
+         })
+         %>      
+                <%banner.forEach((i)=> {%>
                     <div class="min-w-full flex-shrink-0">
-                        <img src="/<%= i %>" alt="Slide 3" class="w-full h-3/4 object-cover">
+                        <img src="<%= i %>" alt="Slide 3" class="w-full h-3/4 object-cover">
                     </div>
                     <% }); %>
         </div>
@@ -83,8 +88,9 @@
                             <span class="text-3xl font-semibold text-gray-800 font-sans">₹<%= parseInt(Number(product.price)/100*(100-Number(product.discount)))%>
                             </span>
                             <span class="text-gray-500 line-through ml-2 font-sans">₹<%= product.price%></span>
-                            <div class="flex justify-between items-center">
+                            <div class="flex  items-center">
                                 <span class="text-red-500 font-sans font-bold"><%= product.discount %>% OFF</span>
+                                <span class="text-green-500 pl-3 font-sans">Save ₹<%= product.price-parseInt(Number(product.price)/100*(100-Number(product.discount)))%></span>
                             </div>
                             
                             <div class="flex justify-between items-center">
@@ -153,7 +159,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
+                        <p class="text-center text-sm text-gray-500 mt-2 font-sans">GET EXTRA <%= product.discount %>% OFF</p>
                     </div>
                             <%}else{%>
                                 <h3 class="text-lg font-semibold mt-2 text text-red-500">Product OutOff Stock</h3>

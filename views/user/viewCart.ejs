@@ -11,6 +11,7 @@
             <h2 class="text-xl font-bold mb-4">Shopping cart <span class="font-sans">(<%=num_item%> Items</span>)</h2>
 
             <h1>Your Cart</h1>
+            <%let tottalSave=0%>
 
             <% if (cart && cart.products.length> 0) { %>
                 <% cart.products.forEach((cartItem)=> {
@@ -51,9 +52,9 @@
                                 <% } %>
                             </div>
                             <div  class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
-                                <span class="font-sans"><%=
-                                    (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst)) %></span>
+                                <span class="font-sans"><%= (product.price-parseInt(Number(product.price)/100*(100-Number(product.discount))))*cartItem.quantity%></span>
                             </div>
+                            <% tottalSave+=(product.price-parseInt(Number(product.price)/100*(100-Number(product.discount))))*cartItem.quantity%>
                             
                             
                     <div class="flex items-center">
@@ -76,13 +77,11 @@
                             
                         </div>
                         <div class="text-right">
-                            ₹<span id="tottal" class="text-xl font-bold text-red-600 font-sans"><%= ((product.price/100)*(100-product.discount))+(product.price/100)*(product.gst) %></span>
+                            ₹<span id="tottal" class="text-xl font-bold text-red-600 font-sans"><%= parseInt((product.price/100)*(100-product.discount))%></span>
                             <span id="price" class="text-sm text-gray-500 line-through block font-sans">₹<%= product.price %>
                             </span>
                             <span class="text-green-600 font-sans">(<%= product.discount %>% off)</span>
-                            <div>
-                                <span class="text-green-600 font-sans">(GST:<%=product.gst%>)%</span>
-                            </div>
+                            
                             <div>
                                 <button onclick="deleteItem('<%= product._id %>','<%= cartItem.quantity %>')">
                                     <a class="text-red-500 mt-1 block hover:font-bold">Remove</a>
@@ -105,9 +104,27 @@
                                     <!-- Cart Total -->
                                     <div class="text-right">
                                         <%if(cart.products.length){%>
-                                        
-                                        <span class="text-lg font-semibold font-sans">Total ₹<%= cart.totalAmount %>
+                                            <% 
+                                            // Calculate total amount without discount
+                                            const totalCartAmount = cart.products.reduce((total, product) => {
+                                                return total + (product.price * product.quantity);
+                                            }, 0);
+                                            
+                                            // Calculate total amount with discount
+                                            const totalCartAmountWithDis = cart.products.reduce((total, product) => {
+                                                const price = product.price || 0;
+                                                const quantity = product.quantity || 0;
+                                                const discount = product.discount || 0;
+                                            
+                                                const discountedPrice = ((price * quantity) * (100 - discount)) / 100;
+                                                return total + discountedPrice;
+                                            }, 0);
+                                            %>
+                                            <span class="text-lg font-semibold font-sans">Total
+                                            </span>
+                                        <span class="text-sm text-gray-600 font-semibold font-sans line-through">₹<%=totalCartAmount %>
                                         </span>
+                                        <span class="text-lg text-green-500 font-semibold font-sans">₹<%= totalCartAmountWithDis %></span>
                                         <%}else{%>
                                             
                                             <%}%>
@@ -120,9 +137,18 @@
             <div class="border-b pb-4 mb-4">
                 <div class="flex justify-between text-sm text-gray-600">
                     <span>Item Total</span>
+                    <%  const totalCartAmountWithDis = cart.products.reduce((total, product) => {
+                        const price = product.price || 0;
+                        const quantity = product.quantity || 0;
+                        const discount = product.discount || 0;
+                    
+                        const discountedPrice = ((price * quantity) * (100 - discount)) / 100;
+                        return total + discountedPrice;
+                    }, 0);
+                    %>
                     <%if(cart.products.length){%>
                                         
-                        <span class="font-sans">₹<%= cart.totalAmount %></span>
+                        <span class="font-sans">₹<%= totalCartAmountWithDis %></span>
                         
                         <%}else{%>
                             
@@ -144,9 +170,10 @@
             </div>
             <div class="flex justify-between text-lg font-semibold text-gray-900">
                 <span>Grand Total</span>
+                
                 <%if(cart.products.length){%>
                                         
-                    <span class="font-sans">₹<%= cart.totalAmount %></span>
+                    <span class="font-sans">₹<%= totalCartAmountWithDis %></span>
                     <%}else{%>
                         
                         <%}%>
@@ -154,7 +181,7 @@
             <div class="mt-2 text-sm text-gray-500">Inclusive of all taxes</div>
             <div class="mt-4 text-green-600 text-sm">You have saved total -₹<%if(cart.products.length){%>
                                         
-                <span class="font-sans"><%=(cart.withOutDis)-(cart.totalAmount)%></span>
+                <span class="font-sans"><%=tottalSave%></span>
                 <%}else{%>
                     
                     <%}%> on your order!</div>

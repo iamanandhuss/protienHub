@@ -1,58 +1,87 @@
 <%- include('layout/admin_header') %>
- 
-      <!-- Right: Login Form -->
-      <div
-        class="bg-gray-200 lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 lg:h-full rounded-lg -ml-10"
-      >
-        <h2 class="text-3xl font-bold text-center mb-8">Admin Login</h2>
 
-        <!-- Username Field -->
-         <form action="/admin/admin_login" method="post">
-          <div class="mb-4 justify-CE relative mt-8">
-            <label
-              for="username"
-              class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs"
-              >Username</label
-            >
-            <input
-              type="text"
-              id="username"   
-              name="username"
-              class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
-              placeholder="Username"
-            />
-            <div><span class="text-sm res-text-xs" id="usernameError"></span></div>
-  
-          </div>
+  <!-- Right: Login Form -->
+  <div class="bg-gray-200 lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 lg:h-full rounded-lg -ml-10">
+    <h2 class="text-3xl font-bold text-center mb-8">Admin Login</h2>
 
-        <!-- Password Field -->
-        <div class="mb-6">
-          <div class="mb-0 relative mt-6">
-            <label
-              for="password"
-              class="absolute -top-2.5 left-4 bg-gray-200 text-gray-700 mb-2 text-sm res-text-xs"
-              >Password</label
-            >
-            <input
-              type="password"
-              id="password"
-              name="password"
-              class="w-full px-4 py-2 border rounded-lg bg-gray-200 border-gray-700 focus:outline-none focus:border-orange-500 res-text-xs"
-              placeholder="Enter your password"
-            />
-            <div><span class="text-sm res-text-xs" id="passwordError"></span></div>
+    <!-- Username Field -->
+    <form id="loginForm" method="post">
+      <div class="mb-4 justify-CE relative mt-8">
+        <label for="username"
+          class="block absolute -top-2.5 left-4 bg-gray-200 text-gray-700 text-sm res-text-xs">Username</label>
+        <input type="text" id="username" name="username"
+          class="w-full px-4 py-2 border rounded-lg border-gray-700 bg-gray-200 focus:outline-none focus:border-orange-500 res-text-xs"
+          placeholder="Username" />
+        <div><span class="text-sm res-text-xs" id="usernameError"></span></div>
+      </div>
 
-          </div>
+      <!-- Password Field -->
+      <div class="mb-6">
+        <div class="mb-0 relative mt-6">
+          <label for="password"
+            class="absolute -top-2.5 left-4 bg-gray-200 text-gray-700 mb-2 text-sm res-text-xs">Password</label>
+          <input type="password" id="password" name="password"
+            class="w-full px-4 py-2 border rounded-lg bg-gray-200 border-gray-700 focus:outline-none focus:border-orange-500 res-text-xs"
+            placeholder="Enter your password" />
+          <div><span class="text-sm res-text-xs" id="passwordError"></span></div>
         </div>
+      </div>
+
+      <!-- Login Button -->
+      <button type="submit"
+        class="w-full mb-10 bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-orange-600 res-text-xs">
+        Login
+      </button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      document.getElementById('loginForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const data = { username, password };
+
+        try {
+          const response = await fetch('/admin/admin_login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Login Successful',
+              text: 'You have logged in successfully.',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              window.location.href = '/admin/dashboard';
+            });
+          } else if (response.status == 403) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Invalid User',
+              text: 'The username or password you entered is incorrect.',
+              confirmButtonText: 'Try Again'
+            });
+          } else if (response.status == 402) {
+            Swal.fire({
+              icon: 'warning',
+              title: 'User Not Allowed',
+              text: 'Your account is not allowed to login.',
+              confirmButtonText: 'OK'
+            });
+          }
+        } catch (err) {
+          console.error('Request failed:', err);
+        }
+      });
+    </script>
 
 
-        <!-- Login Button -->
-        <button
-          class="w-full mb-10 bg-orange-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-orange-600 res-text-xs"
-        >
-          Login
-        </button>
-      </form>
-
-        
-      <%- include('layout/admin_footer') %>
+    <%- include('layout/admin_footer') %>

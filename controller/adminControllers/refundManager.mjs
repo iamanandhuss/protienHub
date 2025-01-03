@@ -14,7 +14,6 @@ export const refund = async (req, res) => {
         const product = order.products.find(
             (item) => item.product.toString() === Return.products[0].product.toString()
           );
-          console.log("mnssj",product);
           product.orderStatus="Refunded";
           const data=await order.save();
         const amount=Return.products[0].amount;

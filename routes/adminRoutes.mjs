@@ -13,7 +13,8 @@ import {view_categories,unblockcategory,blockcategory,addCategory,createCategory
 import {listUser,blockUser,unblockUser,userDetails} from '../controller/adminControllers/userManager.mjs'
 import {manage_coupons,addCoupons,view_coupon_details,editCoupon} from '../controller/adminControllers/couponManager.mjs'
 import {refund} from '../controller/adminControllers/refundManager.mjs'
-import {create_Offers,addOffers} from '../controller/adminControllers/offerControllers.mjs'
+import {create_Offers,addOffers,offersDetails,editOffer} from '../controller/adminControllers/offerControllers.mjs'
+import {view_banner,uploadBanner,changeBanner} from '../controller/adminControllers/bannerController.mjs'
 
 
 //home page for admin desides admin in loge in or not
@@ -93,9 +94,14 @@ adminRouter.post('/editCoupon',is_adminLogedin,editCoupon)
 //offers
 adminRouter.get('/manage_offers',is_adminLogedin,create_Offers)
 adminRouter.put('/create-offer',is_adminLogedin,addOffers)
+adminRouter.get('/offersDetails/:id',is_adminLogedin,offersDetails)
+adminRouter.post("/editOffer", editOffer);
 
 
 // banner
+adminRouter.get('/view_banner',is_adminLogedin,view_banner)
+adminRouter.post('/upload_banner',is_adminLogedin,upload.array('image',1),uploadBanner)
+adminRouter.get('/changeBanner',is_adminLogedin,changeBanner)
 
 
 export default adminRouter;   

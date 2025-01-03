@@ -141,9 +141,19 @@ export const paymentMethod=async(req,res)=>{
   try {
     if(!req.session.orderId){
       let order=await Order.findById(orderId)
-      console.log(order);
       order.paymentMode=paymentMethod;
-      console.log(req.session);
+
+      let grandTotal = 0;
+      if (order.products && order.products.length > 0) {
+        for (let product of order.products) {
+          let productTotal =
+            product.price * product.quantity - 
+            (product.price * product.discount / 100)
+          grandTotal= productTotal;
+        }
+      }
+      order.grandTottal = grandTotal;
+
       const PaymentMet=await order.save();
       if (paymentMethod){
         res.status(201).json({ message: "Payment method updated successfully",});
@@ -197,36 +207,80 @@ export const orderSucess = async (req, res) => {
 
 
 
-export const my_order= async(req,res)=>{
+export const my_order = async (req, res) => {
   try {
-    const user = await User.findOne({_id:req.session._id});
-    try {
-      const page = parseInt(req.query.page) || 1; 
-      const limit = parseInt(req.query.limit) || 3; 
-      const skip = (page - 1) * limit;
-      const totalOrders = await Order.countDocuments({ user: req.session._id }); 
-      const totalPages = Math.ceil(totalOrders / limit);  
+    const user = await User.findOne({ _id: req.session._id });
 
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
 
-      const orders=await Order.find({ user: req.session._id }).sort({createdAt: -1}).populate({
-        path: 'products.product',
-        select: 'product_name price product_image categories discount Flavor',
-        model: Product,  
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+    const skip = (page - 1) * limit;
+
+    // Filtering parameters
+    const { orderStatus, orderTime } = req.query;
+    console.log(orderStatus, orderTime);
+    const filter = { user: req.session._id };
+
+    // Add orderStatus to filter if provided
+    if (orderStatus) {
+      filter.orderStatus = orderStatus;
+    }
+
+    // Add orderTime to filter if provided
+    if (orderTime) {
+      const currentDate = new Date();
+      switch (orderTime) {
+        case "Last 30 days":
+          filter.createdAt = { $gte: new Date(currentDate.setDate(currentDate.getDate() - 30)) };
+          break;
+        case "Last 1 week":
+          filter.createdAt = { $gte: new Date(currentDate.setDate(currentDate.getDate() - 7)) };
+          break;
+        case "Today":
+          filter.createdAt = { $gte: new Date().setHours(0, 0, 0, 0) };
+          break;
+        case "Older":
+          filter.createdAt = { $gte: new Date(currentDate.setDate(currentDate.getDate() - 30)) };
+          break;
+        default:
+          break;
+      }
+    }
+
+    // Fetch total orders and calculate total pages
+    const totalOrders = await Order.countDocuments(filter);
+    const totalPages = Math.ceil(totalOrders / limit);
+
+    // Fetch filtered and paginated orders
+    const orders = await Order.find(filter)
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "products.product",
+        select: "product_name price product_image categories discount Flavor",
+        model: Product,
         options: { strictPopulate: false },
-      }).skip(skip)
+      })
+      .skip(skip)
       .limit(limit);
-    res.render("user/userOrderhistory.ejs",{orders,user,totalPages,
-      currentPage: page, 
-      limit})
-  } catch (error) { 
-      console.error("Error fetching orders:", error);
+
+    // Render the order history page
+    res.render("user/userOrderhistory.ejs", {
+      orders,
+      user,
+      totalPages,
+      currentPage: page,
+      limit,
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).send("Internal Server Error");
   }
-    
-    
-  } catch (error) { 
-    console.log(error);
-  }
-}
+};
+
  
 // cancel the order
 export const cancelOrder=async(req,res)=>{

@@ -98,8 +98,7 @@ export const generateOrderPDF = async (req, res) => {
                 .text(`₹${item.gst.toString()}`, taxX, yPosition)
                 .text(
                     `₹${
-                        ((item.price * item.quantity) / 100) * (100 - item.discount) +
-                        ((item.price * item.quantity) / 100) * item.gst
+                        ((item.price * item.quantity) / 100) * (100 - item.discount) 
                     }`,
                     totalX,
                     yPosition

@@ -60,8 +60,13 @@
 
         <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg w-full right-2 ml-2 mr-5">
           <!-- orders -->
-          <div class="w-full m-2">
-            <h1 class="text-2xl font-bold mb-8 mt-8">Order Details</h1>
+          <div id="navigator " class="flex">
+            <h1 id="ordersText" class="text-2xl font-bold mb-8 mt-8 text-green-500">Order Details</h1>
+            <h1 id="returnText" class="text-2xl pl-4 font-bold text-gray-500 mb-8 mt-8">Returns</h1>
+            </div>
+          <div id="ordersDiv" class="w-full m-2">
+            
+            
             <%order.forEach((order)=>{%>
 
               <%})%>
@@ -124,18 +129,32 @@
                               <!-- Add more products as needed -->
                   </tbody>
                 </table>
-          </div>
 
-          <!--cart -->
-
-          
-
+                <nav class="inline-flex space-x-2 mt-4">
+                  <% if (currentPage > 1) { %>
+                    <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+                       class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg">Previous</a>
+                  <% } %>
+                
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="?page=<%= i %>&limit=<%= limit %>"
+                       class="px-4 py-2 rounded
+                              <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                      <%= i %>
+                    </a>
+                  <% } %>
+                
+                  <% if (currentPage < totalPages) { %>
+                    <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                       class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg">Next</a>
+                  <% } %>
+                </nav>
+                
+          </div> 
+                 
           <!-- returns -->
-
-          <div class="w-full m-2">
-            <h1 class="text-2xl font-bold mb-8 mt-8">Returns</h1>
-
-
+          <div id="returnsDiv" class="w-full m-2 hidden">
+            <div id="ordersDiv" class="w-full m-2">
             <table class="min-w-full bg-white border border-gray-200">
               <thead>
                 <tr class="bg-orange-400 text-white text-sm uppercase text-left">
@@ -182,6 +201,29 @@
                   <%})%>
               </tbody>
             </table>
+
+            <nav class="inline-flex space-x-2 mt-4">
+              <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
+                   class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg">Previous</a>
+              <% } %>
+            
+              <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>&limit=<%= limit %>"
+                   class="px-4 py-2 rounded
+                          <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                  <%= i %>
+                </a>
+              <% } %>
+            
+              <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
+                   class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg">Next</a>
+              <% } %>
+            </nav>
+            
+
+
           </div>
 
         </div>
@@ -219,5 +261,35 @@ fetch(`/admin/refund?id=${id}`,{
               });
             }
           }
+      
+
+          // change layout
+          const returnsDiv =document.getElementById('returnsDiv')
+          const ordersDiv=document.getElementById('ordersDiv')
+          const ordersText=document.getElementById('ordersText')
+          const returnText=document.getElementById('returnText')
+
+
+
+          document.getElementById('returnText').addEventListener('click',(e)=>{
+            e.preventDefault();
+            returnsDiv.classList.remove('hidden')
+            ordersDiv.classList.add('hidden')
+            returnText.classList.add('text-green-500')
+            ordersText.classList.remove('text-green-500')
+            ordersText.classList.add('text-gray-500')
+
+
+          })
+
+          document.getElementById('ordersText').addEventListener('click',(e)=>{
+            e.preventDefault();
+            returnsDiv.classList.add('hidden')
+            ordersDiv.classList.remove('hidden')
+
+            ordersText.classList.add('text-green-500')
+            returnText.classList.remove('text-green-500')
+            returnText.classList.add('text-gray-500')
+          })
         </script>
         <%- include('layout/admin_footer') %>

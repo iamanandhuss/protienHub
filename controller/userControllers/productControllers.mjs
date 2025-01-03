@@ -8,9 +8,10 @@ import Carts from '../../model/cartSchema.js'
  
 
 export const allProduct = async (req, res) => {
-  const orderStatus=req.query.orderStatus;
-  const orderTime=req.query.orderTime;
-  const filter = {}; 
+  console.log(req.query);
+  const { orderStatus, orderTime, price, sort, flavour } = req.query;
+
+  let filter = {}; 
 
   if (orderStatus) {
     filter.orderStatus = { $in: orderStatus.split(',') };
@@ -24,29 +25,60 @@ export const allProduct = async (req, res) => {
       filter.createdAt = { $gte: new Date().setHours(0, 0, 0, 0) };
     }
   }
-  
-  let  cart=await Carts.findOne({userId:req.session._id}) ;
+
+  if (flavour) {
+    filter.Flavor = { $in: flavour.split(',') };
+  }
+
+  let sortOptions = {};
+  if (price === 'asc' || price === 'desc') {
+    sortOptions.price = price === 'asc' ? 1 : -1;
+  }
+  if (sort === 'asc' || sort === 'desc') {
+    sortOptions.product_name = sort === 'asc' ? 1 : -1;
+  }
+
   const page = parseInt(req.query.page) || 1; 
-  const limit = parseInt(req.query.limit) || 8; 
+  const limit = parseInt(req.query.limit) || 8;
   const skip = (page - 1) * limit;
-      
-      const ratting=await Rattings.find();
+
   try {
     const user = await User.findOne({ _id: req.session._id });
-    const totalProducts = await Product.countDocuments(); 
-    const totalPages = Math.ceil(totalProducts / limit);  
+    const totalProducts = await Product.countDocuments({ status: "active" });
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    const products = await Product.find({ status: "active" },filter).skip(skip)
-    .limit(limit); 
+    const products = await Product.find({ status: "active", ...filter })
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limit);
+
     const Category = await Categories.find(
       { status: "active" },
       { category_name: 1 }
     );
-    res.render("user/allProducts.ejs", { user, products, Category,ratting,orderStatus,orderTime,cart,totalPages,
-      currentPage: page, 
-      limit});
-  } catch (error) {}
+
+    const ratting = await Rattings.find();
+
+    const cart = await Carts.findOne({ userId: req.session._id });
+
+    res.render("user/allProducts.ejs", {
+      user,
+      products,
+      Category,
+      ratting,
+      orderStatus,
+      orderTime,
+      cart,
+      totalPages,
+      currentPage: page,
+      limit
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching products');
+  }
 };
+
 
 export const viewdetail = async (req, res) => {
   try {
@@ -150,7 +182,6 @@ export const addRatting = async (req, res) => {
 };
 
 
-// search products
 
 export const searchProducts=async(req,res)=>{
   try {

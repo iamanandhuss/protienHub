@@ -59,7 +59,7 @@ export const order_manage = async (req, res) => {
 
 
   const delivaryAddress = await User.findOne(
-    { _id: order.user._id, },
+    { _id: order.user._id, }, 
     { address: 1 }
   );
 

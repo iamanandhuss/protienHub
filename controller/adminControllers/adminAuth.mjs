@@ -26,10 +26,16 @@ export const loginCred=async(req,res)=>{
    try {
     const { username, password }=req.body;
     const user = await User.findOne({ username });
-    if(!user) return res.status(404).send({message:'User not found'});
+    if(!user)  res.status(404).json({ 
+      success: false,
+      message:'User not found'});
     const isMatch=await bcrypt.compare(password,user.password);
-    if(!isMatch) return res.status(400).send({message:'Invalid password'});
-    if(!user.is_admin)return res.status(403).send({message:'user is not permitted'});
+    if(!isMatch)  res.status(403).json({ 
+      success: false,
+      message:'Invalid password'});
+    if(!user.is_admin) res.status(402).json({ 
+      success: false,
+      message:'user is not permitted'});
     const adminData=
     {
         _id:user._id,
@@ -37,7 +43,11 @@ export const loginCred=async(req,res)=>{
         email:user.email,
     }
     req.session.adminEmail=adminData.email;
-    res.redirect('/admin/dashboard')
+    res.status(200).json({
+      success: true,
+      message: "login success",
+    });
+    // res.redirect('/admin/dashboard')
    } catch (error) {
     
    }

@@ -250,8 +250,6 @@ export const get_Otp = async (req, res) => {
     try {
         const { otp, otpExpiry, email } = req.session.otp;
         const userOtp = req.body.full_otp;
-        console.log(userOtp);
-        //get the data of the user
         const user = await User.findOne({ email })
 
 

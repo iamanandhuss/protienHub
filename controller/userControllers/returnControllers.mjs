@@ -11,7 +11,6 @@ export const newReturn=async (req, res) => {
     const gst=product.gst;
     const discount=product.discount
     try {
-        console.log(req.query.couponDiscound);
         const newReturn=new Returns({
             user:req.session._id,
             products:[{
@@ -30,6 +29,7 @@ export const newReturn=async (req, res) => {
             (item) => item.product.toString() === req.query.product
           );
         product.orderStatus="Returned";
+        order.orderStatus="Returned";
         const data=await newReturn.save();
         await order.save();
       if(data){

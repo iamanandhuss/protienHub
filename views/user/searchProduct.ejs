@@ -36,78 +36,92 @@
 <div class="flex pt-8">
  
     <!-- Sidebar (Filters) -->
-    <aside class="w-2/4 p-4 bg-white shadow-lg rounded-md">
-      <form id="sortOptions">
-
-      <h2 class="text-xl font-bold mb-4">Filter</h2>
-<!-- Category -->
-      <div class="mb-6 hidden">
-        <h3 class="font-semibold text-lg">Category</h3>
-        <% Category.forEach((Cat) => { %>
-          <label class="flex items-center mt-2">
-            <input id="category" type="checkbox" name="category" value="<%= Cat.category_name%>">
-            <%= Cat.category_name %>
-          </label>
-        <% }) %>
-      </div>
-
-      <!-- Price Filter -->
-  <div class="mb-6">
-    <h3 class="font-semibold text-lg">Price</h3>
-    <label class="flex items-center mt-2">
-      <input id="price" type="radio" name="price" value="asc"> Low to High
-    </label>
-    <label class="flex items-center mt-2">
-      <input type="radio" name="price" value="desc"> High to Low
-    </label>
-  </div>
-
+    <aside class=" p-4  bg-white  shadow-lg rounded-md">
+        <form id="sortOptions">
   
-
-  <div class="mb-6">
-    <h3 class="font-semibold text-lg">Sort By</h3>
-    <label class="flex items-center mt-2">
-        <input type="radio" name="sort" value="asc" class="mr-2"> A to Z
-    </label>
-    <label class="flex items-center mt-2">
-        <input type="radio" name="sort" value="desc" class="mr-2"> Z to A
-    </label>
-  </div>
-
-  <!-- Flavor Filter -->
-  <div class="mb-6">
-    <h3 class="font-semibold text-lg">Flavour</h3>
-    <div class="flex flex-col">
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Chocolate" class="mr-2"> Chocolate
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Cookies and Cream" class="mr-2"> Cookies and Cream
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Double Chocolate" class="mr-2"> Double Chocolate
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Unflavoured Whey Protein" class="mr-2"> Unflavoured Whey Protein
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Vanilla" class="mr-2"> Vanilla
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Mango" class="mr-2"> Mango
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Salted Caramel" class="mr-2"> Salted Caramel
-        </label>
-        <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Strawberry" class="mr-2"> Strawberry
-        </label>
+        <h2 class="text-xl font-bold mb-4">Filter</h2>
+  <!-- Category -->
+        <div class="mb-6 hidden">
+          <h3 class="font-semibold text-lg">Category</h3>
+          <% Category.forEach((Cat) => { %>
+            <label class="flex items-center mt-2">
+              <input id="category" type="checkbox" name="category" value="<%= Cat.category_name%>">
+              <%= Cat.category_name %>
+            </label>
+          <% }) %>
+        </div>
+  
+        <!-- Price Filter -->
+    <div class="mb-6">
+      <h3 class="font-semibold text-lg">Price</h3>
+      <label class="flex items-center mt-2">
+        <input id="price" type="radio" name="price" value="asc"> Low to High
+      </label>
+      <label class="flex items-center mt-2">
+        <input type="radio" name="price" value="desc"> High to Low
+      </label>
     </div>
-</div>
-
-<button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">Submit</button>
-</form>
-    </aside>
+  
+    
+  
+    <div class="mb-6">
+      <h3 class="font-semibold text-lg">Sort By</h3>
+      <label class="flex items-center mt-2">
+          <input type="radio" name="sort" value="asc" class="mr-2"> A to Z
+      </label>
+      <label class="flex items-center mt-2">
+          <input type="radio" name="sort" value="desc" class="mr-2"> Z to A
+      </label>
+    </div>
+  
+    <!-- Flavor Filter -->
+    <div class="mb-6">
+      <h3 class="font-semibold text-lg">Flavour</h3>
+      <div class="flex flex-col">
+          <label class="flex items-center mt-2">
+              <a href="?flavour=Chocolate">
+              <input id="flavour" type="checkbox" name="flavour" value="Chocolate" class="mr-2"> Chocolate
+          </a>
+          </label>
+          <label class="flex items-center mt-2">
+              <a href="">
+              <input id="flavour" type="checkbox" name="flavour" value="Cookies and Cream" class="mr-2"> Cookies and Cream
+          </a>
+          </label>
+          <label class="flex items-center mt-2">
+              <a href="">
+              <input id="flavour" type="checkbox" name="flavour" value="Double Chocolate" class="mr-2"> Double Chocolate
+          
+          </a>
+      </label>
+          <label class="flex items-center mt-2">
+              <a href="">
+              <input id="flavour" type="checkbox" name="flavour" value="Unflavoured Whey Protein" class="mr-2"> Unflavoured Whey Protein
+          
+          </a></label>
+          <label class="flex items-center mt-2">
+              <a href="">
+              <input id="flavour" type="checkbox" name="flavour" value="Vanilla" class="mr-2"> Vanilla
+          
+          </a></label>
+          <label class="flex items-center mt-2">
+              <a href="?flavour=mango">
+              <input id="flavour" type="checkbox" name="flavour" value="Mango" class="mr-2"> Mango
+          </a></label>
+          <label class="flex items-center mt-2">
+              <a href="">
+                              <input id="flavour" type="checkbox" name="flavour" value="Salted Caramel" class="mr-2"> Salted Caramel
+                          </a></label>
+          <label class="flex items-center mt-2">
+              <a href="">
+              </a><input id="flavour" type="checkbox" name="flavour" value="Strawberry" class="mr-2"> Strawberry
+          </label>
+      </div>
+  </div>
+  
+  <button type="submit" class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600">Submit</button>
+  </form>
+    </aside>   
 
     <!-- Product Listing Section -->
      <div>
@@ -116,10 +130,10 @@
             <h2 class="text-xl font-bold mb-4 pr-4">(<%= products.length %> Items)</h2>
         </div>
        
-    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
-        <% products.forEach((product)=>{ %>
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class="flex justify-center">
+        <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+            <% products.forEach((product)=>{ %>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="flex justify-center">   
                     <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
 
                 </div>

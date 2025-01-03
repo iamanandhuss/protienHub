@@ -1,39 +1,424 @@
 <%- include('layout/adminpage_header') %>
-<div class="container">
-    <h1>Change Banner</h1>
-    <form id="bannerForm" enctype="multipart/form-data">
-        <label for="banner">Choose a banner image:</label>
-        <input type="file" id="banner" name="banner" accept="image/*" required>
-        <button type="submit">Upload Banner</button>
-    </form>
-    <div id="response"></div>
-</div>
+    <div class="bg-white w-full mx-3 my-0 rounded-lg shadow-lg relative">
 
-<script>
-    const form = document.getElementById('bannerForm');
-    const responseDiv = document.getElementById('response');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        <!-- available banner -->
+        <div id="avail"
+            class="bg-white w-full h-full mx-0 my-0 rounded-lg border left absolute backdrop-blur-xl hidden ">
+            <div class="flex justify-between">
+                <h1 class="text-gray-400 font-bold p-3">Available Banner</h1>
+                <h1 id="remove" class="text-red-500 font-bold p-3">x</h1>
+            </div>
 
-        const formData = new FormData(form);
 
-        try {
-            const res = await fetch('/change-banner', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await res.json();
+            <!-- banner list inactive -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3">
+              <% banners.forEach(banner => { %>
+                <div  class="border rounded-lg shadow-lg overflow-hidden bg-white">
+                  <img onclick="select('<%=banner._id %>')" src="<%= banner.bannerImage[0] %>" alt="<%= banner.bannerName[0] %>" class="w-full h-48 object-cover">
+                  <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800"><%= banner.bannerName[0] %></h3>
+                    <p class="text-gray-600 text-sm mt-2"><%= banner.bannerDescription %></p>
+                    <div class="mt-4">
+                      <span class="inline-block bg-gray-200 text-gray-800 px-3 py-1 text-xs font-semibold rounded-full">
+                        <%= banner.status %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+              <div class="flex justify-center mt-8">
+                <nav class="inline-flex space-x-2">
+                  <% if (currentPage > 1) { %>
+                    <!-- Previous Button -->
+                    <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg mr-2">Previous</a>
+                      
+                    </a>
+                  <% } %>
+              
+                  <!-- Page Numbers -->
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <a href="?page=<%= i %>&limit=<%= limit %>"
+                      class="px-4 py-2 rounded <% if (i === currentPage) { %> bg-green-600 text-white <% } else { %> bg-gray-800 text-white hover:bg-gray-700 <% } %>">
+                      <%= i %>
+                    </a>
+                  <% } %>
+              
+                  <% if (currentPage < totalPages) { %>
+                    <!-- Next Button -->
+                 <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="bg-gray-300 text-gray-700 px-3 py-1 rounded-lg ml-2">Next</a>
+                    </a>
+                  <% } %>
+                </nav>
+              </div>            
+            <hr>
 
-            if (res.ok) {
-                responseDiv.innerHTML = `<p>Banner updated successfully!</p><img src="${data.bannerPath}" alt="New Banner" width="500" />`;
-            } else {
-                responseDiv.innerHTML = `<p>Error: ${data.message}</p>`;
-            }
-        } catch (error) {
-            responseDiv.innerHTML = `<p>Error: ${error.message}</p>`;
-        }
+        </div>
+
+        <!-- spinner -->
+        <div id="spinner" class=" hidden fixed inset-0 flex justify-center items-center z-[1000] backdrop-blur-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 animate-spin fill-blue-600 block mx-auto"
+            viewBox="0 0 24 24">
+            <path
+              d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"
+              data-original="#000000" />
+          </svg>
+        </div>
+        <!-- create banner -->
+        <div id="create" class="bg-white w-full h-full mx-0 my-0 rounded-lg border absolute backdrop-blur-xl hidden">
+          <div class="flex justify-between p-3">
+            <h1 class="text-gray-400 font-bold">Create Banner</h1>
+            <button id="closeCreate" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+              &times;
+            </button>
+          </div>
+          <hr>
+        
+          <!-- Form Section -->
+          <div class="container mx-auto p-6 bg-gray-100 drop-shadow-2xl rounded-lg">
+            <form id="bannerForm" method="POST" enctype="multipart/form-data">
+              <!-- Banner Name -->
+              <div class="mb-4">
+                <label for="bannerName" class="block text-gray-700 font-semibold mb-2">Banner Name</label>
+                <input 
+                  id="bannerName" 
+                  name="bannerName" 
+                  type="text" 
+                  class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                  placeholder="Enter banner name" 
+                  required
+                >
+              </div>
+        
+              <!-- Description -->
+              <div class="mb-4">
+                <label for="bannerDescription" class="block text-gray-700 font-semibold mb-2">Description</label>
+                <textarea 
+                  id="bannerDescription" 
+                  name="bannerDescription" 
+                  class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                  rows="4" 
+                  placeholder="Enter banner description" 
+                  required
+                ></textarea>
+              </div>
+        
+              <!-- File Upload -->
+              <div class="mb-4">
+                <label for="fileInput" class="block text-gray-700 font-semibold mb-2">Upload Files</label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  multiple
+                  class="block w-full text-sm text-gray-400 file:bg-gray-700 file:border-none file:rounded file:text-white file:cursor-pointer file:px-4 file:py-2 hover:file:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  required
+                />
+                <p class="mt-2 text-xs text-gray-500">Allowed formats: PNG, JPG, SVG, WEBP, GIF (Max: 3 files).</p>
+        
+                <!-- Preview Section -->
+                <div id="previewContainer" class="grid grid-cols-3 gap-4 mt-4">
+                  <!-- Cropped Image Preview will appear here -->
+                </div>
+        
+                <!-- Crop Modal -->
+                <div id="cropModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                  <div class="bg-white p-6 rounded-lg">
+                    <div id="imagePreviewContainer" class="mb-4">
+                      <img id="imageToCrop" class="w-full max-h-96 object-contain" src="" alt="To Crop" />
+                    </div>
+                    <div class="flex justify-between">
+                      <button type="button" id="cropButton" class="bg-blue-500 px-4 py-2 text-white rounded hover:bg-blue-600 transition focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Crop
+                      </button>
+                      <button type="button" id="cancelCropButton" class="bg-red-500 px-4 py-2 text-white rounded hover:bg-red-600 transition focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <!-- Submit Button -->
+              <div class="mb-4">
+                <button 
+                  type="submit" 
+                  class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  Submit Banner
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+
+        <div class="flex justify-between">
+            <h1 class="text-gray-400 font-bold p-3">Current Banner</h1>
+
+            <button id="Change" onclick="create()"
+                class="bg-purple-500 hover:bg-purple-500   p-2 rounded-lg m-2 text-white font-extrabold">+Create
+                New</button>
+        </div>
+        <hr>
+            <%activeBanners.forEach((i)=> {%>
+                <div class="min-w-full flex-shrink-0">
+                    <div class="flex justify-between">
+                        <img src="<%= i.bannerImage %>" alt="Slide 3" class="w-1/3 h-1/3 object-cover p-2">
+                        <div>
+                            <h1 class="text-gray-400 font-bold p-3">Details</h1>
+                            <hr>
+                            <h1 class="text-lg text-gray-500">Banner Name:<%= i.bannerName %></h1>
+                            <h1 class="font-sans text-sm text-gray-500">Description:<%= i.bannerDescription %></h1>
+                        </div>
+                        <div class="mr-4">
+                            <h1 class="text-gray-400 font-bold p-3">Actions</h1>
+                            <hr>
+                            <button id="Change" onclick="Change('<%= i._id%>')"
+                                class="bg-green-500 hover:bg-green-600 hover:scale-105 p-2 rounded-lg m-2 text-white font-extrabold">Change</button>
+                            <button onclick="deleteBanner()"
+                                class="bg-orange-500 hover:bg-orange-600 hover:scale-105 p-2 rounded-lg m-2 text-white font-extrabold">Delete</button>
+
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <% }); %>
+
+    </div>
+    <!-- hidden div showing available banner -->
+
+    </div>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+  const spinner = document.getElementById("spinner");
+  const fileInput = document.getElementById("fileInput");
+  const previewContainer = document.getElementById("previewContainer");
+  const cropModal = document.getElementById("cropModal");
+  const imageToCrop = document.getElementById("imageToCrop");
+
+
+
+  let cropper;
+  // File input handling
+  fileInput.addEventListener("change", handleFiles);
+
+  function handleFiles(event) {
+    const files = event.target.files;
+    const maxFiles = 3;
+
+    if (files.length > maxFiles) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Too Many Files',
+        text: 'You can upload a maximum of 3 files.',
+        confirmButtonText: 'OK'
+      });
+  return;
+    }
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imageToCrop.src = e.target.result;
+        cropModal.classList.remove("hidden");
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1380 / 481, 
+          background: false,
+        });
+      };
+      reader.readAsDataURL(file);
     });
-</script>
-    
-<%- include('layout/admin_footer') %>
+  }
+
+  // Handle the crop button click
+let croppedImages = []; 
+let fileCount = 0;  
+
+document.getElementById("cropButton").addEventListener("click", function () {
+  if (fileCount >= 1) {
+    alert("You can only upload one image.");
+    return; 
+  }
+
+  const croppedCanvas = cropper.getCroppedCanvas();
+  const croppedImageURL = croppedCanvas.toDataURL();
+
+  previewContainer.innerHTML = "";
+
+  const imgWrapper = document.createElement("div");
+  imgWrapper.classList.add("relative", "inline-block");
+
+  const imgElement = document.createElement("img");
+  imgElement.src = croppedImageURL;
+  imgElement.classList.add("rounded", "border", "border-gray-700", "p-2");
+
+  const removeBtn = document.createElement("button");
+  removeBtn.innerHTML = "&times;";
+  removeBtn.classList.add(
+    "absolute",
+    "top-0",
+    "right-0",
+    "bg-red-500",
+    "text-white",
+    "rounded-full",
+    "p-1",
+    "cursor-pointer" 
+  );
+  removeBtn.title = "Remove Image";
+
+  removeBtn.addEventListener('click', function () {
+    previewContainer.removeChild(imgWrapper);
+
+    const imageIndex = croppedImages.indexOf(croppedImageURL);
+    if (imageIndex > -1) {
+      croppedImages.splice(imageIndex, 1);
+    }
+
+    fileCount = 0; // Reset file count as image was removed
+    alert(`Image removed. You can now upload 1 image.`);
+  });
+
+  imgWrapper.appendChild(imgElement);
+  imgWrapper.appendChild(removeBtn);
+
+  previewContainer.appendChild(imgWrapper);
+
+  croppedImages.push(croppedImageURL);
+
+  cropper.destroy();
+  cropModal.classList.add("hidden");
+
+  fileCount = 1;
+});
+
+
+
+
+
+        // show the Change div
+        let changeId=''
+        function  Change(_id) {
+          changeId=_id;
+            document.getElementById("avail").classList.remove('hidden')
+        }
+        function select(selectId){
+          const url = `/admin/changeBanner?selectId=${selectId}&changeId=${changeId}`;
+
+  const response =  fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((response)=>{
+   if(response.status==200)
+   {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: 'Banners updated successfully.',
+    }).then(()=>{
+      window.location.reload()
+   });
+   }else{
+    Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Something went wrong! Please try again later.',
+  }).then(()=>{
+      window.location.reload()
+   });
+   }
+  });
+}
+        // hide the Change div
+        document.getElementById('remove').addEventListener('click', (e) => {
+            e.preventDefault()
+            document.getElementById("avail").classList.add('hidden')
+        })
+        // delete banner
+        function deleteBanner() {
+            swal.fire({
+                icon: 'question',
+                text: 'Are you sure',
+            })
+        }
+
+        // create banner
+        function create() {
+            document.getElementById("create").classList.remove('hidden')
+        }
+        document.getElementById('remove').addEventListener('click', (e) => {
+            e.preventDefault()
+            document.getElementById("create").classList.add('hidden')
+        })
+//------------------------------------------create banner upload---------------------------------------
+  document.getElementById('bannerForm').addEventListener('submit', async (event) => {
+  spinner.classList.remove("hidden");
+  const form = document.getElementById('bannerForm');
+  event.preventDefault();
+  const formData = new FormData(form);
+  croppedImages.forEach((img, index) => {
+      formData.append(`croppedImage${index + 1}`, img);
+    });  
+  const formObject = {};
+  formData.forEach((value, key) => {
+        formObject[key] = value;
+    });
+    console.log(formObject);
+    try {
+    const response = await fetch('/admin/upload_banner', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formObject),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: result.message,
+        showConfirmButton: false,
+        timer: 2000,
+      }).then((result) => {
+        spinner.classList.add("hidden");
+        window.location.reload();
+      })
+    } else {
+      const error = await response.json();
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: error.message || 'An error occurred while uploading the banner.',
+        showConfirmButton: true,
+      });
+    }
+  } catch (err) {
+    console.error('An error occurred:', err);
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'An unexpected error occurred. Please try again later.',
+      showConfirmButton: true,
+    });
+  }
+});
+
+
+    </script>
+    <%- include('layout/admin_footer') %>

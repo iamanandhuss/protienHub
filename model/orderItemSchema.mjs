@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema(
         gst:{type:Number,required: false},
         orderStatus: {
           type: String,
-          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned","Refunded"], // Possible statuses for the order item
+          enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled","Returned","Refunded"], // Possible statuses for the order item
           default: "Pending",
         },
       },
@@ -60,7 +60,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
+      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled","Returned"],
       default: "Pending",
     },
     cancelReason: {

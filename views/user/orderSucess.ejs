@@ -84,7 +84,6 @@
                                 <th class="px-6 py-3 text-right font-sans">MRP</th>
                                 <th class="px-6 py-3 text-right font-sans">Qty</th>
                                 <th class="px-6 py-3 text-right font-sans">Discount</th>
-                                <th class="px-6 py-3 text-right font-sans">Tax</th>
                                 <th class="px-6 py-3 text-right font-sans">Total</th>
                             </tr>
                         </thead>
@@ -103,17 +102,20 @@
                                     <td class="px-6 py-3 text-right font-sans">
                                         <%= item.discount.toString() %>
                                     </td>
-                                    <td class="px-6 py-3 text-right font-sans">
-                                        <%= item.gst.toString() %>
-                                    </td>
                                     <td class="px-6 py-3 text-right font-sans">₹<%= ((item.price * item.quantity) / 100)
-                                            * (100 - item.discount) + ((item.price * item.quantity) / 100) * item.gst %>
+                                            * (100 - item.discount) %>
                                     </td>
                                 </tr>
                                 <% }) %>
                         </tbody>
 
                     </table>
+                    <div class="flex justify-end pr-9">
+                        <div class="flex justify-between">
+                            <h3 class="pr-3">DeliveryCharge</h3>
+                            <h3 class="font-sans">₹ 50</h3>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex justify-between items-center border-t pt-4">
@@ -122,9 +124,8 @@
                         <p id="grandTotal" class="text-xl font-bold text-right font-sans">₹<%=order.grandTottal%>
                         </p>
                     </div>
-                    <button id="downloadReceipt" onclick="generateOrderPDF('<%=order._id%>')"
-                        class="btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-sans">Download
-                        Receipt</button>
+                    <button id="downloadReceipt" onclick="Confirm()"
+                        class="btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-sans">Confirm order</button>
                     <h1 id="msg" class="font-bold text-green-500 hidden">Receipt downloaded successfully. Thank you for
                         your purchase!
 
@@ -162,41 +163,20 @@
             });
 
             // generate pdf
-            function generateOrderPDF(orderId) {
-                fetch(`/generatePdf?orderId=${orderId}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                }).then(async (response) => {
-                    if (response) {
-                        const blob = await response.blob();
-                        const downloadUrl = window.URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = downloadUrl;
-                        link.download = `order-${orderId}.pdf`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        window.URL.revokeObjectURL(downloadUrl);
-                    } else {
-                        Swal.fire({
-                            title: `Failed to Generate PDF`,
-                            text: 'Failed to Generate PDF',
-                            icon: 'error',
-                        })
-                    }
-                })
-
-                const downloadButton = document.getElementById('downloadReceipt')
-                const msg = document.getElementById('msg')
-                msg.classList.remove('hidden')
-                downloadButton.classList.add('hidden')
-            }
+            
             window.history.pushState(null, null, window.location.href);
             window.onpopstate = function () {
             window.location.href = "/";
 };
+function Confirm(){
+    Swal.fire({
+                title: `Order Comfirmed `,
+                text: 'Your Order has been confirmed',
+                icon: 'success',
+              }).then((result) => {
+                window.location.href='/'
+              })
+}
         </script>
 
         <%- include('layout/utility') %>

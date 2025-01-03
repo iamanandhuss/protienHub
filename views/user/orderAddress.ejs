@@ -36,7 +36,6 @@
       <div class="w-1/3 bg-white p-6 rounded-lg shadow-md ml-6">
         <h3 class="text-xl font-semibold mb-4 text-center">Your order</h3>
         <%if(order){%>
-
           <%items.forEach((product)=>{%>
             <!-- Product 1 -->
             <div class="flex justify-between mb-4">
@@ -44,18 +43,19 @@
                 <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>"
                   alt="Product 1" class="w-16 h-16 object-cover rounded-md">
                 <div class="ml-4">
-                  <p class="text-lg font-sans"><span class="line-through text-red-500 font-sans">₹<%= product.price %>
-                        </span>₹<%= ((product.price/100)*(100-product.discount))+(product.price/100)*(product.gst) %>
+                  <p class="text-lg font-sans"><span class="line-through text-red-500 font-sans">₹<%= (product.price)%>
+                        </span>₹<%= parseInt((product.price/100)*(100-product.discount))%>
                   </p>
-                  <div>
-                    <span class="text-green-600 font-sans">(GST:<%=product.gst%>)%</span>
-                  </div>
+                  <span class="text-green-600 font-sans">(<%= product.discount %>% off)</span>
+
+                  
                   <div class="text-green-600 font-semibold mt-1 font-sans">You saved ₹
                     <span>
-                      <%= (product.price)-((product.price/100)*(100-product.discount)+(product.price/100)*(product.gst))
-                        %>
+                      <%=(product.price)-parseInt((product.price/100)*(100-product.discount))%>
                     </span>
                   </div>
+                  <span class="text-green-600 font-sans">(<%= product.discount %>% off)</span>
+
                 </div>
               </div>
             </div>

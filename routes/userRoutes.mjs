@@ -82,8 +82,8 @@ userRouter.post('/editAddress/:addressId', isLoggedIn, insertEdited)
 userRouter.delete('/DeleteAddress/:addressId', isLoggedIn, deleteAddress);
 
 
-userRouter.get('/forgotPassword', isLoggedIn, forgetPassword)
-userRouter.post("/verifie_email", isLoggedIn, verifie_email) 
+userRouter.get('/forgotPassword', isLoggedOut, forgetPassword)
+userRouter.post("/verifie_email", isLoggedOut, verifie_email) 
 
 //cart page 
 userRouter.get('/viewCart', isLoggedIn, viewCart)

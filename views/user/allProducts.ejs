@@ -39,7 +39,7 @@
 <div class="flex pt-8">
  
     <!-- Sidebar (Filters) -->
-    <aside class="w-2/4 p-4 bg-white shadow-lg rounded-md">
+    <aside class=" p-4  bg-white  shadow-lg rounded-md">
       <form id="sortOptions">
 
       <h2 class="text-xl font-bold mb-4">Filter</h2>
@@ -82,28 +82,42 @@
     <h3 class="font-semibold text-lg">Flavour</h3>
     <div class="flex flex-col">
         <label class="flex items-center mt-2">
+            <a href="?flavour=Chocolate">
             <input id="flavour" type="checkbox" name="flavour" value="Chocolate" class="mr-2"> Chocolate
+        </a>
         </label>
         <label class="flex items-center mt-2">
+            <a href="">
             <input id="flavour" type="checkbox" name="flavour" value="Cookies and Cream" class="mr-2"> Cookies and Cream
+        </a>
         </label>
         <label class="flex items-center mt-2">
+            <a href="">
             <input id="flavour" type="checkbox" name="flavour" value="Double Chocolate" class="mr-2"> Double Chocolate
-        </label>
+        
+        </a>
+    </label>
         <label class="flex items-center mt-2">
+            <a href="">
             <input id="flavour" type="checkbox" name="flavour" value="Unflavoured Whey Protein" class="mr-2"> Unflavoured Whey Protein
-        </label>
+        
+        </a></label>
         <label class="flex items-center mt-2">
+            <a href="">
             <input id="flavour" type="checkbox" name="flavour" value="Vanilla" class="mr-2"> Vanilla
-        </label>
+        
+        </a></label>
         <label class="flex items-center mt-2">
+            <a href="?flavour=mango">
             <input id="flavour" type="checkbox" name="flavour" value="Mango" class="mr-2"> Mango
-        </label>
+        </a></label>
         <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Salted Caramel" class="mr-2"> Salted Caramel
-        </label>
+            <a href="">
+                            <input id="flavour" type="checkbox" name="flavour" value="Salted Caramel" class="mr-2"> Salted Caramel
+                        </a></label>
         <label class="flex items-center mt-2">
-            <input id="flavour" type="checkbox" name="flavour" value="Strawberry" class="mr-2"> Strawberry
+            <a href="">
+            </a><input id="flavour" type="checkbox" name="flavour" value="Strawberry" class="mr-2"> Strawberry
         </label>
     </div>
 </div>
@@ -113,14 +127,16 @@
     </aside>
     
 
+    <!-- Product Listing Section -->
     
         
 
        
-    <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
-        <% products.forEach((product)=>{ %>
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                <div class="flex justify-center">
+    <%if(products.length){%>
+        <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+            <% products.forEach((product)=>{ %>
+                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="flex justify-center">   
                     <img src="<%= product.product_image.length > 0 ? product.product_image[0] : 'fallback.jpg' %>" alt="Product Image" class="w-1/2 object-fill">
 
                 </div>
@@ -185,43 +201,61 @@
                                     </div>
                                 </div>
                                 <div class="flex justify-between h-fit align-middle <%= 
-    (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
-    ? 'hidden' 
-    : 'block' %>">
-
-                                    <button onclick="window.location.href='/cart'" class="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 addToCart" data-product-id="<%= product._id %>">
-                                        View Cart
-                                    </button>
-                                    <div class="bg-white rounded-full shadow-lg h-fit align-middle p-1 mt-3" onclick="addToFav('<%= product._id %>')">
-                                        <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
-                                            <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
-                                            </path>
-                                        </svg>
+        (!cart.products.map((pdt) => pdt.productId.toString()).includes(product._id.toString())) 
+        ? 'hidden' 
+        : 'block' %>">
+    
+                                        <button onclick="window.location.href='/cart'" class="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 addToCart" data-product-id="<%= product._id %>">
+                                            View Cart
+                                        </button>
+                                        <div class="bg-white rounded-full shadow-lg h-fit align-middle p-1 mt-3" onclick="addToFav('<%= product._id %>')">
+                                            <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6 <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                                <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                                </path>
+                                            </svg>
+                                        </div>
                                     </div>
-                                </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-2 font-sans">GET EXTRA <%= product.discount %>% OFF</p>
                 </div>
-                <p class="text-center text-sm text-gray-500 mt-2">GET EXTRA <%= product.additional_discount %>% OFF</p>
-            </div>
-                    <%}else{%>
-                        <h3 class="text-lg font-semibold mt-2 text text-red-500">Product OutOff Stock</h3>
-                        <div class="flex justify-between h-fit align-middle">
-                            <button  class=" mt-4 bg-white text-white py-2 px-4 rounded">
-                                Add to cart
-                            </button>
-                            <div class="bg-white  rounded-full shadow-lg  h-fit align-middle p-1 mt-3
-                            "onclick="addToFav('<%= product._id %>')">
-                            <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6  <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
-                                <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
-                                </path>
-                              </svg>
+                        <%}else{%>
+                            <h3 class="text-lg font-semibold mt-2 text text-red-500">Product OutOff Stock</h3>
+                            <div class="flex justify-between h-fit align-middle">
+                                <button  class=" mt-4 bg-white text-white py-2 px-4 rounded">
+                                    Add to cart
+                                </button>
+                                <div class="bg-white  rounded-full shadow-lg  h-fit align-middle p-1 mt-3
+                                "onclick="addToFav('<%= product._id %>')">
+                                <svg y="0" xmlns="http://www.w3.org/2000/svg" x="0" width="100" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" height="100" class="w-6 h-6  <%= user.favorites.includes(product._id) ? 'fill-red-500' : 'fill-white' %> hover:fill-red-500 hover:stroke-white stroke-black border-red-500">
+                                    <path fill-rule="evenodd" d="M23,27.6a15.8,15.8,0,0,1,22.4,0L50,32.2l4.6-4.6A15.8,15.8,0,0,1,77,50L50,77,23,50A15.8,15.8,0,0,1,23,27.6Z" class="">
+                                    </path>
+                                  </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                    <%}%>
-               
-        <% }) %>
-    </div> 
+                        <%}%>
+                   
+            <% }) %>
+        </div> 
+        <%}else{%>
+            <div id="productContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 pt-0">
+                <% if (products.length === 0) { %>
+                  <div class="col-span-full text-center text-xl font-semibold text-gray-500">
+                    No results found
+                  </div>
+                <% } else { %>
+                  <!-- Loop through products and display them here -->
+                  <% products.forEach(product => { %>
+                    <div class="product-item bg-white p-4 border rounded shadow">
+                      <!-- Display product details, e.g., name, price, etc. -->
+                      <h3 class="text-lg font-bold"><%= product.name %></h3>
+                      <p class="text-gray-500"><%= product.price %></p>
+                    </div>
+                  <% }) %>
+                <% } %>
+              </div>
+            <%}%>
     
     </div>
   </div>

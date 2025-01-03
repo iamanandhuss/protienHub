@@ -1,5 +1,22 @@
 import mongoose, { Schema } from "mongoose";
 
+function calculateTotalAmount(products) {
+    return products.reduce((total, product) => {
+        const price = product.price || 0;
+        const quantity = product.quantity || 0;
+        const discount = product.discount || 0;
+        return total + (((price * quantity) / 100) * (100 - discount));
+    }, 0);
+}
+
+function calculateWithOutDis(products) {
+    return products.reduce((total, product) => {
+        const price = product.price || 0;
+        const quantity = product.quantity || 0;
+        return total + (price * quantity);
+    }, 0);
+}
+
 // Define cartSchema
 const cartSchema = new mongoose.Schema({
     userId: {
@@ -36,20 +53,28 @@ const cartSchema = new mongoose.Schema({
     }
 });
 
-// Calculate totalAmount 
-cartSchema.pre('save', function(next) {
-    this.totalAmount = this.products.reduce((total, product) => {
-        return total + (((product.price * product.quantity)/100)*(100-product.discount)+((product.price/100)*product.gst));
-    }, 0);
-    next(); 
+// Pre-Save Hook
+cartSchema.pre('save', function (next) {
+    if (this.products) {
+        this.totalAmount = calculateTotalAmount(this.products);
+        this.withOutDis = calculateWithOutDis(this.products);
+    }
+    next();
 });
-// withOutDis
-cartSchema.pre('save', function(next) {
-    this.withOutDis = this.products.reduce((total, product) => {
-        return total + (product.price * product.quantity);
-    }, 0);
-    next(); 
+
+// Pre-Update Hooks (updateOne, updateMany, findOneAndUpdate)
+cartSchema.pre(['updateOne', 'updateMany', 'findOneAndUpdate'], async function (next) {
+    const update = this.getUpdate();
+
+    if (update.products) {
+        update.totalAmount = calculateTotalAmount(update.products);
+        update.withOutDis = calculateWithOutDis(update.products);
+        this.setUpdate(update);
+    }
+
+    next();
 });
+
 
 // Create cartModel
 const Cart = mongoose.model('Cart', cartSchema);

@@ -157,27 +157,37 @@
                                 YOUR ORDER HAS BEEN SUCCESSFULLY DELIVERED</h1>
 
 
-                              <%if(order.orderStatus!=="Delivered"){%>
-                                <%if(order.orderStatus!=="cancelled"){%>
+                                <%if(order.orderStatus=="Cancelled"){%>
                                   <div class="flex  absolute right-72  ">
                                     <span class="text-base text-red-500 ">Order Cancelled</span>
 
-                                  </div>
+                                  </div>  
                                   <%}else{%>
-                                  <div class="absolute right-72">
-
-                                    <button onclick="cancel_Order('<%=order._id%>')"
-                                      class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
-                                      Cancel Order
-                                    </button>
-                                  </div>
+                                    
                                   <%}%>
-                                <%}%>
+                                  <%if(order.orderStatus!=="Delivered"&&order.orderStatus!=="Cancelled"){%>
+                                    <div class="absolute right-72">
+  
+                                      <button onclick="cancel_Order('<%=order._id%>')"
+                                        class="bg-orange-500 text-white py-2 px-6 rounded-md ml-4 hover:bg-orange-600">
+                                        Cancel Order
+                                      </button>
+                                    </div>
+                                    <%}%>
+                                    <%if(order.orderStatus=="Delivered"){%>
+                                      <div class="absolute right-72">
+    
+                                        <button id="downloadReceipt" onclick="generateOrderPDF('<%=order._id%>')"
+                                          class="btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-sans">Download
+                                          Receipt</button>  
+                                      </div>
+                                      <%}%>
+                                
 
                 </div>
                 <%if(order.orderStatus=='Returned'){%>
                   <div class="group">
-                    <h1 class="font-bold text-red-600">Returned On</h1>
+                    <h1 class="font-bold text-red-600">Product has been Returned</h1>
                   </div>
                   <%}%>
               </div>
@@ -521,5 +531,38 @@
 
       })
     }
+
+    
+    function generateOrderPDF(orderId) {
+                fetch(`/generatePdf?orderId=${orderId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }).then(async (response) => {
+                    if (response) {
+                        const blob = await response.blob();
+                        const downloadUrl = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = downloadUrl;
+                        link.download = `order-${orderId}.pdf`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(downloadUrl);
+                    } else {
+                        Swal.fire({
+                            title: `Failed to Generate PDF`,
+                            text: 'Failed to Generate PDF',
+                            icon: 'error',
+                        })
+                    }
+                })
+
+                const downloadButton = document.getElementById('downloadReceipt')
+                const msg = document.getElementById('msg')
+                msg.classList.remove('hidden')
+                downloadButton.classList.add('hidden')
+            }
   </script>
   <%- include('layout/footer') %>

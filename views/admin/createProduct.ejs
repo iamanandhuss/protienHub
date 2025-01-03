@@ -326,7 +326,7 @@
               </button>
             </div>
           </div>
-        </div>
+      </div>
 
 
 
@@ -466,11 +466,10 @@
   });
 
 
-    const form = document.getElementById('productForm');
+const form = document.getElementById('productForm');
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
-
     spinner.classList.remove("hidden");
     const formData = new FormData(form);
     formData.delete('fileInput'); 
